@@ -18,21 +18,17 @@ public class Main {
     private static DataSource dataSource;
     private static RegisteredUserRepository userRepository;
     private static RegisteredExpenseRepository expenseRepository;
-    private static InMemoryPortfolioRepository portfolioRepo;
-    private static InMemoryPriceHistoryRepository priceHistoryRepo;
 
     private static SignUpController signUpController;
     private static LoginController loginController;
     private static DashboardController dashboardController;
-    private static StockSearchController stockSearchController;
-    private static PortfolioController portfolioController;
 
     private static JFrame currentFrame;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             // Setup database
-            dataSource = DataSourceFactory.sqlite("app.db");
+            dataSource = DataSourceFactory.sqlite("sqllite.db");
             TableInitializer.ensureSchema(dataSource);
             userRepository = new RegisteredUserRepository(dataSource);
             expenseRepository = new RegisteredExpenseRepository(dataSource);
@@ -53,8 +49,6 @@ public class Main {
             signUpController = new SignUpController(signUpInteractor);
             loginController = new LoginController(loginInteractor);
             dashboardController = new DashboardController();
-            stockSearchController = new StockSearchController(stockSearchInteractor);
-           // portfolioController = new PortfolioController()
 
             // Start application on the login screen
             showLoginView();
