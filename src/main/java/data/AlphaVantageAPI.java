@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class AlphaVantageAPI {
-    private static final String API_KEY = "KKRO8T6G0YMWYGRT";
+    private static final String API_KEY = "9P17BCLZ42787NSY";
     // alternative : JTSZQWNFASUDRTW5 (hhc)
     // daily limit : 25
     private static final String BASE_URL = "https://www.alphavantage.co/query";
