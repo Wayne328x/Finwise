@@ -9,19 +9,19 @@ import java.util.Map;
  */
 public class TrendsOutputData {
 
-    private final Map<LocalDate, Map<String, Double>> typeTotals;
+    private final Map<LocalDate, Map<String, Double>> totalExpenses;
 
     /**
-     * @param typeTotals the expenses, indexed by date and type.
+     * @param totalExpenses the expenses, indexed by date and type.
      */
-    public TrendsOutputData(Map<LocalDate, Map<String, Double>> typeTotals) {
-        this.typeTotals = typeTotals;
+    public TrendsOutputData(Map<LocalDate, Map<String, Double>> totalExpenses) {
+        this.totalExpenses = totalExpenses;
     }
 
     /**
      * @return the expense totals, indexed by date and type.
      */
-    public Map<LocalDate, Map<String, Double>> getTypeTotals() {
-        return typeTotals;
+    public Map<LocalDate, Map<String, Double>> getTotalExpenses() {
+        return totalExpenses;
     }
 }
