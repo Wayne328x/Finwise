@@ -1,9 +1,12 @@
 import data.news.*;
 import data.usecase5.*;
 import data.*;
+import data.usecase4.InMemoryTradingDataAccess;
 
 import interface_adapters.controllers.*;
 import interface_adapters.presenters.*;
+
+
 
 import ui.*;
 
@@ -14,6 +17,9 @@ import use_case.signup.*;
 import use_case.stocksearch.*;
 import use_case.fetch_news.*;
 import use_case.case5.*;
+import use_case.trading.*;
+
+
 
 import javax.sql.DataSource;
 import javax.swing.*;
@@ -23,6 +29,7 @@ public class Main {
     private static DataSource dataSource;
     private static RegisteredUserRepository userRepository;
     private static RegisteredExpenseRepository expenseRepository;
+    private static InMemoryTradingDataAccess tradingData;
     private static InMemoryPortfolioRepository portfolioRepo;
     private static InMemoryPriceHistoryRepository priceHistoryRepo;
 
@@ -30,6 +37,7 @@ public class Main {
     private static LoginController loginController;
     private static DashboardController dashboardController;
     private static StockSearchController stockSearchController;
+    private static TradingController tradingController;
     private static PortfolioController portfolioController;
 
     private static JFrame currentFrame;
@@ -66,6 +74,17 @@ public class Main {
             loginController = new LoginController(loginInteractor);
             dashboardController = new DashboardController();
            // portfolioController = new PortfolioController()
+
+           //Trading setup
+            tradingData = new InMemoryTradingDataAccess();
+                // Initial cash for testing
+            tradingData.updateCash("testuser", 10000.0);
+
+            TradingViewModel tradingViewModel = new TradingViewModel();
+            TradingPresenter tradingPresenter = new TradingPresenter(tradingViewModel);
+            TradingInteractor tradingInteractor = new TradingInteractor(tradingData, tradingPresenter);
+            tradingController = new TradingController(tradingInteractor, tradingViewModel);
+
 
             // Start application on the login screen
             showLoginView();
@@ -107,6 +126,7 @@ public class Main {
         DashboardView dashboardView = new DashboardView(
                 dashboardController,
                 stockSearchController,
+                tradingController,
                 Main::showLoginView,   // callback to login screen
                 username,              // show welcome message
                 expenseRepository
