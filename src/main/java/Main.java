@@ -14,6 +14,8 @@ import use_case.signup.*;
 import use_case.stocksearch.*;
 import use_case.fetch_news.*;
 import use_case.case5.*;
+import use_case.trends.TrendsDataAccess;
+import use_case.trends.TrendsInteractor;
 
 import javax.sql.DataSource;
 import javax.swing.*;
@@ -31,6 +33,10 @@ public class Main {
     private static DashboardController dashboardController;
     private static StockSearchController stockSearchController;
     private static PortfolioController portfolioController;
+    private static TrendsController trendsController;
+    private static TrendsPresenter trendsPresenter;
+    private static TrendsViewModel trendsViewModel;
+    private static TrendsDataAccess trendsDataAccess;
 
     private static JFrame currentFrame;
     private static String currentUsername;
@@ -42,6 +48,13 @@ public class Main {
             TableInitializer.ensureSchema(dataSource);
             userRepository = new RegisteredUserRepository(dataSource);
             expenseRepository = new RegisteredExpenseRepository(dataSource);
+
+            // Trends (slightly messy)
+            trendsViewModel = new TrendsViewModel();
+            trendsPresenter = new TrendsPresenter(trendsViewModel);
+            trendsDataAccess = new TrendsAdapter(expenseRepository);
+            TrendsInteractor trendsInteractor = new TrendsInteractor(trendsDataAccess, trendsPresenter);
+            trendsController = new TrendsController(trendsInteractor);
 
             // Create interactors
             SignUpInteractor signUpInteractor = new SignUpInteractor(userRepository);
@@ -107,6 +120,8 @@ public class Main {
         DashboardView dashboardView = new DashboardView(
                 dashboardController,
                 stockSearchController,
+                trendsController,
+                trendsViewModel,
                 Main::showLoginView,   // callback to login screen
                 username,              // show welcome message
                 expenseRepository
@@ -200,7 +215,12 @@ public class Main {
     }
 
     private static void showTrendsView() {
-        // ToDo
+        if (currentFrame != null) currentFrame.dispose();
+
+        // Use the already-initialized fields
+        TrendsView trendsView = new TrendsView(trendsController, trendsViewModel, currentUsername);
+        currentFrame = trendsView;
+        trendsView.setVisible(true);
     }
 
     private static void showExpensesView() {
