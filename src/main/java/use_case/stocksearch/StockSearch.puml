@@ -1,0 +1,45 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package "UI (View)" {
+  class StockSearchView
+}
+
+package "Interface Adapters" {
+  class StockSearchController
+}
+
+package "Use Cases" {
+  class StockSearchInteractor
+  class StockSearchInputData
+  class StockSearchOutputData
+}
+
+package "Data / Frameworks" {
+  class AlphaVantageAPI
+  class StockSearchResult
+  interface WatchlistRepository
+  class JdbcWatchlistRepository
+}
+
+' --- Relationships (direction = dependency / call flow) ---
+
+' User search → controller
+StockSearchView --> StockSearchController : search(keywords)
+
+' Controller → interactor + input/output DTOs
+StockSearchController --> StockSearchInputData
+StockSearchController --> StockSearchInteractor : execute(input)
+StockSearchInteractor --> StockSearchOutputData
+StockSearchOutputData --> StockSearchResult
+
+' Interactor → external service
+StockSearchInteractor --> AlphaVantageAPI : searchStocks(...)
+
+' Controller → watchlist abstraction
+StockSearchController --> WatchlistRepository : isWatched()/setWatched()/getWatchedSymbols()
+
+' Concrete data implementation
+JdbcWatchlistRepository ..|> WatchlistRepository
+
+@enduml
