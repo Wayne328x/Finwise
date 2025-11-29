@@ -36,8 +36,8 @@ public class DashboardView extends JFrame {
     private static final int TRACKER_TAB = 2;
     private static final int STOCK_TAB = 3;
     private static final int TRADING_TAB = 4;
-    private static final int TRENDS_TAB = 4;
-    private static final int PORTFOLIO_TAB = 5;
+    private static final int TRENDS_TAB = 5;
+    private static final int PORTFOLIO_TAB = 6;
 
     public DashboardView(DashboardController dashController,
                          StockSearchController stockController,
