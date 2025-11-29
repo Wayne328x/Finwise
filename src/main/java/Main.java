@@ -154,12 +154,12 @@ public class Main {
         currentUsername = username; // Store the username for use in other views
 
         DashboardView dashboardView = new DashboardView(
-                dashboardController,     // dashboard
-                stockSearchController,   // usecase 1
-                tradingController,       // usecase 4
-                trendsController,        // usecase 2
-                trendsViewModel,         // usecase 2
-                portfolioController,     // usecase 5
+                dashboardController,
+                stockSearchController,
+                tradingController,
+                trendsController,
+                trendsViewModel,
+                portfolioController,
                 Main::showLoginView,     // callback to login screen
                 username,                // show welcome message
                 expenseRepository
