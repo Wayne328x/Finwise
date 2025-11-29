@@ -6,10 +6,7 @@ import data.usecase4.InMemoryTradingDataAccess;
 import interface_adapters.controllers.*;
 import interface_adapters.presenters.*;
 
-
-
 import ui.*;
-
 
 import use_case.login.*;
 import use_case.portfolio.*;
