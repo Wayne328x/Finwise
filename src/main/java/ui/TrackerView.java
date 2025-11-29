@@ -33,8 +33,8 @@ public class TrackerView extends JFrame {
         this.username = username;
         this.expenseRepository = expenseRepository;
 
-        setTitle("Tracker View");
-        setSize(600, 400);
+        setTitle("Expense Tracker");
+        setSize(800, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -92,7 +92,7 @@ public class TrackerView extends JFrame {
 
     private void updateTotal() {
         double total = expenseRepository.getTotalForUser(username);
-        totalLabel.setText(String.format("%.2f", total));
+        totalLabel.setText("Total: " + String.format("%.2f", total));
     }
 
     private void onAddExpense() {
