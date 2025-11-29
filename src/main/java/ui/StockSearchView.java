@@ -381,49 +381,6 @@ public class StockSearchView extends JFrame {
 
     if (initialSymbol == null || initialSymbol.isEmpty()) {
       return;
-    private final StockSearchController controller;
-    private final AlphaVantageAPI api;
-    private final String username;
-
-    // top user
-    private final JLabel userLabel = new JLabel();
-    // search + suggestions
-    private final JTextField searchField = new JTextField();
-    private final JList<AlphaVantageAPI.StockSearchResult> suggestionsList = new JList<>();
-    private final JScrollPane suggestionsScroll = new JScrollPane(suggestionsList);
-    // quote info
-    private final JLabel companyNameLabel = new JLabel("Search for a stock");
-    private final JLabel symbolLabel = new JLabel("");
-    private final JLabel priceLabel = new JLabel("");
-    private final JLabel changeLabel = new JLabel("");
-    private final JButton refreshButton = new JButton("⟳");
-    private final JButton watchButton = new JButton("♡");
-    // time range buttons
-    private final ButtonGroup rangeGroup = new ButtonGroup();
-    private final JPanel rangePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    // chart
-    private final ChartPanel chartPanel = new ChartPanel();
-    // status bar
-    private final JLabel statusLabel = new JLabel("Enter keywords to search.");
-    // state
-    private String currentSymbol = "";
-    private AlphaVantageAPI.StockSearchResult currentSelectedResult = null;
-    private SwingWorker<?, ?> currentSearchWorker;
-    private SwingWorker<?, ?> currentQuoteWorker;
-    private SwingWorker<?, ?> currentSeriesWorker;
-    public StockSearchView(StockSearchController controller,
-                           String username) {
-        this.controller = controller;
-        this.api = new AlphaVantageAPI();
-        this.username = username;
-
-        setTitle("Live Stock Prices");
-        setSize(1000, 700);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        initUI(username);
-        initListeners();
-        showEmptyState();
     }
 
     statusLabel.setText("Loading " + initialSymbol + " from watchlist...");
@@ -606,86 +563,6 @@ public class StockSearchView extends JFrame {
       btn.setForeground(
           new Color(COLOR_LIGHT_BLUE_R, COLOR_LIGHT_BLUE_G,
               COLOR_LIGHT_BLUE_B));
-    private void initUI(String username) {
-        JPanel searchCard = new JPanel();
-        searchCard.setLayout(new BoxLayout(searchCard, BoxLayout.Y_AXIS));
-        searchCard.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-        searchCard.setBackground(Color.WHITE);
-        searchField.setPreferredSize(new Dimension(300, 32));
-        searchField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
-        searchField.putClientProperty("JComponent.sizeVariant", "regular");
-        searchField.setToolTipText("Search stocks (e.g., AAPL, Tesla)...");
-        suggestionsList.setVisibleRowCount(6);
-        suggestionsList.setCellRenderer(new SuggestionCellRenderer());
-        suggestionsScroll.setVisible(false);
-        suggestionsScroll.setBorder(BorderFactory.createEmptyBorder());
-        searchCard.add(searchField);
-        searchCard.add(Box.createVerticalStrut(4));
-        searchCard.add(suggestionsScroll);
-        JPanel detailsCard = new JPanel();
-        detailsCard.setLayout(new BoxLayout(detailsCard, BoxLayout.Y_AXIS));
-        detailsCard.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-        detailsCard.setBackground(Color.WHITE);
-        companyNameLabel.setFont(companyNameLabel.getFont().deriveFont(Font.BOLD, 20f));
-        symbolLabel.setFont(symbolLabel.getFont().deriveFont(Font.PLAIN, 14f));
-        symbolLabel.setForeground(new Color(0x66, 0x70, 0x85));
-        priceLabel.setFont(priceLabel.getFont().deriveFont(Font.BOLD, 24f));
-        changeLabel.setFont(changeLabel.getFont().deriveFont(Font.PLAIN, 16f));
-        JPanel headerLeft = new JPanel();
-        headerLeft.setLayout(new BoxLayout(headerLeft, BoxLayout.Y_AXIS));
-        headerLeft.setOpaque(false);
-        headerLeft.add(companyNameLabel);
-        headerLeft.add(symbolLabel);
-        JPanel headerRight = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 0));
-        headerRight.setOpaque(false);
-        headerRight.add(refreshButton);
-        headerRight.add(watchButton);
-        JPanel headerRow = new JPanel(new BorderLayout());
-        headerRow.setOpaque(false);
-        JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
-        pricePanel.setOpaque(false);
-        pricePanel.add(priceLabel);
-        pricePanel.add(changeLabel);
-        headerRow.add(headerLeft, BorderLayout.WEST);
-        headerRow.add(pricePanel, BorderLayout.CENTER);
-        headerRow.add(headerRight, BorderLayout.EAST);
-        detailsCard.add(headerRow);
-        rangePanel.setOpaque(false);
-        addRangeButton("1D", true);
-        addRangeButton("5D", false);
-        addRangeButton("1M", false);
-        addRangeButton("6M", false);
-        addRangeButton("1Y", false);
-        addRangeButton("5Y", false);
-        JPanel chartCard = new JPanel();
-        chartCard.setLayout(new BorderLayout());
-        chartCard.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-        chartCard.setBackground(Color.WHITE);
-        JLabel chartTitle = new JLabel("Price Chart");
-        chartTitle.setFont(chartTitle.getFont().deriveFont(Font.BOLD, 16f));
-        JPanel chartHeader = new JPanel(new BorderLayout());
-        chartHeader.setOpaque(false);
-        chartHeader.add(chartTitle, BorderLayout.WEST);
-        chartHeader.add(rangePanel, BorderLayout.EAST);
-        chartPanel.setPreferredSize(new Dimension(800, 360));
-        chartPanel.setBackground(new Color(0xf7, 0xf8, 0xfb));
-        chartCard.add(chartHeader, BorderLayout.NORTH);
-        chartCard.add(chartPanel, BorderLayout.CENTER);
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setBackground(new Color(0xf7, 0xf8, 0xfb));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-        centerPanel.add(searchCard);
-        centerPanel.add(Box.createVerticalStrut(12));
-        centerPanel.add(detailsCard);
-        centerPanel.add(Box.createVerticalStrut(12));
-        centerPanel.add(chartCard);
-        JPanel statusBar = new JPanel(new BorderLayout());
-        statusBar.setBorder(BorderFactory.createEmptyBorder(4, 12, 4, 12));
-        statusBar.add(statusLabel, BorderLayout.WEST);
-        setLayout(new BorderLayout());
-        add(new JScrollPane(centerPanel), BorderLayout.CENTER);
-        add(statusBar, BorderLayout.SOUTH);
     }
     btn.addActionListener(e -> onRangeSelected(label, btn));
     rangeGroup.add(btn);
