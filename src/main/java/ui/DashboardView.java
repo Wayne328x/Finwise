@@ -5,6 +5,7 @@ import interface_adapters.controllers.DashboardController;
 import interface_adapters.controllers.PortfolioController;
 import interface_adapters.controllers.StockSearchController;
 import interface_adapters.controllers.TradingController;
+import interface_adapters.controllers.TrendsController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +19,8 @@ public class DashboardView extends JFrame {
     private final DashboardController dashController;
     private final StockSearchController stockController;
     private final TradingController tradingController;
+    private final TrendsController trendsController;
+    private final TrendsViewModel trendsViewModel;
 //    private final PortfolioController portfolioController;
     private final Runnable onLogout;
     private final String username;
@@ -31,17 +34,22 @@ public class DashboardView extends JFrame {
     private static final int TRACKER_TAB = 2;
     private static final int STOCK_TAB = 3;
     private static final int TRADING_TAB = 4;
+    private static final int TRENDS_TAB = 4;
     private static final int PORTFOLIO_TAB = 5;
 
     public DashboardView(DashboardController dashController,
                          StockSearchController stockController,
                          TradingController tradingController,
+                         TrendsController trendsController,
+                         TrendsViewModel trendsViewModel,
                          Runnable onLogout,
                          String username,
                          ExpenseRepository expenseRepository) {
         this.dashController = dashController;
         this.stockController = stockController;
         this.tradingController = tradingController;
+        this.trendsController = trendsController;
+        this.trendsViewModel = trendsViewModel;
 //        this.portfolioController = portfolioController;
         this.onLogout = onLogout;
         this.username = username;
@@ -69,6 +77,7 @@ public class DashboardView extends JFrame {
         tabs.addTab("Tracker", buildTabPlaceholder("Open the Tracker window…"));
         tabs.addTab("Stock", buildTabPlaceholder("Open the Stock window…"));
         tabs.addTab("Trading", buildTabPlaceholder("Open the Trading window"));
+        tabs.addTab("Trends", buildTabPlaceholder("Open the Trends window…"));
         tabs.addTab("Portfolio", buildTabPlaceholder("Open the Portfolio window"));
 
         // When user selects a tab, open a new window and reset back to Home
@@ -95,6 +104,8 @@ public class DashboardView extends JFrame {
                         new ui.TrackerView(username, expenseRepository).setVisible(true));
                 case STOCK_TAB -> SwingUtilities.invokeLater(() ->
                         new ui.StockSearchView(stockController, username).setVisible(true));
+                case TRENDS_TAB -> SwingUtilities.invokeLater(() ->
+                        new ui.TrendsView(trendsController, trendsViewModel, username).setVisible(true));
 //                case PORTFOLIO_TAB -> SwingUtilities.invokeLater(() ->
 //                        new  ui.PortfolioView(portfolioController, username).setVisible(true));
                 case TRADING_TAB -> SwingUtilities.invokeLater(() ->
