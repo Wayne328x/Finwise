@@ -19,7 +19,7 @@ public class LoginView extends JFrame {
                      java.util.function.Consumer<String> showDashboard) {
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 180);
+        setSize(400, 200);
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new GridLayout(3 ,2, 5, 5));
