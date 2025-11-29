@@ -4,7 +4,7 @@ import use_case.login.LoginOutputData;
 
 import javax.swing.*;
 
-import interfaceadapters.controllers.LoginController;
+import interface_adapters.controllers.LoginController;
 
 import java.awt.*;
 

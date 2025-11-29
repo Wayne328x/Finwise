@@ -2,8 +2,8 @@ import data.news.*;
 import data.usecase5.*;
 import data.*;
 
-import interfaceadapters.controllers.*;
-import interfaceadapters.presenters.*;
+import interface_adapters.controllers.*;
+import interface_adapters.presenters.*;
 
 import ui.*;
 

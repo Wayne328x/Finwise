@@ -1,4 +1,4 @@
-package interfaceadapters.presenters;
+package interface_adapters.presenters;
 
 import entity.News;
 import ui.NewsView;

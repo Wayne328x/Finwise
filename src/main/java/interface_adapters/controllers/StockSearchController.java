@@ -1,4 +1,4 @@
-package interfaceadapters.controllers;
+package interface_adapters.controllers;
 
 import data.WatchlistRepository;
 import java.util.List;

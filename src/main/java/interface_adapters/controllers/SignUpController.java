@@ -1,4 +1,4 @@
-package interfaceadapters.controllers;
+package interface_adapters.controllers;
 
 import use_case.signup.SignUpInputData;
 import use_case.signup.SignUpInteractor;

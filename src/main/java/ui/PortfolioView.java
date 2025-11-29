@@ -7,7 +7,7 @@ import use_case.case5.SnapshotRow;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import interfaceadapters.controllers.PortfolioController;
+import interface_adapters.controllers.PortfolioController;
 
 import java.awt.*;
 import java.util.List;

@@ -1,7 +1,7 @@
-package interfaceadapters.controllers;
+package interface_adapters.controllers;
 
 import use_case.fetch_news.FetchNewsInputBoundary;
-import interfaceadapters.presenters.FetchNewsPresenter;
+import interface_adapters.presenters.FetchNewsPresenter;
 import use_case.fetch_news.FetchNewsInputData;
 
 public class NewsController {

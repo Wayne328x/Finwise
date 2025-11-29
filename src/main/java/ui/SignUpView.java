@@ -4,7 +4,7 @@ import use_case.signup.SignUpOutputData;
 
 import javax.swing.*;
 
-import interfaceadapters.controllers.SignUpController;
+import interface_adapters.controllers.SignUpController;
 
 import java.awt.*;
 
