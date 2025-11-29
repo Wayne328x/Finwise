@@ -109,10 +109,8 @@ public class DashboardView extends JFrame {
                         new ui.StockSearchView(stockController, username).setVisible(true));
                 case TRENDS_TAB -> SwingUtilities.invokeLater(() ->
                         new ui.TrendsView(trendsController, trendsViewModel, username).setVisible(true));
-//                case PORTFOLIO_TAB -> SwingUtilities.invokeLater(() ->
-//                        new  ui.PortfolioView(portfolioController, username).setVisible(true));
-                case TRADING_TAB -> SwingUtilities.invokeLater(() ->
-                        new ui.TradingView(tradingController, username).setVisible(true));
+//              // case PORTFOLIO_TAB -> SwingUtilities.invokeLater(() ->
+//                       // new  ui.PortfolioView(portfolioController, username).setVisible(true));
                 default -> {}
             }
             // Reset to Home to avoid repeated auto-opens on focus changes
