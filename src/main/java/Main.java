@@ -6,14 +6,21 @@ import data.usecase4.InMemoryTradingDataAccess;
 import interface_adapters.controllers.*;
 import interface_adapters.presenters.*;
 
-import ui.*;
 
+import ui.dashboard.DashboardView;
+import ui.login.LoginView;
+import ui.signup.SignUpView;
+import ui.news.NewsView;
+import ui.portfolio.PortfolioView;
+import ui.portfolio.PortfolioViewModel;
+import ui.stock_search.StockSearchView;
+import ui.trends.TrendsView;
+import ui.trends.TrendsViewModel;
 import use_case.login.*;
 import use_case.portfolio.*;
 import use_case.signup.*;
 import use_case.stocksearch.*;
 import use_case.fetch_news.*;
-import use_case.case5.*;
 import use_case.trading.*;
 
 
@@ -29,8 +36,8 @@ public class Main {
     private static RegisteredUserRepository userRepository;
     private static RegisteredExpenseRepository expenseRepository;
     private static InMemoryTradingDataAccess tradingData;
-    private static InMemoryPortfolioRepository portfolioRepo;
-    private static InMemoryPriceHistoryRepository priceHistoryRepo;
+    private static PortfolioRepository portfolioRepo;
+    private static PriceHistoryRepository priceHistoryRepo;
 
     private static SignUpController signUpController;
     private static LoginController loginController;
@@ -76,26 +83,34 @@ public class Main {
             stockSearchController =
                     new StockSearchController(stockSearchInteractor, watchlistRepository);
 
-            portfolioRepo = new InMemoryPortfolioRepository();
-            priceHistoryRepo = new InMemoryPriceHistoryRepository();
-            //portfolioInteractor = new PortfolioInteractor(portfolioRepo, priceHistoryRepo, )
+            //Trading setup
+            tradingData = new InMemoryTradingDataAccess();
+            // Initial cash for testing
+            tradingData.updateCash("testuser", 10000.0);
+
+            // Portfolio repo relies on tradingData
+            portfolioRepo = new TradingDataPortfolioRepository(tradingData);
+            priceHistoryRepo = new AlphaVantagePriceHistoryRepository();
+
+            PortfolioPresenter portfolioPresenter = new PortfolioPresenter(new PortfolioViewModel());
+
+            PortfolioInteractor portfolioInteractor = new PortfolioInteractor(
+                    portfolioRepo,
+                    priceHistoryRepo,
+                    portfolioPresenter
+            );
 
             // Create controllers
             signUpController = new SignUpController(signUpInteractor);
             loginController = new LoginController(loginInteractor);
             dashboardController = new DashboardController();
-           // portfolioController = new PortfolioController()
+            portfolioController = new PortfolioController(portfolioInteractor, portfolioPresenter.getViewModel());
 
-           //Trading setup
-            tradingData = new InMemoryTradingDataAccess();
-                // Initial cash for testing
-            tradingData.updateCash("testuser", 10000.0);
 
             tradingViewModel = new TradingViewModel();
             TradingPresenter tradingPresenter = new TradingPresenter(tradingViewModel);
             TradingInteractor tradingInteractor = new TradingInteractor(tradingData, tradingPresenter);
             tradingController = new TradingController(tradingInteractor, tradingViewModel);
-
 
             // Start application on the login screen
             showLoginView();
@@ -144,8 +159,9 @@ public class Main {
                 tradingController,
                 trendsController,
                 trendsViewModel,
-                Main::showLoginView,   // callback to login screen
-                username,              // show welcome message
+                portfolioController,
+                Main::showLoginView,     // callback to login screen
+                username,                // show welcome message
                 expenseRepository
         );
 
@@ -154,28 +170,27 @@ public class Main {
     }
 
     private static void showNewsView(){
-        // 1.Get DAO
-        NewsApiDAO newsApiDAO = new NewsApiDAO();
+        NewsApiDAO newsApiDAO = new NewsApiDAO();   // Get DAO
         try {
             newsApiDAO.fetchNews("");
         } catch (NewsApiDAO.RateLimitExceededException e) {
             System.out.println("Rate Limit Exceeded");
         }
 
-        // 2. Presenter
-        NewsView view = new NewsView(null); 
+        // Presenter
+        NewsView view = new NewsView(null);
         FetchNewsPresenter presenter = new FetchNewsPresenter(view);
 
-        // 3. Interactor
+        // Interactor
         FetchNewsInteractor interactor = new FetchNewsInteractor(newsApiDAO, presenter);
 
-        // 4. Controller
+        // Controller
         NewsController controller = new NewsController(interactor, presenter);
 
-        // 5. View
+        // View
         view.setController(controller);
 
-        // 6. Initialize the news
+        // Initialize the news
         controller.fetchNews();
     }
 
@@ -183,27 +198,26 @@ public class Main {
         // Use Case 5: Portfolio performance diagnostics
         if (currentFrame != null) currentFrame.dispose();
 
-        // 1. create ViewModel
+        // create ViewModel
         PortfolioViewModel viewModel = new PortfolioViewModel();
 
-        // 2. create Presenter（implement PortfolioOutputBoundary）
-        Presenter presenter = new Presenter(viewModel);
+        // create Presenter（implement PortfolioOutputBoundary）
+        PortfolioPresenter presenter = new PortfolioPresenter(viewModel);
 
-        // 3. create Interactor（implement PortfolioInputBoundary）
+        TradingDataAccessInterface tradingDataAccess = new InMemoryTradingDataAccess();
+
+        // create Interactor（implement PortfolioInputBoundary）
         PortfolioInputBoundary interactor = new PortfolioInteractor(
-                new InMemoryPortfolioRepository(),
-                new InMemoryPriceHistoryRepository(),
+                new TradingDataPortfolioRepository(tradingDataAccess),
+                new AlphaVantagePriceHistoryRepository(),
                 presenter
         );
 
-        // 4. create Controller（dependent on InputBoundary + ViewModel）
+        // create Controller（dependent on InputBoundary + ViewModel）
         PortfolioController controller = new PortfolioController(interactor, viewModel);
 
-        // 5. create View（dependent on Controller + username）
-        PortfolioView view = new PortfolioView(
-                controller,
-                currentUsername
-        );
+        // create View（dependent on Controller + username）
+        PortfolioView view = new PortfolioView(controller, currentUsername);
 
         currentFrame = view;
         view.setVisible(true);

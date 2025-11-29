@@ -1,5 +1,5 @@
 package use_case.trading;
-import entity.usecase5.Holding;
+import entity.Holding;
 
 public class TradingInteractor implements TradingInputBoundary {
 

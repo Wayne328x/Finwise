@@ -1,8 +1,6 @@
 package data.usecase5;
 
-// 按用户名拿持仓
-
-import entity.usecase5.Holding;
+import entity.Holding;
 import java.util.List;
 
 /**
@@ -13,7 +11,6 @@ public interface PortfolioRepository {
 
     /**
      * Returns all stock holdings for the given user.
-     *
      * @param username the username of the logged-in user
      * @return list of holdings (empty list if user has no investments)
      */

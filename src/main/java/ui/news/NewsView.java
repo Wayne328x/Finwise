@@ -1,4 +1,4 @@
-package ui;
+package ui.news;
 
 import javax.swing.*;
 import java.awt.*;

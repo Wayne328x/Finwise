@@ -1,4 +1,4 @@
-package use_case.case5;
+package ui.portfolio;
 
 public class HoldingRow {
     private final String symbol;

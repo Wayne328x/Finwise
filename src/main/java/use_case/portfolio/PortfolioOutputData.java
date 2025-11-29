@@ -1,7 +1,7 @@
 package use_case.portfolio;
 
-import entity.usecase5.Holding;
-import entity.usecase5.PortfolioSnapshot;
+import entity.Holding;
+import entity.PortfolioSnapshot;
 
 import java.util.List;
 

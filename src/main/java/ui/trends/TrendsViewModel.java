@@ -1,4 +1,4 @@
-package ui;
+package ui.trends;
 
 import java.time.LocalDate;
 import java.util.Map;

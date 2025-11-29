@@ -1,4 +1,4 @@
-package ui;
+package ui.signup;
 
 import use_case.signup.SignUpOutputData;
 

@@ -1,7 +1,6 @@
 package data.usecase5;
 
-// 股票拿历史价格
-import entity.usecase5.PricePoint;
+import entity.PricePoint;
 import java.util.List;
 
 /**
@@ -11,7 +10,6 @@ public interface PriceHistoryRepository {
 
     /**
      * Returns the historical price series for the given stock symbol.
-     *
      * @param symbol stock ticker symbol, e.g. "AAPL"
      * @return list of price points ordered by date (oldest → newest).
      */

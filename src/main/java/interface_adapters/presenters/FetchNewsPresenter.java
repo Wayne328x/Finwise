@@ -1,8 +1,8 @@
 package interface_adapters.presenters;
 
 import entity.News;
-import ui.NewsView;
-import ui.NewsViewModel;
+import ui.news.NewsView;
+import ui.news.NewsViewModel;
 import use_case.fetch_news.FetchNewsOutputBoundary;
 
 import java.time.format.DateTimeFormatter;

@@ -1,6 +1,6 @@
 package interface_adapters.controllers;
 
-import use_case.case5.PortfolioViewModel;
+import ui.portfolio.PortfolioViewModel;
 import use_case.portfolio.PortfolioInputBoundary;
 import use_case.portfolio.PortfolioInputData;
 

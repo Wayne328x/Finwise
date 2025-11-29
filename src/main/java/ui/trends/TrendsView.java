@@ -1,4 +1,4 @@
-package ui;
+package ui.trends;
 
 import interface_adapters.controllers.TrendsController;
 

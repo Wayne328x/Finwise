@@ -1,7 +1,10 @@
-package use_case.case5;
+package interface_adapters.presenters;
 
-import entity.usecase5.Holding;
-import entity.usecase5.PortfolioSnapshot;
+import entity.Holding;
+import entity.PortfolioSnapshot;
+import ui.portfolio.HoldingRow;
+import ui.portfolio.PortfolioViewModel;
+import ui.portfolio.SnapshotRow;
 import use_case.portfolio.PortfolioOutputBoundary;
 import use_case.portfolio.PortfolioOutputData;
 
@@ -10,11 +13,11 @@ import java.util.List;
 /**
  * Presenter for Use Case 5.
  */
-public class Presenter implements PortfolioOutputBoundary {
+public class PortfolioPresenter implements PortfolioOutputBoundary {
 
     private final PortfolioViewModel viewModel;
 
-    public Presenter(PortfolioViewModel viewModel) {
+    public PortfolioPresenter(PortfolioViewModel viewModel) {
         this.viewModel = viewModel;
     }
 

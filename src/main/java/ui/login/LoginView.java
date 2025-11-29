@@ -1,4 +1,4 @@
-package ui;
+package ui.login;
 
 import use_case.login.LoginOutputData;
 

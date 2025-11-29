@@ -1,11 +1,10 @@
 package interface_adapters.controllers;
 
 import data.WatchlistRepository;
+import java.util.List;
 import use_case.stocksearch.StockSearchInputData;
 import use_case.stocksearch.StockSearchInteractor;
 import use_case.stocksearch.StockSearchOutputData;
-
-import java.util.List;
 
 /**
  * Controller for stock search and watchlist actions.
@@ -14,46 +13,80 @@ import java.util.List;
  */
 public class StockSearchController {
 
-    private final StockSearchInteractor stockSearchInteractor;
-    private final WatchlistRepository watchlistRepository;
+  /**
+   * The interactor for stock search operations.
+   */
+  private final StockSearchInteractor stockSearchInteractor;
 
-    public StockSearchController(StockSearchInteractor stockSearchInteractor,
-                                 WatchlistRepository watchlistRepository) {
-        this.stockSearchInteractor = stockSearchInteractor;
-        this.watchlistRepository = watchlistRepository;
-    }
+  /**
+   * The repository for watchlist operations.
+   */
+  private final WatchlistRepository watchlistRepository;
 
-    /**
-     * Performs a stock search based on the given keywords.
-     */
-    public StockSearchOutputData search(String keywords) {
-        StockSearchInputData input = new StockSearchInputData(keywords);
-        return stockSearchInteractor.execute(input);
-    }
+  /**
+   * Constructs a StockSearchController with the given dependencies.
+   *
+   * @param interactor the stock search interactor
+   * @param repository the watchlist repository
+   */
+  public StockSearchController(
+      final StockSearchInteractor interactor,
+      final WatchlistRepository repository) {
+    this.stockSearchInteractor = interactor;
+    this.watchlistRepository = repository;
+  }
 
-    /**
-     * Returns true if the given symbol is in the user's watchlist.
-     */
-    public boolean isWatched(String username, String symbol) {
-        return watchlistRepository.isWatched(username, symbol);
-    }
+  /**
+   * Performs a stock search based on the given keywords.
+   *
+   * @param keywords the search keywords
+   * @return the search results
+   */
+  public StockSearchOutputData search(final String keywords) {
+    StockSearchInputData input = new StockSearchInputData(keywords);
+    return stockSearchInteractor.execute(input);
+  }
 
-    /**
-     * Adds or removes a stock from the user's watchlist.
-     */
-    public void setWatched(String username,
-                           String symbol,
-                           String name,
-                           String exchange,
-                           boolean watched) {
-        if (watched) {
-            watchlistRepository.addWatched(username, symbol, name, exchange);
-        } else {
-            watchlistRepository.removeWatched(username, symbol);
-        }
-    }
+  /**
+   * Returns true if the given symbol is in the user's watchlist.
+   *
+   * @param username the username
+   * @param symbol the stock symbol
+   * @return true if the symbol is watched, false otherwise
+   */
+  public boolean isWatched(final String username, final String symbol) {
+    return watchlistRepository.isWatched(username, symbol);
+  }
 
-    public List<String> getWatchedSymbols(String username) {
-        return watchlistRepository.findSymbolsByUsername(username);
+  /**
+   * Adds or removes a stock from the user's watchlist.
+   *
+   * @param username the username
+   * @param symbol the stock symbol
+   * @param name the stock name
+   * @param exchange the stock exchange
+   * @param watched true to add to watchlist, false to remove
+   */
+  public void setWatched(
+      final String username,
+      final String symbol,
+      final String name,
+      final String exchange,
+      final boolean watched) {
+    if (watched) {
+      watchlistRepository.addWatched(username, symbol, name, exchange);
+    } else {
+      watchlistRepository.removeWatched(username, symbol);
     }
+  }
+
+  /**
+   * Gets all watched stock symbols for a user.
+   *
+   * @param username the username
+   * @return list of watched stock symbols
+   */
+  public List<String> getWatchedSymbols(final String username) {
+    return watchlistRepository.findSymbolsByUsername(username);
+  }
 }

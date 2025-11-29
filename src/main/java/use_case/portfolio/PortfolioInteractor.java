@@ -2,19 +2,16 @@ package use_case.portfolio;
 
 import data.usecase5.PortfolioRepository;
 import data.usecase5.PriceHistoryRepository;
-import entity.usecase5.Holding;
-import entity.usecase5.PortfolioSnapshot;
-import entity.usecase5.PricePoint;
+
+import entity.Holding;
+import entity.PortfolioSnapshot;
+import entity.PricePoint;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
- * Interactor for the Portfolio Analysis use case.
- *
- * Use Case layer
+ * Interactor for the Portfolio Performance Diagnostics Use Case (Use Case 5).
  */
 public class PortfolioInteractor implements PortfolioInputBoundary {
 
@@ -22,113 +19,108 @@ public class PortfolioInteractor implements PortfolioInputBoundary {
     private final PriceHistoryRepository priceHistoryRepository;
     private final PortfolioOutputBoundary outputBoundary;
 
-    /**
-     * @param portfolioRepository
-     * @param priceHistoryRepository
-     * @param outputBoundary
-     */
-    public PortfolioInteractor(PortfolioRepository portfolioRepository,
-                               PriceHistoryRepository priceHistoryRepository,
-                               PortfolioOutputBoundary outputBoundary) {
+    public PortfolioInteractor(
+            PortfolioRepository portfolioRepository,
+            PriceHistoryRepository priceHistoryRepository,
+            PortfolioOutputBoundary outputBoundary) {
         this.portfolioRepository = portfolioRepository;
         this.priceHistoryRepository = priceHistoryRepository;
         this.outputBoundary = outputBoundary;
     }
 
-    /**
-     * Executes the portfolio analysis use case.
-     * @param input the input data (e.g., username)
-     */
     @Override
     public void execute(PortfolioInputData input) {
         String username = input.getUsername();
 
-        // ===== Step 1: Load holdings for this user =====
+        // Load holdings
         List<Holding> holdings = portfolioRepository.findHoldingsByUser(username);
 
-        PortfolioOutputData output;
-
         if (holdings.isEmpty()) {
-            // No investments: nothing to analyze
-            output = new PortfolioOutputData(
-                    Collections.emptyList(),   // snapshots
-                    Collections.emptyList(),   // holdings
-                    false,
-                    "No data available: the user has no holdings."
-            );
-            outputBoundary.present(output);
-            return;
-        }
-
-        // ===== Step 2: Choose a base date series from the first symbol =====
-        Holding firstHolding = holdings.get(0);
-        List<PricePoint> baseHistory =
-                priceHistoryRepository.getPriceHistory(firstHolding.getSymbol());
-
-        if (baseHistory.isEmpty()) {
-            // No price data at all: cannot compute performance
-            output = new PortfolioOutputData(
+            outputBoundary.present(new PortfolioOutputData(
                     Collections.emptyList(),
-                    holdings,
+                    Collections.emptyList(),
                     false,
-                    "No historical price data available for analysis."
-            );
-            outputBoundary.present(output);
+                    "No holdings found for user: " + username
+            ));
             return;
         }
+
+        //  Load all historical price data once (cache)
+        Map<String, List<PricePoint>> historyCache = new HashMap<>();
+        for (Holding h : holdings) {
+            List<PricePoint> history = priceHistoryRepository.getPriceHistory(h.getSymbol());
+
+            if (history.isEmpty()) {
+                outputBoundary.present(new PortfolioOutputData(
+                        Collections.emptyList(),
+                        holdings,
+                        false,
+                        "Missing historical prices for: " + h.getSymbol()
+                ));
+                return;
+            }
+
+            // Ensure sorted ascending by date
+            history.sort(Comparator.comparing(PricePoint::getDate));
+            historyCache.put(h.getSymbol(), history);
+        }
+
+        // Use the first holding as base timeline
+        String baseSymbol = holdings.get(0).getSymbol();
+        List<PricePoint> baseHistory = historyCache.get(baseSymbol);
 
         List<PortfolioSnapshot> snapshots = new ArrayList<>();
 
-        // ===== Step 3: For each date, compute total cost & total value =====
+        // For each date, compute totalCost & totalValue
         for (PricePoint basePoint : baseHistory) {
             LocalDate date = basePoint.getDate();
+
             double totalCost = 0.0;
             double totalValue = 0.0;
 
             for (Holding h : holdings) {
-                // cost side: shares * avgCost (constant over time)
                 totalCost += h.getTotalCost();
 
-                // value side: shares * price on this date
-                List<PricePoint> history = priceHistoryRepository.getPriceHistory(h.getSymbol());
-                double priceOnDate = findPriceOnDate(history, date);
+                List<PricePoint> history = historyCache.get(h.getSymbol());
+                double priceOnDate = findPriceOnOrBefore(history, date);
+
                 totalValue += h.getShares() * priceOnDate;
             }
 
-            // Create a snapshot (profit & profitRate derived inside)
             PortfolioSnapshot snapshot =
                     PortfolioSnapshot.fromCostAndValue(date, totalCost, totalValue);
             snapshots.add(snapshot);
         }
 
-        // ===== Step 4: Build output data and pass to presenter =====
-        output = new PortfolioOutputData(
+        // Return result
+        outputBoundary.present(new PortfolioOutputData(
                 snapshots,
                 holdings,
                 true,
-                "Portfolio analysis calculated successfully."
-        );
-        outputBoundary.present(output);
+                "Portfolio analysis completed successfully."
+        ));
     }
 
     /**
-     * Finds the price for the given date in the history list.
-     * If no exact match is found, falls back to the latest available price.
+     * Returns price at the latest date ≤ targetDate.
+     * If all dates are after targetDate, return the earliest available.
      */
-    private double findPriceOnDate(List<PricePoint> history, LocalDate date) {
-        if (history.isEmpty()) {
-            // No data at all: treat as zero price (or you can choose another strategy)
-            return 0.0;
-        }
+    private double findPriceOnOrBefore(List<PricePoint> history, LocalDate targetDate) {
+        PricePoint lastBefore = null;
 
         for (PricePoint p : history) {
-            if (p.getDate().equals(date)) {
-                return p.getPrice();
+            if (!p.getDate().isAfter(targetDate)) {
+                lastBefore = p;
+            } else {
+                break;
             }
         }
 
-        // If we do not have this exact date, use the most recent price as a fallback.
-        return history.get(history.size() - 1).getPrice();
+        // If we never saw a date ≤ targetDate, use the earliest
+        if (lastBefore == null) {
+            return history.get(0).getPrice();
+        }
+        return lastBefore.getPrice();
     }
 }
 

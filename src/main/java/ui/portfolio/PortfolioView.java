@@ -1,8 +1,4 @@
-package ui;
-
-import use_case.case5.PortfolioViewModel;
-import use_case.case5.HoldingRow;
-import use_case.case5.SnapshotRow;
+package ui.portfolio;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -34,7 +30,7 @@ public class PortfolioView extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // ===== Step 1: Call the use case via controller =====
+        // Call the use case via controller
         PortfolioViewModel vm = controller.analyze(username);
 
         // Main layout

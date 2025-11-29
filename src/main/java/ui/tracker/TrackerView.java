@@ -1,7 +1,6 @@
-package ui;
+package ui.tracker;
 
 import data.ExpenseRepository;
-import data.RegisteredExpenseRepository;
 import entity.Expense;
 
 import javax.swing.*;

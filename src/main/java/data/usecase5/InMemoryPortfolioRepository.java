@@ -1,21 +1,21 @@
 package data.usecase5;
 
-import entity.usecase5.Holding;
+import entity.Holding;
 
 import java.util.*;
 
 /**
  * Simple in-memory implementation of PortfolioRepository.
- * This is only for demo / development; it can be replaced with
- * a JDBC or API-based implementation later.
+ * This is only for demo or test.
+ * It can be replaced with a JDBC or API-based implementation later.
  */
 public class InMemoryPortfolioRepository implements PortfolioRepository {
 
-    // username -> list of holdings
+    // Map: username -> list of holdings
     private final Map<String, List<Holding>> store = new HashMap<>();
 
     public InMemoryPortfolioRepository() {
-        // Example data: you can change symbols / shares / costs as you like
+        // Example data: can change symbols / shares / costs as like
         store.put("hhc", List.of(
                 new Holding("AAPL", 10, 150.0),
                 new Holding("GOOG", 5, 120.0),
@@ -25,7 +25,6 @@ public class InMemoryPortfolioRepository implements PortfolioRepository {
         store.put("alice", List.of(
                 new Holding("TSLA", 8, 200.0)
         ));
-
         // users with no entry in the map will be treated as "no investments"
     }
 

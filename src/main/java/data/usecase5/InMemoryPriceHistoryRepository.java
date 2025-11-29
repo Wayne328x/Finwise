@@ -1,6 +1,6 @@
 package data.usecase5;
 
-import entity.usecase5.PricePoint;
+import entity.PricePoint;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -8,6 +8,8 @@ import java.util.*;
 /**
  * Simple in-memory implementation of PriceHistoryRepository.
  * Provides hard-coded historical prices for a few example symbols.
+ * This is only for demo or test.
+ * It can be replaced with a JDBC or API-based implementation later.
  */
 public class InMemoryPriceHistoryRepository implements PriceHistoryRepository {
 

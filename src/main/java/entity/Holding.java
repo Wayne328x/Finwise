@@ -1,11 +1,9 @@
-package entity.usecase5;
+package entity;
 
 /**
  * Represents a single stock holding in the user's portfolio.
- *
  * This is a domain entity (Entity layer in Clean Architecture).
- * It contains only business data and simple invariants,
- * but no UI or persistence logic.
+ * It contains only business data and simple invariants, no UI or persistence logic.
  */
 public class Holding {
 
@@ -15,7 +13,6 @@ public class Holding {
 
     /**
      * Creates a new Holding.
-     *
      * @param symbol  stock ticker symbol (must not be null or blank)
      * @param shares  number of shares (must be > 0)
      * @param avgCost average cost per share (must be >= 0)
