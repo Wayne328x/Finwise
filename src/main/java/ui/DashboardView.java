@@ -4,6 +4,7 @@ import data.ExpenseRepository;
 import interface_adapters.controllers.DashboardController;
 import interface_adapters.controllers.PortfolioController;
 import interface_adapters.controllers.StockSearchController;
+import interface_adapters.controllers.TradingController;
 import interface_adapters.controllers.TrendsController;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ public class DashboardView extends JFrame {
     private final JList<String> watchedList = new JList<>(new DefaultListModel<>());
     private final DashboardController dashController;
     private final StockSearchController stockController;
+    private final TradingController tradingController;
     private final TrendsController trendsController;
     private final TrendsViewModel trendsViewModel;
 //    private final PortfolioController portfolioController;
@@ -31,11 +33,13 @@ public class DashboardView extends JFrame {
     private static final int NEWS_TAB = 1;
     private static final int TRACKER_TAB = 2;
     private static final int STOCK_TAB = 3;
+    private static final int TRADING_TAB = 4;
     private static final int TRENDS_TAB = 4;
     private static final int PORTFOLIO_TAB = 5;
 
     public DashboardView(DashboardController dashController,
                          StockSearchController stockController,
+                         TradingController tradingController,
                          TrendsController trendsController,
                          TrendsViewModel trendsViewModel,
                          Runnable onLogout,
@@ -43,6 +47,7 @@ public class DashboardView extends JFrame {
                          ExpenseRepository expenseRepository) {
         this.dashController = dashController;
         this.stockController = stockController;
+        this.tradingController = tradingController;
         this.trendsController = trendsController;
         this.trendsViewModel = trendsViewModel;
 //        this.portfolioController = portfolioController;
@@ -71,6 +76,7 @@ public class DashboardView extends JFrame {
         tabs.addTab("News", buildTabPlaceholder("Open the News window…"));
         tabs.addTab("Tracker", buildTabPlaceholder("Open the Tracker window…"));
         tabs.addTab("Stock", buildTabPlaceholder("Open the Stock window…"));
+        tabs.addTab("Trading", buildTabPlaceholder("Open the Trading window"));
         tabs.addTab("Trends", buildTabPlaceholder("Open the Trends window…"));
         tabs.addTab("Portfolio", buildTabPlaceholder("Open the Portfolio window"));
 
@@ -102,6 +108,8 @@ public class DashboardView extends JFrame {
                         new ui.TrendsView(trendsController, trendsViewModel, username).setVisible(true));
 //                case PORTFOLIO_TAB -> SwingUtilities.invokeLater(() ->
 //                        new  ui.PortfolioView(portfolioController, username).setVisible(true));
+                case TRADING_TAB -> SwingUtilities.invokeLater(() ->
+                        new ui.TradingView(tradingController, username).setVisible(true));
                 default -> {}
             }
             // Reset to Home to avoid repeated auto-opens on focus changes
@@ -141,6 +149,8 @@ public class DashboardView extends JFrame {
                 • News    → opens the News window
                 • Tracker → opens the Tracker window
                 • Stock   → opens the Stock window
+                • Trading → opens the Trading window
+                • Portfolio → opens the Portfolio window
 
                 On the right, you can see your watched stocks.
                 Double-click one to open its details.
