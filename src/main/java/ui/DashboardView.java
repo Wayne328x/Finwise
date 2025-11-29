@@ -68,7 +68,11 @@ public class DashboardView extends JFrame {
         // When user selects a tab, open a new window and reset back to Home
         tabs.addChangeListener(e -> {
             int idx = tabs.getSelectedIndex();
-            if (idx == HOME_TAB) return;
+            if (idx == HOME_TAB) {
+                // Refresh watchlist when returning to Home tab
+                refreshWatchlist();
+                return;
+            }
 
             switch (idx) {
                 case NEWS_TAB -> SwingUtilities.invokeLater(() -> {
@@ -95,6 +99,14 @@ public class DashboardView extends JFrame {
             }
             // Reset to Home to avoid repeated auto-opens on focus changes
             tabs.setSelectedIndex(HOME_TAB);
+        });
+
+        // Refresh watchlist when dashboard window gains focus
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowActivated(java.awt.event.WindowEvent e) {
+                refreshWatchlist();
+            }
         });
 
         // When user double-clicks a watched symbol, open the StockSearchView
@@ -143,11 +155,7 @@ public class DashboardView extends JFrame {
         watchPanel.setBorder(BorderFactory.createTitledBorder("Watched stocks"));
 
         // Populate the list from the controller
-        DefaultListModel<String> model = (DefaultListModel<String>) watchedList.getModel();
-        model.clear();
-        for (String symbol : stockController.getWatchedSymbols(username)) {
-            model.addElement(symbol);
-        }
+        refreshWatchlist();
 
         watchedList.setVisibleRowCount(10);
 
@@ -158,6 +166,17 @@ public class DashboardView extends JFrame {
         p.add(watchPanel, BorderLayout.EAST);
 
         return p;
+    }
+
+    /**
+     * Refreshes the watchlist display by fetching the latest watched stocks from the database.
+     */
+    private void refreshWatchlist() {
+        DefaultListModel<String> model = (DefaultListModel<String>) watchedList.getModel();
+        model.clear();
+        for (String symbol : stockController.getWatchedSymbols(username)) {
+            model.addElement(symbol);
+        }
     }
 
     private JPanel buildTabPlaceholder(String text) {
