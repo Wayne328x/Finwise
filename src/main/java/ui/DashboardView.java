@@ -21,7 +21,7 @@ public class DashboardView extends JFrame {
     private final TradingController tradingController;
     private final TrendsController trendsController;
     private final TrendsViewModel trendsViewModel;
-    private final PortfolioController portfolioController;
+//    private final PortfolioController portfolioController;
     private final Runnable onLogout;
     private final String username;
     private final ExpenseRepository expenseRepository;
@@ -105,8 +105,8 @@ public class DashboardView extends JFrame {
                         new ui.StockSearchView(stockController, username).setVisible(true));
                 case TRENDS_TAB -> SwingUtilities.invokeLater(() ->
                         new ui.TrendsView(trendsController, trendsViewModel, username).setVisible(true));
-                case PORTFOLIO_TAB -> SwingUtilities.invokeLater(() ->
-                        new PortfolioView(portfolioController, username).setVisible(true));
+//                case PORTFOLIO_TAB -> SwingUtilities.invokeLater(() ->
+//                        new PortfolioView(portfolioController, username).setVisible(true));
                 case TRADING_TAB -> SwingUtilities.invokeLater(() ->
                         new TradingView(tradingController, stockController, username).setVisible(true));
                 default -> {}
