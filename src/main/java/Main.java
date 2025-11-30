@@ -1,7 +1,7 @@
 import data.news.*;
 import data.usecase5.*;
 import data.*;
-import data.usecase4.InMemoryTradingDataAccess;
+import data.usecase4.JsonTradingDataAccess;
 
 import interface_adapters.controllers.*;
 import interface_adapters.presenters.*;
@@ -29,13 +29,14 @@ import use_case.trends.TrendsInteractor;
 
 import javax.sql.DataSource;
 import javax.swing.*;
+import java.nio.file.Paths;
 
 public class Main {
 
     private static DataSource dataSource;
     private static RegisteredUserRepository userRepository;
     private static RegisteredExpenseRepository expenseRepository;
-    private static InMemoryTradingDataAccess tradingData;
+    private static TradingDataAccessInterface tradingData;
     private static PortfolioRepository portfolioRepo;
     private static PriceHistoryRepository priceHistoryRepo;
 
@@ -86,9 +87,8 @@ public class Main {
                     new StockSearchController(stockSearchInteractor, watchlistRepository);
 
             //Trading setup
-            tradingData = new InMemoryTradingDataAccess();
-            // Initial cash for testing
-            tradingData.updateCash("testuser", 10000.0);
+            tradingData = new JsonTradingDataAccess(Paths.get("orders.json"));
+            
 
             // Portfolio repo relies on tradingData
             portfolioRepo = new TradingDataPortfolioRepository(tradingData);
@@ -206,7 +206,7 @@ public class Main {
         // create Presenter（implement PortfolioOutputBoundary）
         PortfolioPresenter presenter = new PortfolioPresenter(viewModel);
 
-        TradingDataAccessInterface tradingDataAccess = new InMemoryTradingDataAccess();
+        TradingDataAccessInterface tradingDataAccess = tradingData;
 
         // create Interactor（implement PortfolioInputBoundary）
         PortfolioInputBoundary interactor = new PortfolioInteractor(

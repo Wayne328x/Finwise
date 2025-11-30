@@ -1,6 +1,7 @@
 package data.usecase4;
 
 import entity.Holding;
+import entity.OrderRecord;
 import use_case.trading.TradingDataAccessInterface;
 import data.AlphaVantageAPI;
 import java.io.IOException;
@@ -63,11 +64,20 @@ public class InMemoryTradingDataAccess implements TradingDataAccessInterface{
         }
     }
 
-    // Returns the list of holdings of according the username
     @Override
     public List<Holding> getUserHoldings(String username) {
-        Map<String, Holding> userHoldings = holdings.get(username);
-        if (userHoldings == null) return Collections.emptyList();
-        return new ArrayList<>(userHoldings.values());
+        Map<String, Holding> h = userHoldings.get(username);
+        return h == null ? new ArrayList<>() : new ArrayList<>(h.values());
+    }
+
+    // do nothing for in-memory
+    @Override
+    public void saveOrder(OrderRecord orderRecord) {
+
+    }
+
+    @Override
+    public List<OrderRecord> findOrdersByUser(String username) {
+        return new ArrayList<>();
     }
 }
