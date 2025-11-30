@@ -5,23 +5,40 @@ package "UI (View)" {
   class StockSearchView {
     - controller: StockSearchController
     - username: String
+    + onSearchSubmitted(keywords: String)
+    + showResults(output: StockSearchOutputData)
   }
 }
 
 package "Interface Adapters" {
   class StockSearchController {
-    - stockSearchInteractor: StockSearchInteractor
+    - inputBoundary: StockSearchInputBoundary
     - watchlistRepository: WatchlistRepository
-    + search(keywords: String): StockSearchOutputData
+    + search(keywords: String): void
     + isWatched(username: String, symbol: String): boolean
     + setWatched(username: String, symbol: String, name: String, exchange: String, watched: boolean): void
     + getWatchedSymbols(username: String): List<String>
   }
+
+  class StockSearchPresenter implements StockSearchOutputBoundary {
+    - lastOutput: StockSearchOutputData
+    + present(output: StockSearchOutputData): void
+    + getLastOutput(): StockSearchOutputData
+  }
 }
 
 package "Use Cases" {
-  class StockSearchInteractor {
+  interface StockSearchInputBoundary {
+    + execute(input: StockSearchInputData): StockSearchOutputData
+  }
+
+  interface StockSearchOutputBoundary {
+    + present(output: StockSearchOutputData): void
+  }
+
+  class StockSearchInteractor implements StockSearchInputBoundary {
     - api: AlphaVantageAPI
+    - outputBoundary: StockSearchOutputBoundary
     + execute(input: StockSearchInputData): StockSearchOutputData
   }
 
@@ -51,9 +68,7 @@ package "Data / Frameworks" {
     - symbol: String
     - name: String
     - exchange: String
-    - type: String
     - region: String
-    - currency: String
   }
 
   interface WatchlistRepository {
@@ -63,29 +78,32 @@ package "Data / Frameworks" {
     + findSymbolsByUsername(username: String): List<String>
   }
 
-  class JdbcWatchlistRepository {
+  class JdbcWatchlistRepository implements WatchlistRepository {
     - dataSource: DataSource
   }
 }
 
-' --- Relationships (direction = dependency / call flow) ---
+' ===== Dependencies (Clean Architecture flow) =====
 
-' User search → controller
-StockSearchView --> StockSearchController : search(keywords)
+' View -> Controller
+StockSearchView --> StockSearchController : search()/watch actions
 
-' Controller → interactor + input/output DTOs
+' Controller -> Input Boundary + DTOs + Repository
+StockSearchController --> StockSearchInputBoundary : execute(input)
 StockSearchController --> StockSearchInputData
-StockSearchController --> StockSearchInteractor : execute(input)
+StockSearchController --> WatchlistRepository
+
+' Interactor -> API + Output Data + Output Boundary
+StockSearchInteractor --> AlphaVantageAPI : searchStocks(...)
 StockSearchInteractor --> StockSearchOutputData
 StockSearchOutputData --> StockSearchResult
+StockSearchInteractor --> StockSearchOutputBoundary : present(output)
 
-' Interactor → external service
-StockSearchInteractor --> AlphaVantageAPI : searchStocks(...)
-
-' Controller → watchlist abstraction
-StockSearchController --> WatchlistRepository : isWatched()/setWatched()/getWatchedSymbols()
+' Presenter -> View
+StockSearchPresenter --> StockSearchView : showResults(...)
 
 ' Concrete data implementation
 JdbcWatchlistRepository ..|> WatchlistRepository
+AlphaVantageAPI --> StockSearchResult
 
 @enduml

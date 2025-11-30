@@ -1,0 +1,199 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > StockSearchInteractor</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">use_case.stocksearch</a>
+</div>
+
+<h1>Coverage Summary for Class: StockSearchInteractor (use_case.stocksearch)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StockSearchInteractor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package use_case.stocksearch;
+&nbsp;
+&nbsp;import data.AlphaVantageAPI;
+&nbsp;import data.AlphaVantageAPI.StockSearchResult;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;/**
+&nbsp; * Interactor for stock search operations.
+&nbsp; * Handles the business logic for searching stocks using the AlphaVantage API.
+&nbsp; */
+&nbsp;public final class StockSearchInteractor implements StockSearchInputBoundary {
+&nbsp;  /**
+&nbsp;   * The API client for fetching stock data.
+&nbsp;   */
+&nbsp;  private final AlphaVantageAPI api;
+&nbsp;
+&nbsp;  /**
+&nbsp;   * The output boundary for presenting search results.
+&nbsp;   */
+&nbsp;  private final StockSearchOutputBoundary outputBoundary;
+&nbsp;
+&nbsp;  /**
+&nbsp;   * Constructs a StockSearchInteractor with the given API client and output boundary.
+&nbsp;   *
+&nbsp;   * @param apiClient the AlphaVantage API client
+&nbsp;   * @param outputBoundaryParam the output boundary for presenting results
+&nbsp;   */
+&nbsp;  public StockSearchInteractor(final AlphaVantageAPI apiClient,
+<b class="fc">&nbsp;      final StockSearchOutputBoundary outputBoundaryParam) {</b>
+<b class="fc">&nbsp;    this.api = apiClient;</b>
+<b class="fc">&nbsp;    this.outputBoundary = Objects.requireNonNull(</b>
+&nbsp;        outputBoundaryParam, &quot;outputBoundaryParam must not be null&quot;);
+&nbsp;  }
+&nbsp;
+&nbsp;  /**
+&nbsp;   * Executes a stock search operation based on the provided input.
+&nbsp;   *
+&nbsp;   * @param input the search input containing keywords
+&nbsp;   * @return output data containing search results or error information
+&nbsp;   */
+&nbsp;  @Override
+&nbsp;  public StockSearchOutputData execute(final StockSearchInputData input) {
+<b class="fc">&nbsp;    String keywords = input.getKeywords();</b>
+&nbsp;
+&nbsp;    StockSearchOutputData result;
+&nbsp;
+<b class="fc">&nbsp;    if (keywords == null || keywords.isBlank()) {</b>
+<b class="fc">&nbsp;      result = new StockSearchOutputData(</b>
+&nbsp;          false,
+&nbsp;          &quot;Search keywords cannot be empty&quot;,
+&nbsp;          new ArrayList&lt;&gt;());
+&nbsp;    } else {
+&nbsp;      try {
+<b class="fc">&nbsp;        List&lt;StockSearchResult&gt; results = api.searchStocks(keywords);</b>
+<b class="fc">&nbsp;        if (results.isEmpty()) {</b>
+<b class="fc">&nbsp;          result = new StockSearchOutputData(</b>
+&nbsp;              false,
+&nbsp;              &quot;No results for \&quot;&quot; + keywords + &quot;\&quot;&quot;,
+&nbsp;              new ArrayList&lt;&gt;());
+&nbsp;        } else {
+<b class="fc">&nbsp;          result = new StockSearchOutputData(true, &quot;Search completed&quot;, results);</b>
+&nbsp;        }
+&nbsp;      } catch (IOException e) {
+<b class="fc">&nbsp;        result = new StockSearchOutputData(</b>
+&nbsp;            false,
+<b class="fc">&nbsp;            &quot;Network error: &quot; + e.getMessage(),</b>
+&nbsp;            new ArrayList&lt;&gt;());
+&nbsp;      } catch (Exception e) {
+<b class="fc">&nbsp;        result = new StockSearchOutputData(</b>
+&nbsp;            false,
+<b class="fc">&nbsp;            &quot;Error: &quot; + e.getMessage(),</b>
+&nbsp;            new ArrayList&lt;&gt;());
+&nbsp;      }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    outputBoundary.present(result);</b>
+&nbsp;
+<b class="fc">&nbsp;    return result;</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-29 18:50</div>
+</div>
+</body>
+</html>
