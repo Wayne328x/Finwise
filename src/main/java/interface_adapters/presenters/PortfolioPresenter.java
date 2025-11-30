@@ -5,8 +5,8 @@ import entity.PortfolioSnapshot;
 import ui.portfolio.HoldingRow;
 import ui.portfolio.PortfolioViewModel;
 import ui.portfolio.SnapshotRow;
-import use_case.portfolio.PortfolioOutputBoundary;
-import use_case.portfolio.PortfolioOutputData;
+import usecase.portfolio.PortfolioOutputBoundary;
+import usecase.portfolio.PortfolioOutputData;
 
 import java.util.List;
 

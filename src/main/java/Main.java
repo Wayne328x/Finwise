@@ -14,18 +14,22 @@ import ui.news.NewsView;
 import ui.portfolio.PortfolioView;
 import ui.portfolio.PortfolioViewModel;
 import ui.stock_search.StockSearchView;
+import ui.tracker.TrackerView;
 import ui.trends.TrendsView;
 import ui.trends.TrendsViewModel;
-import use_case.login.*;
-import use_case.portfolio.*;
-import use_case.signup.*;
-import use_case.stocksearch.*;
-import use_case.fetch_news.*;
-import use_case.trading.*;
+import usecase.StockSearchInputBoundary;
+import usecase.StockSearchInteractor;
+import usecase.add_expense.AddExpenseInteractor;
+import usecase.list_expenses.ListExpensesInteractor;
+import usecase.login.*;
+import usecase.portfolio.*;
+import usecase.signup.*;
+import usecase.fetch_news.*;
+import usecase.trading.*;
 
 
-import use_case.trends.TrendsDataAccess;
-import use_case.trends.TrendsInteractor;
+import usecase.trends.TrendsDataAccess;
+import usecase.trends.TrendsInteractor;
 
 import javax.sql.DataSource;
 import javax.swing.*;
@@ -43,6 +47,7 @@ public class Main {
     private static SignUpController signUpController;
     private static LoginController loginController;
     private static DashboardController dashboardController;
+    private static TrackerController trackerController;
     private static StockSearchController stockSearchController;
     private static TradingController tradingController;
     private static TradingViewModel tradingViewModel;
@@ -73,6 +78,8 @@ public class Main {
             // Create interactors
             SignUpInteractor signUpInteractor = new SignUpInteractor(userRepository);
             LoginInteractor loginInteractor = new LoginInteractor(userRepository);
+            ListExpensesInteractor listExpensesInteractor = new ListExpensesInteractor(expenseRepository);
+            AddExpenseInteractor addExpenseInteractor     = new AddExpenseInteractor(expenseRepository);
 
             // Stocks API call
             AlphaVantageAPI api = new AlphaVantageAPI();
@@ -106,6 +113,7 @@ public class Main {
             signUpController = new SignUpController(signUpInteractor);
             loginController = new LoginController(loginInteractor);
             dashboardController = new DashboardController();
+            trackerController = new TrackerController(listExpensesInteractor, addExpenseInteractor);
             portfolioController = new PortfolioController(portfolioInteractor, portfolioPresenter.getViewModel());
 
 
@@ -164,7 +172,8 @@ public class Main {
                 portfolioController,
                 Main::showLoginView,     // callback to login screen
                 username,                // show welcome message
-                expenseRepository
+                expenseRepository,
+                Main::showTrackerView
         );
 
         currentFrame = dashboardView;
@@ -194,6 +203,11 @@ public class Main {
 
         // Initialize the news
         controller.fetchNews();
+    }
+
+    private static void showTrackerView(String username) {
+        TrackerView trackerView = new TrackerView(username, trackerController);
+        trackerView.setVisible(true);
     }
 
     private static void showPortfolioView() {
@@ -267,4 +281,3 @@ public class Main {
         // ToDo
     }
 }
-

@@ -1,39 +1,56 @@
 package ui.tracker;
 
-import data.ExpenseRepository;
-import entity.Expense;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import entity.Expense;
+import interface_adapters.controllers.TrackerController;
+import usecase.add_expense.AddExpenseOutputData;
+import usecase.list_expenses.ListExpensesOutputData;
+
+/**
+ * View for expense tracking.
+ */
+@SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:SuppressWarnings"})
 public class TrackerView extends JFrame {
 
+    private static final int VIEW_PANEL_WIDTH = 800;
+    private static final int VIEW_PANEL_HEIGHT = 500;
+    private static final String CENT_DECIMAL_COUNT = "%.2f";
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     private final String username;
-    private final ExpenseRepository expenseRepository;
+    private final TrackerController trackerController;
 
     private final DefaultTableModel tableModel;
-    private final JTable table;
 
     private final JLabel totalLabel = new JLabel("Total: $0.00");
 
     private final JTextField datetimeField = new JTextField(16);
     private final JComboBox<String> typeCombo = new JComboBox<>(new String[]{
-            "Food", "Technology", "Leisure", "Transport", "Other"
+        "Food", "Technology", "Leisure", "Transport", "Other",
     });
     private final JTextField amountField = new JTextField(8);
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    public TrackerView(String username, ExpenseRepository expenseRepository) {
+    public TrackerView(String username, TrackerController trackerController) {
         this.username = username;
-        this.expenseRepository = expenseRepository;
+        this.trackerController = trackerController;
 
         setTitle("Expense Tracker");
-        setSize(800, 500);
+        setSize(VIEW_PANEL_WIDTH, VIEW_PANEL_HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -44,23 +61,23 @@ public class TrackerView extends JFrame {
             }
         };
 
-        table = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(table);
+        final JTable table = new JTable(tableModel);
+        final JScrollPane scrollPane = new JScrollPane(table);
 
-        JPanel bottomPanel = new JPanel();
+        final JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout());
 
-        JPanel totalPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        final JPanel totalPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         totalPanel.add(totalLabel);
 
-        JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        final JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         formPanel.add(new JLabel("Date/Time"));
         formPanel.add(datetimeField);
         formPanel.add(new JLabel("Type"));
         formPanel.add(typeCombo);
         formPanel.add(new JLabel("Amount"));
         formPanel.add(amountField);
-        JButton addButton = new JButton("Add");
+        final JButton addButton = new JButton("Add");
         formPanel.add(addButton);
 
         bottomPanel.add(totalPanel, BorderLayout.NORTH);
@@ -70,64 +87,54 @@ public class TrackerView extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        datetimeField.setText(LocalDateTime.now().format(formatter));
+        datetimeField.setText(LocalDateTime.now().format(FORMATTER));
 
         loadExpenses();
 
-        addButton.addActionListener(e -> onAddExpense());
+        addButton.addActionListener(event -> onAddExpense());
     }
 
     private void loadExpenses() {
         tableModel.setRowCount(0);
-        List<Expense> expenses = expenseRepository.findByUsername(username);
-        for (Expense expense : expenses) {
+
+        final ListExpensesOutputData output = trackerController.loadExpenses(username);
+        for (Expense expense : output.getExpenses()) {
             tableModel.addRow(new Object[] {
                     expense.getDatetime(),
                     expense.getType(),
-                    String.format("%.2f", expense.getAmount())
+                    String.format(CENT_DECIMAL_COUNT, expense.getAmount()),
             });
-        } updateTotal();
-    }
+        }
 
-    private void updateTotal() {
-        double total = expenseRepository.getTotalForUser(username);
-        totalLabel.setText("Total: " + String.format("%.2f", total));
+        totalLabel.setText("Total: " + String.format(CENT_DECIMAL_COUNT, output.getTotal()));
     }
 
     private void onAddExpense() {
-        String datetime = datetimeField.getText().trim();
-        String type = (String) typeCombo.getSelectedItem();
-        String amountText = amountField.getText().trim();
-        double amount;
+        final String datetime = datetimeField.getText().trim();
+        final String type = (String) typeCombo.getSelectedItem();
+        final String amountText = amountField.getText().trim();
 
-        if (datetime.isEmpty() || type == null || amountText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill up all fields!",
-                    "Validation", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        final AddExpenseOutputData result =
+                trackerController.addExpense(username, datetime, type, amountText);
 
-        try {
-            amount = Double.parseDouble(amountText);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Please enter a number!",
-                    "Validation", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        try {
-            expenseRepository.add(username, datetime, type, amount);
+        if (result.isSuccess()) {
+            final double amount = result.getAmount();
             tableModel.insertRow(0, new Object[] {
-                    datetime,
-                    type,
-                    String.format("%.2f", amount)
+                    result.getDatetime(),
+                    result.getType(),
+                    String.format(CENT_DECIMAL_COUNT, amount),
             });
-            updateTotal();
 
-            datetimeField.setText(LocalDateTime.now().format(formatter));
+            final ListExpensesOutputData listOutput = trackerController.loadExpenses(username);
+            totalLabel.setText("Total: " + String.format(CENT_DECIMAL_COUNT, listOutput.getTotal()));
+
+            // Reset fields
+            datetimeField.setText(LocalDateTime.now().format(FORMATTER));
             amountField.setText("");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Failed to add expense!",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            JOptionPane.showMessageDialog(this, result.getMessage(),
+                    "Validation", JOptionPane.WARNING_MESSAGE);
         }
     }
 }

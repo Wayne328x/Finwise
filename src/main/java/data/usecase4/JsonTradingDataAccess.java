@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import data.AlphaVantageAPI;
 import entity.OrderRecord;
 import entity.Holding;
-import use_case.trading.TradingDataAccessInterface;
+import usecase.trading.TradingDataAccessInterface;
 
 import java.io.IOException;
 import java.io.Reader;

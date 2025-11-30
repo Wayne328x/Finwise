@@ -7,7 +7,6 @@ import ui.stock_search.StockSearchView;
 import ui.trading.TradingView;
 import ui.trends.TrendsViewModel;
 import ui.news.NewsView;
-import ui.tracker.TrackerView;
 import ui.trends.TrendsView;
 
 import javax.swing.*;
@@ -15,6 +14,7 @@ import java.awt.*;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 
 public class DashboardView extends JFrame {
 
@@ -28,6 +28,7 @@ public class DashboardView extends JFrame {
     private final Runnable onLogout;
     private final String username;
     private final ExpenseRepository expenseRepository;
+    private final Consumer<String> showTrackerView;
 
     private final JTabbedPane tabs = new JTabbedPane();
 
@@ -48,7 +49,8 @@ public class DashboardView extends JFrame {
                          PortfolioController portfolioController,
                          Runnable onLogout,
                          String username,
-                         ExpenseRepository expenseRepository) {
+                         ExpenseRepository expenseRepository,
+                         Consumer<String> showTrackerView) {
         this.dashController = dashController;
         this.stockController = stockController;
         this.tradingController = tradingController;
@@ -58,6 +60,7 @@ public class DashboardView extends JFrame {
         this.onLogout = onLogout;
         this.username = username;
         this.expenseRepository = expenseRepository;
+        this.showTrackerView = showTrackerView;
 
         setTitle("FinWise");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,7 +88,7 @@ public class DashboardView extends JFrame {
         tabs.addTab("Portfolio", buildTabPlaceholder("Open the Portfolio window"));
 
         // When user selects a tab, open a new window and reset back to Home
-        tabs.addChangeListener(e -> {
+        tabs.addChangeListener(event -> {
             int idx = tabs.getSelectedIndex();
             if (idx == HOME_TAB) {
                 // Refresh watchlist when returning to Home tab
@@ -100,8 +103,8 @@ public class DashboardView extends JFrame {
                     NewsView newsView = new NewsView(null);
                     interface_adapters.presenters.FetchNewsPresenter presenter =
                         new interface_adapters.presenters.FetchNewsPresenter(newsView);
-                    use_case.fetch_news.FetchNewsInteractor interactor =
-                        new use_case.fetch_news.FetchNewsInteractor(newsApiDAO, presenter);
+                    usecase.fetch_news.FetchNewsInteractor interactor =
+                        new usecase.fetch_news.FetchNewsInteractor(newsApiDAO, presenter);
                     interface_adapters.controllers.NewsController newsController =
                         new interface_adapters.controllers.NewsController(interactor, presenter);
                     newsView.setController(newsController);
@@ -109,15 +112,15 @@ public class DashboardView extends JFrame {
                     newsView.setVisible(true);
                 });
                 case TRACKER_TAB -> SwingUtilities.invokeLater(() ->
-                        new TrackerView(username, expenseRepository).setVisible(true));
+                        showTrackerView.accept(username));
                 case STOCK_TAB -> SwingUtilities.invokeLater(() ->
                         new StockSearchView(stockController, username).setVisible(true));
+                case TRADING_TAB -> SwingUtilities.invokeLater(() ->
+                        new TradingView(tradingController, stockController, username).setVisible(true));
                 case TRENDS_TAB -> SwingUtilities.invokeLater(() ->
                         new TrendsView(trendsController, trendsViewModel, username).setVisible(true));
                 case PORTFOLIO_TAB -> SwingUtilities.invokeLater(() ->
                         new PortfolioView(portfolioController, username).setVisible(true));
-                case TRADING_TAB -> SwingUtilities.invokeLater(() ->
-                        new TradingView(tradingController, stockController, username).setVisible(true));
                 default -> {}
             }
             // Reset to Home to avoid repeated auto-opens on focus changes

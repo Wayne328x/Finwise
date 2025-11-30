@@ -1,6 +1,6 @@
 package ui.signup;
 
-import use_case.signup.SignUpOutputData;
+import usecase.signup.SignUpOutputData;
 
 import javax.swing.*;
 
@@ -18,7 +18,7 @@ public class SignUpView extends JFrame {
     public SignUpView(SignUpController signUpController, Runnable showLoginView) {
         setTitle("Sign Up");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 180);
+        setSize(400, 200);
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new GridLayout(3, 2, 5, 5));

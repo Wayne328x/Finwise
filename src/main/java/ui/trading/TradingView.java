@@ -1,9 +1,9 @@
 package ui.trading;
 import interface_adapters.controllers.TradingController;
 import interface_adapters.controllers.StockSearchController;
-import use_case.trading.TradingInputData;
-import use_case.trading.TradingViewModel;
-import use_case.stocksearch.StockSearchOutputData;
+import usecase.trading.TradingInputData;
+import usecase.trading.TradingViewModel;
+import usecase.StockSearchOutputData;
 import data.AlphaVantageAPI;
 
 import javax.swing.*;

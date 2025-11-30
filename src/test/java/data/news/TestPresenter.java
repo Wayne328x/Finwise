@@ -1,7 +1,7 @@
 package data.news;
 
 import entity.News;
-import use_case.fetch_news.FetchNewsOutputBoundary;
+import usecase.fetch_news.FetchNewsOutputBoundary;
 
 import java.util.List;
 

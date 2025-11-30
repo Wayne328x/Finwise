@@ -1,8 +1,7 @@
 package data.news;
 
-import data.news.MockNewsDAO;
-import use_case.fetch_news.FetchNewsInputData;
-import use_case.fetch_news.FetchNewsInteractor;
+import usecase.fetch_news.FetchNewsInputData;
+import usecase.fetch_news.FetchNewsInteractor;
 
 public class FetchNewsInteractorTest {
 

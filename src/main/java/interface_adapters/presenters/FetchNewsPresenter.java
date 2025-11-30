@@ -3,7 +3,7 @@ package interface_adapters.presenters;
 import entity.News;
 import ui.news.NewsView;
 import ui.news.NewsViewModel;
-import use_case.fetch_news.FetchNewsOutputBoundary;
+import usecase.fetch_news.FetchNewsOutputBoundary;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

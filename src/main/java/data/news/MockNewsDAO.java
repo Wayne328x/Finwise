@@ -1,7 +1,7 @@
 package data.news;
 
 import entity.News;
-import use_case.fetch_news.NewsDataAccessInterface;
+import usecase.fetch_news.NewsDataAccessInterface;
 import com.google.gson.*;
 
 import java.io.FileReader;

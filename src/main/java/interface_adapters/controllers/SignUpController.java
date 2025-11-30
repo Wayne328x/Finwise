@@ -1,8 +1,8 @@
 package interface_adapters.controllers;
 
-import use_case.signup.SignUpInputData;
-import use_case.signup.SignUpInteractor;
-import use_case.signup.SignUpOutputData;
+import usecase.signup.SignUpInputData;
+import usecase.signup.SignUpInteractor;
+import usecase.signup.SignUpOutputData;
 
 public class SignUpController {
 
