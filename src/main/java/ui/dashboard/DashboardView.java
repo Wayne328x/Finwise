@@ -6,7 +6,6 @@ import ui.portfolio.PortfolioView;
 import ui.stock_search.StockSearchView;
 import ui.trends.TrendsViewModel;
 import ui.news.NewsView;
-import ui.tracker.TrackerView;
 import ui.trends.TrendsView;
 
 import javax.swing.*;
@@ -84,7 +83,7 @@ public class DashboardView extends JFrame {
         tabs.addTab("Portfolio", buildTabPlaceholder("Open the Portfolio window"));
 
         // When user selects a tab, open a new window and reset back to Home
-        tabs.addChangeListener(e -> {
+        tabs.addChangeListener(event -> {
             int idx = tabs.getSelectedIndex();
             if (idx == HOME_TAB) {
                 // Refresh watchlist when returning to Home tab
