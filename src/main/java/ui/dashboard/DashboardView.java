@@ -4,6 +4,7 @@ import data.ExpenseRepository;
 import interface_adapters.controllers.*;
 import ui.portfolio.PortfolioView;
 import ui.stock_search.StockSearchView;
+import ui.trading.TradingView;
 import ui.trends.TrendsViewModel;
 import ui.news.NewsView;
 import ui.tracker.TrackerView;
@@ -37,8 +38,9 @@ public class DashboardView extends JFrame {
     private static final int NEWS_TAB = 1;
     private static final int TRACKER_TAB = 2;
     private static final int STOCK_TAB = 3;
-    private static final int TRENDS_TAB = 4;
-    private static final int PORTFOLIO_TAB = 5;
+    private static final int TRADER_TAB = 4;
+    private static final int TRENDS_TAB = 5;
+    private static final int PORTFOLIO_TAB = 6;
 
     public DashboardView(DashboardController dashController,
                          StockSearchController stockController,
@@ -114,6 +116,8 @@ public class DashboardView extends JFrame {
                         showTrackerView.accept(username));
                 case STOCK_TAB -> SwingUtilities.invokeLater(() ->
                         new StockSearchView(stockController, username).setVisible(true));
+                case TRADER_TAB -> SwingUtilities.invokeLater(() ->
+                        new TradingView(tradingController, username).setVisible(true));
                 case TRENDS_TAB -> SwingUtilities.invokeLater(() ->
                         new TrendsView(trendsController, trendsViewModel, username).setVisible(true));
                 case PORTFOLIO_TAB -> SwingUtilities.invokeLater(() ->
