@@ -1,35 +1,40 @@
 @startuml
 skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
 
-package "UI (View)" {
+' UI Layer
+package "ui" {
   class StockSearchView {
     - controller: StockSearchController
     - username: String
-    + onSearchSubmitted(keywords: String)
-    + showResults(output: StockSearchOutputData)
+    + showResults(output: StockSearchOutputData): void
+    + updateStatus(message: String): void
   }
 }
 
-package "Interface Adapters" {
+' Interface Adapters Layer
+package "interface_adapters.controllers" {
   class StockSearchController {
-    - inputBoundary: StockSearchInputBoundary
+    - stockSearchInteractor: StockSearchInputBoundary
     - watchlistRepository: WatchlistRepository
     + search(keywords: String): void
     + isWatched(username: String, symbol: String): boolean
     + setWatched(username: String, symbol: String, name: String, exchange: String, watched: boolean): void
     + getWatchedSymbols(username: String): List<String>
   }
+}
 
+package "interface_adapters.presenters" {
   class StockSearchPresenter implements StockSearchOutputBoundary {
-    - lastOutput: StockSearchOutputData
+    - view: StockSearchView
     + present(output: StockSearchOutputData): void
-    + getLastOutput(): StockSearchOutputData
   }
 }
 
-package "Use Cases" {
+' Use Cases Layer
+package "use case" {
   interface StockSearchInputBoundary {
-    + execute(input: StockSearchInputData): StockSearchOutputData
+    + execute(input: StockSearchInputData): void
   }
 
   interface StockSearchOutputBoundary {
@@ -39,7 +44,7 @@ package "Use Cases" {
   class StockSearchInteractor implements StockSearchInputBoundary {
     - api: AlphaVantageAPI
     - outputBoundary: StockSearchOutputBoundary
-    + execute(input: StockSearchInputData): StockSearchOutputData
+    + execute(input: StockSearchInputData): void
   }
 
   class StockSearchInputData {
@@ -57,7 +62,8 @@ package "Use Cases" {
   }
 }
 
-package "Data / Frameworks" {
+' Data / Frameworks Layer
+package "data" {
   class AlphaVantageAPI {
     + searchStocks(keywords: String): List<StockSearchResult>
     + getQuote(symbol: String): StockQuote
@@ -68,7 +74,9 @@ package "Data / Frameworks" {
     - symbol: String
     - name: String
     - exchange: String
+    - type: String
     - region: String
+    - currency: String
   }
 
   interface WatchlistRepository {
@@ -83,27 +91,34 @@ package "Data / Frameworks" {
   }
 }
 
-' ===== Dependencies (Clean Architecture flow) =====
+' ===== Clean Architecture Flow =====
+' Flow: Controller → Interactor → Data Access + Presenter → View
 
-' View -> Controller
-StockSearchView --> StockSearchController : search()/watch actions
+' Step 1: View → Controller
+StockSearchView --> StockSearchController : search(keywords)
 
-' Controller -> Input Boundary + DTOs + Repository
+' Step 2: Controller → Interactor
 StockSearchController --> StockSearchInputBoundary : execute(input)
-StockSearchController --> StockSearchInputData
-StockSearchController --> WatchlistRepository
+StockSearchController --> StockSearchInputData : creates
 
-' Interactor -> API + Output Data + Output Boundary
-StockSearchInteractor --> AlphaVantageAPI : searchStocks(...)
-StockSearchInteractor --> StockSearchOutputData
-StockSearchOutputData --> StockSearchResult
+' Step 3: Interactor → Data Access
+StockSearchInteractor --> AlphaVantageAPI : searchStocks(keywords)
+
+' Step 4: Interactor → Presenter (via Output Boundary)
 StockSearchInteractor --> StockSearchOutputBoundary : present(output)
+StockSearchInteractor --> StockSearchOutputData : creates
 
-' Presenter -> View
-StockSearchPresenter --> StockSearchView : showResults(...)
+' Step 5: Presenter → View
+StockSearchPresenter --> StockSearchView : showResults(output)
 
-' Concrete data implementation
-JdbcWatchlistRepository ..|> WatchlistRepository
-AlphaVantageAPI --> StockSearchResult
+' Additional dependencies
+StockSearchOutputData --> StockSearchResult : contains
+StockSearchPresenter ..|> StockSearchOutputBoundary : implements
+StockSearchInteractor ..|> StockSearchInputBoundary : implements
+JdbcWatchlistRepository ..|> WatchlistRepository : implements
+AlphaVantageAPI --> StockSearchResult : returns
+
+' Note: StockSearchResult is an inner class of AlphaVantageAPI
+
 
 @enduml
