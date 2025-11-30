@@ -10,19 +10,27 @@ import java.util.List;
  * Interactor for stock search operations.
  * Handles the business logic for searching stocks using the AlphaVantage API.
  */
-public class StockSearchInteractor {
+public final class StockSearchInteractor implements StockSearchInputBoundary {
   /**
    * The API client for fetching stock data.
    */
   private final AlphaVantageAPI api;
 
   /**
-   * Constructs a StockSearchInteractor with the given API client.
+   * The output boundary for presenting search results.
+   */
+  private final StockSearchOutputBoundary outputBoundary;
+
+  /**
+   * Constructs a StockSearchInteractor with the given API client and output boundary.
    *
    * @param apiClient the AlphaVantage API client
+   * @param outputBoundaryParam the output boundary for presenting results
    */
-  public StockSearchInteractor(final AlphaVantageAPI apiClient) {
+  public StockSearchInteractor(final AlphaVantageAPI apiClient,
+      final StockSearchOutputBoundary outputBoundaryParam) {
     this.api = apiClient;
+    this.outputBoundary = outputBoundaryParam;
   }
 
   /**
@@ -31,35 +39,45 @@ public class StockSearchInteractor {
    * @param input the search input containing keywords
    * @return output data containing search results or error information
    */
+  @Override
   public StockSearchOutputData execute(final StockSearchInputData input) {
     String keywords = input.getKeywords();
 
+    StockSearchOutputData result;
+
     if (keywords == null || keywords.isBlank()) {
-      return new StockSearchOutputData(
+      result = new StockSearchOutputData(
           false,
           "Search keywords cannot be empty",
           new ArrayList<>());
-    }
-
-    try {
-      List<StockSearchResult> results = api.searchStocks(keywords);
-      if (results.isEmpty()) {
-        return new StockSearchOutputData(
+    } else {
+      try {
+        List<StockSearchResult> results = api.searchStocks(keywords);
+        if (results.isEmpty()) {
+          result = new StockSearchOutputData(
+              false,
+              "No results for \"" + keywords + "\"",
+              new ArrayList<>());
+        } else {
+          result = new StockSearchOutputData(true, "Search completed", results);
+        }
+      } catch (IOException e) {
+        result = new StockSearchOutputData(
             false,
-            "No results for \"" + keywords + "\"",
+            "Network error: " + e.getMessage(),
+            new ArrayList<>());
+      } catch (Exception e) {
+        result = new StockSearchOutputData(
+            false,
+            "Error: " + e.getMessage(),
             new ArrayList<>());
       }
-      return new StockSearchOutputData(true, "Search completed", results);
-    } catch (IOException e) {
-      return new StockSearchOutputData(
-          false,
-          "Network error: " + e.getMessage(),
-          new ArrayList<>());
-    } catch (Exception e) {
-      return new StockSearchOutputData(
-          false,
-          "Error: " + e.getMessage(),
-          new ArrayList<>());
     }
+
+    if (outputBoundary != null) {
+      outputBoundary.present(result);
+    }
+
+    return result;
   }
 }

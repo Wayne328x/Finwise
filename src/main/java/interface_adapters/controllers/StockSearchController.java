@@ -2,8 +2,8 @@ package interface_adapters.controllers;
 
 import data.WatchlistRepository;
 import java.util.List;
+import use_case.stocksearch.StockSearchInputBoundary;
 import use_case.stocksearch.StockSearchInputData;
-import use_case.stocksearch.StockSearchInteractor;
 import use_case.stocksearch.StockSearchOutputData;
 
 /**
@@ -14,9 +14,9 @@ import use_case.stocksearch.StockSearchOutputData;
 public class StockSearchController {
 
   /**
-   * The interactor for stock search operations.
+   * The input boundary for stock search operations.
    */
-  private final StockSearchInteractor stockSearchInteractor;
+  private final StockSearchInputBoundary stockSearchInteractor;
 
   /**
    * The repository for watchlist operations.
@@ -26,11 +26,11 @@ public class StockSearchController {
   /**
    * Constructs a StockSearchController with the given dependencies.
    *
-   * @param interactor the stock search interactor
+   * @param interactor the stock search input boundary
    * @param repository the watchlist repository
    */
   public StockSearchController(
-      final StockSearchInteractor interactor,
+      final StockSearchInputBoundary interactor,
       final WatchlistRepository repository) {
     this.stockSearchInteractor = interactor;
     this.watchlistRepository = repository;
