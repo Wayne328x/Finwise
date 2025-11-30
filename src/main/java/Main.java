@@ -277,3 +277,41 @@ public class Main {
     }
 }
 
+
+    private static void showStockPricesView() {
+        if (currentFrame != null) currentFrame.dispose();
+
+        AlphaVantageAPI api = new AlphaVantageAPI();
+        StockSearchInteractor interactor = new StockSearchInteractor(api);
+
+        // Use a watchlist repository so the stock search controller
+        // has access to persisted watched stocks.
+        WatchlistRepository watchlistRepository =
+                new JdbcWatchlistRepository(dataSource);
+
+        StockSearchController controller =
+                new StockSearchController(interactor, watchlistRepository);
+
+        StockSearchView view = new StockSearchView(
+                controller,
+                currentUsername
+        );
+
+        currentFrame = view;
+        view.setVisible(true);
+    }
+
+    private static void showTrendsView() {
+        if (currentFrame != null) currentFrame.dispose();
+
+        // Use the already-initialized fields
+        TrendsView trendsView = new TrendsView(trendsController, trendsViewModel, currentUsername);
+        currentFrame = trendsView;
+        trendsView.setVisible(true);
+    }
+
+    private static void showExpensesView() {
+        // ToDo
+    }
+}
+
