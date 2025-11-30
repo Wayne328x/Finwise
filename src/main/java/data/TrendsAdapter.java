@@ -2,7 +2,7 @@ package data;
 
 import java.util.List;
 import entity.Expense;
-import use_case.trends.TrendsDataAccess;
+import usecase.trends.TrendsDataAccess;
 
 /**
  * Data adapter for the Trends use case.

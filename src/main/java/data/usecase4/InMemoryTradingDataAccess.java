@@ -1,7 +1,7 @@
 package data.usecase4;
 
 import entity.Holding;
-import use_case.trading.TradingDataAccessInterface;
+import usecase.trading.TradingDataAccessInterface;
 import data.AlphaVantageAPI;
 import java.io.IOException;
 import java.util.*;

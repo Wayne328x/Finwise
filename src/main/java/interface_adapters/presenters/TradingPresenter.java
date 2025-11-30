@@ -1,7 +1,7 @@
 package interface_adapters.presenters;
-import use_case.trading.TradingOutputBoundary;
-import use_case.trading.TradingOutputData;
-import use_case.trading.TradingViewModel;
+import usecase.trading.TradingOutputBoundary;
+import usecase.trading.TradingOutputData;
+import usecase.trading.TradingViewModel;
 
 public class TradingPresenter implements TradingOutputBoundary {
     private final TradingViewModel viewModel;

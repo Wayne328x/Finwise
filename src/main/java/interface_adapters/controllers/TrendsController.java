@@ -1,7 +1,7 @@
 package interface_adapters.controllers;
 
-import use_case.trends.TrendsInputBoundary;
-import use_case.trends.TrendsInputData;
+import usecase.trends.TrendsInputBoundary;
+import usecase.trends.TrendsInputData;
 
 import java.time.LocalDate;
 

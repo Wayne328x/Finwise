@@ -1,7 +1,7 @@
 package data.usecase5;
 
 import entity.Holding;
-import use_case.trading.TradingDataAccessInterface;
+import usecase.trading.TradingDataAccessInterface;
 
 import java.util.List;
 

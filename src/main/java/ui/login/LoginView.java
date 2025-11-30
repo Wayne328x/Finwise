@@ -1,6 +1,6 @@
 package ui.login;
 
-import use_case.login.LoginOutputData;
+import usecase.login.LoginOutputData;
 
 import javax.swing.*;
 

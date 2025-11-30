@@ -1,6 +1,6 @@
 package ui.signup;
 
-import use_case.signup.SignUpOutputData;
+import usecase.signup.SignUpOutputData;
 
 import javax.swing.*;
 

@@ -103,8 +103,8 @@ public class DashboardView extends JFrame {
                     NewsView newsView = new NewsView(null);
                     interface_adapters.presenters.FetchNewsPresenter presenter =
                         new interface_adapters.presenters.FetchNewsPresenter(newsView);
-                    use_case.fetch_news.FetchNewsInteractor interactor =
-                        new use_case.fetch_news.FetchNewsInteractor(newsApiDAO, presenter);
+                    usecase.fetch_news.FetchNewsInteractor interactor =
+                        new usecase.fetch_news.FetchNewsInteractor(newsApiDAO, presenter);
                     interface_adapters.controllers.NewsController newsController =
                         new interface_adapters.controllers.NewsController(interactor, presenter);
                     newsView.setController(newsController);
@@ -115,14 +115,12 @@ public class DashboardView extends JFrame {
                         showTrackerView.accept(username));
                 case STOCK_TAB -> SwingUtilities.invokeLater(() ->
                         new StockSearchView(stockController, username).setVisible(true));
-                case TRADER_TAB -> SwingUtilities.invokeLater(() ->
-                        new TradingView(tradingController, username).setVisible(true));
+                case TRADING_TAB -> SwingUtilities.invokeLater(() ->
+                        new TradingView(tradingController, stockController, username).setVisible(true));
                 case TRENDS_TAB -> SwingUtilities.invokeLater(() ->
                         new TrendsView(trendsController, trendsViewModel, username).setVisible(true));
                 case PORTFOLIO_TAB -> SwingUtilities.invokeLater(() ->
                         new PortfolioView(portfolioController, username).setVisible(true));
-                case TRADING_TAB -> SwingUtilities.invokeLater(() ->
-                        new TradingView(tradingController, stockController, username).setVisible(true));
                 default -> {}
             }
             // Reset to Home to avoid repeated auto-opens on focus changes

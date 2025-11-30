@@ -1,8 +1,8 @@
 package interface_adapters.controllers;
 
 import ui.portfolio.PortfolioViewModel;
-import use_case.portfolio.PortfolioInputBoundary;
-import use_case.portfolio.PortfolioInputData;
+import usecase.portfolio.PortfolioInputBoundary;
+import usecase.portfolio.PortfolioInputData;
 
 /**
  * Controller for the Portfolio Analysis use case (Use Case 5).

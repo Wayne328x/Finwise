@@ -17,18 +17,19 @@ import ui.stock_search.StockSearchView;
 import ui.tracker.TrackerView;
 import ui.trends.TrendsView;
 import ui.trends.TrendsViewModel;
-import use_case.add_expense.AddExpenseInteractor;
-import use_case.list_expenses.ListExpensesInteractor;
-import use_case.login.*;
-import use_case.portfolio.*;
-import use_case.signup.*;
-import use_case.stocksearch.*;
-import use_case.fetch_news.*;
-import use_case.trading.*;
+import usecase.StockSearchInputBoundary;
+import usecase.StockSearchInteractor;
+import usecase.add_expense.AddExpenseInteractor;
+import usecase.list_expenses.ListExpensesInteractor;
+import usecase.login.*;
+import usecase.portfolio.*;
+import usecase.signup.*;
+import usecase.fetch_news.*;
+import usecase.trading.*;
 
 
-import use_case.trends.TrendsDataAccess;
-import use_case.trends.TrendsInteractor;
+import usecase.trends.TrendsDataAccess;
+import usecase.trends.TrendsInteractor;
 
 import javax.sql.DataSource;
 import javax.swing.*;

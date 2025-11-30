@@ -1,7 +1,7 @@
 package interface_adapters.presenters;
 
-import use_case.trends.TrendsOutputBoundary;
-import use_case.trends.TrendsOutputData;
+import usecase.trends.TrendsOutputBoundary;
+import usecase.trends.TrendsOutputData;
 import ui.trends.TrendsViewModel;
 
 /**

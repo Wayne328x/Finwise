@@ -1,7 +1,7 @@
 package interface_adapters.controllers;
 
-import use_case.add_expense.*;
-import use_case.list_expenses.*;
+import usecase.add_expense.*;
+import usecase.list_expenses.*;
 
 public class TrackerController {
 

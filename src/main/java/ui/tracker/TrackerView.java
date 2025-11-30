@@ -18,8 +18,8 @@ import javax.swing.table.DefaultTableModel;
 
 import entity.Expense;
 import interface_adapters.controllers.TrackerController;
-import use_case.add_expense.AddExpenseOutputData;
-import use_case.list_expenses.ListExpensesOutputData;
+import usecase.add_expense.AddExpenseOutputData;
+import usecase.list_expenses.ListExpensesOutputData;
 
 /**
  * View for expense tracking.

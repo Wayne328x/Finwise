@@ -1,7 +1,7 @@
 package interface_adapters.controllers;
-import use_case.trading.TradingInputBoundary;
-import use_case.trading.TradingInputData;
-import use_case.trading.TradingViewModel;
+import usecase.trading.TradingInputBoundary;
+import usecase.trading.TradingInputData;
+import usecase.trading.TradingViewModel;
 
 public class TradingController {
 
