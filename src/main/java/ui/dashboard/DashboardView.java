@@ -4,6 +4,7 @@ import data.ExpenseRepository;
 import interface_adapters.controllers.*;
 import ui.portfolio.PortfolioView;
 import ui.stock_search.StockSearchView;
+import ui.trading.TradingView;
 import ui.trends.TrendsViewModel;
 import ui.news.NewsView;
 import ui.trends.TrendsView;
