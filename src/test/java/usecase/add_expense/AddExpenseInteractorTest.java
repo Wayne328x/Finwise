@@ -22,7 +22,7 @@ class AddExpenseInteractorTest {
     }
 
     /**
-     * all fields valid -> success, repo.add called with correct values.
+     * All fields valid -> success, repo.add called with correct values.
      */
     @Test
     void testAddExpenseSuccess() {
@@ -54,7 +54,7 @@ class AddExpenseInteractorTest {
     @Test
     void testAddExpenseMissingUsername() {
         AddExpenseInputData input = new AddExpenseInputData(
-                " ",
+                " ",                         // blank username
                 "2025-11-30 14:30",
                 "Food",
                 "10.00"
@@ -75,7 +75,7 @@ class AddExpenseInteractorTest {
     void testAddExpenseMissingDatetime() {
         AddExpenseInputData input = new AddExpenseInputData(
                 "alice",
-                "   ",
+                "   ",                        // blank datetime
                 "Food",
                 "10.00"
         );
@@ -117,13 +117,33 @@ class AddExpenseInteractorTest {
                 "alice",
                 "2025-11-30 14:30",
                 "Food",
-                ""
+                ""                             // empty amount
         );
 
         AddExpenseOutputData output = interactor.execute(input);
 
         assertFalse(output.isSuccess());
         assertEquals("Please fill up all fields!", output.getMessage());
+        assertNull(output.getAmount());
+        assertFalse(fakeRepo.addCalled);
+    }
+
+    /**
+     * Invalid datetime format -> fail, no repo call.
+     */
+    @Test
+    void testAddExpenseInvalidDatetimeFormat() {
+        AddExpenseInputData input = new AddExpenseInputData(
+                "alice",
+                "202511-30 14:30",            // invalid format (missing dash)
+                "Food",
+                "5.00"
+        );
+
+        AddExpenseOutputData output = interactor.execute(input);
+
+        assertFalse(output.isSuccess());
+        assertEquals("Please enter date/time as yyyy-MM-dd HH:mm", output.getMessage());
         assertNull(output.getAmount());
         assertFalse(fakeRepo.addCalled);
     }
@@ -137,7 +157,7 @@ class AddExpenseInteractorTest {
                 "alice",
                 "2025-11-30 14:30",
                 "Food",
-                "twelve point five"
+                "twelve point five"            // invalid number
         );
 
         AddExpenseOutputData output = interactor.execute(input);
@@ -167,11 +187,12 @@ class AddExpenseInteractorTest {
         assertFalse(output.isSuccess());
         assertEquals("Failed to add expense!", output.getMessage());
         assertNull(output.getAmount());
+        // add was attempted, but threw
         assertTrue(fakeRepo.addCalled);
     }
 
     /**
-     * fake repository – only add() is really used in these tests.
+     * Fake repository – only add() is really used in these tests.
      */
     private static class FakeExpenseRepository implements ExpenseRepository {
 
@@ -206,4 +227,3 @@ class AddExpenseInteractorTest {
         }
     }
 }
-
