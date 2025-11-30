@@ -1,4 +1,4 @@
-package usecase;
+package usecase.stocksearch;
 
 /**
  * Input data for stock search operations.

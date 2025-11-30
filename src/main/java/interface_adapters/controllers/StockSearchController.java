@@ -2,9 +2,9 @@ package interface_adapters.controllers;
 
 import data.WatchlistRepository;
 import java.util.List;
-import usecase.StockSearchInputBoundary;
-import usecase.StockSearchInputData;
-import usecase.StockSearchOutputData;
+import usecase.stocksearch.StockSearchInputBoundary;
+import usecase.stocksearch.StockSearchInputData;
+import usecase.stocksearch.StockSearchOutputData;
 
 /**
  * Controller for stock search and watchlist actions.

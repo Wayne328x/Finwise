@@ -39,7 +39,7 @@ import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import usecase.StockSearchOutputData;
+import usecase.stocksearch.StockSearchOutputData;
 
 /**
  * Swing UI for Use Case 3: Stock Search + Quote + Time Series Chart.

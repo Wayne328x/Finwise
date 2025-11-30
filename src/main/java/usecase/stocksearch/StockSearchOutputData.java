@@ -1,4 +1,4 @@
-package usecase;
+package usecase.stocksearch;
 
 import data.AlphaVantageAPI.StockSearchResult;
 import java.util.List;
