@@ -3,10 +3,10 @@ package usecase.stock_search;
 import data.AlphaVantageAPI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.StockSearchInputData;
-import usecase.StockSearchInteractor;
-import usecase.StockSearchOutputBoundary;
-import usecase.StockSearchOutputData;
+import usecase.stocksearch.StockSearchInputData;
+import usecase.stocksearch.StockSearchInteractor;
+import usecase.stocksearch.StockSearchOutputBoundary;
+import usecase.stocksearch.StockSearchOutputData;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -3,7 +3,7 @@ import interface_adapters.controllers.TradingController;
 import interface_adapters.controllers.StockSearchController;
 import usecase.trading.TradingInputData;
 import usecase.trading.TradingViewModel;
-import usecase.StockSearchOutputData;
+import usecase.stocksearch.StockSearchOutputData;
 import data.AlphaVantageAPI;
 
 import javax.swing.*;

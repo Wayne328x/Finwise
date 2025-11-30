@@ -1,4 +1,4 @@
-package usecase;
+package usecase.stocksearch;
 
 /**
  * Input boundary for stock search operations.

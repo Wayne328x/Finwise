@@ -1,7 +1,7 @@
 package interface_adapters.presenters;
 
-import usecase.StockSearchOutputBoundary;
-import usecase.StockSearchOutputData;
+import usecase.stocksearch.StockSearchOutputBoundary;
+import usecase.stocksearch.StockSearchOutputData;
 
 /**
  * Presenter for stock search results.

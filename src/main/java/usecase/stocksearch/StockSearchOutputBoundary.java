@@ -1,4 +1,4 @@
-package usecase;
+package usecase.stocksearch;
 
 /**
  * Output boundary for stock search operations.
