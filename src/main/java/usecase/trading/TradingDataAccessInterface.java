@@ -1,5 +1,6 @@
 package usecase.trading;
 import entity.Holding;
+import entity.OrderRecord;
 
 import java.util.List;
 
@@ -17,4 +18,7 @@ public interface TradingDataAccessInterface {
 
     // Returns the list of holdings of according the username
     List<Holding> getUserHoldings (String username);
+
+    void saveOrder(OrderRecord orderRecord);
+    List<OrderRecord> findOrdersByUser(String username);
 }

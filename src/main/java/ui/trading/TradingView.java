@@ -49,28 +49,44 @@ public class TradingView extends JFrame {
         JRadioButton sellRadioButton = new JRadioButton("Sell");
         actionGroup.add(sellRadioButton);
 
-        JPanel form = new JPanel();
-        form.setLayout(new GridLayout(7, 2, 10, 14));
-        form.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
         suggestionsScroll.setVisible(false);
-        suggestionsScroll.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        suggestionsScroll.setPreferredSize(new Dimension(450, 240));
+        suggestionsScroll.setPreferredSize(new Dimension(700, 280));
+        suggestionsScroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 280));
+        suggestionsScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        suggestionsScroll.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY),
+                BorderFactory.createEmptyBorder(6, 6, 6, 6)
+        ));
+        suggestions.setVisibleRowCount(8);
+        suggestions.setFixedCellHeight(28);
         suggestions.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
             DefaultListCellRenderer base = new DefaultListCellRenderer();
             JLabel lbl = (JLabel) base.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             if (value instanceof AlphaVantageAPI.StockSearchResult) {
                 AlphaVantageAPI.StockSearchResult r = (AlphaVantageAPI.StockSearchResult) value;
                 lbl.setText(r.getSymbol() + " — " + r.getName() + " (" + r.getExchange() + ")");
+                lbl.setFont(lbl.getFont().deriveFont(13f));
             }
             return lbl;
         });
+        symbolField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 28));
+        symbolField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JPanel symbolPanel = new JPanel(new BorderLayout());
-        symbolPanel.add(symbolField, BorderLayout.NORTH);
-        symbolPanel.add(suggestionsScroll, BorderLayout.CENTER);
+        JPanel symbolColumn = new JPanel();
+        symbolColumn.setLayout(new BoxLayout(symbolColumn, BoxLayout.Y_AXIS));
+        symbolColumn.setBorder(BorderFactory.createEmptyBorder(12, 12, 0, 12));
+        JLabel symbolLabel = new JLabel("Symbol:");
+        symbolLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        symbolColumn.add(symbolLabel);
+        symbolColumn.add(Box.createVerticalStrut(4));
+        symbolColumn.add(symbolField);
+        symbolColumn.add(Box.createVerticalStrut(6));
+        suggestionsScroll.setAlignmentX(Component.LEFT_ALIGNMENT);
+        symbolColumn.add(suggestionsScroll);
 
-        form.add(new JLabel("Symbol:"));
-        form.add(symbolPanel);
+        JPanel form = new JPanel();
+        form.setLayout(new GridLayout(6, 2, 10, 14));
+        form.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
         form.add(new JLabel("Action:"));
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         actionPanel.add(buyRadioButton);
@@ -78,7 +94,7 @@ public class TradingView extends JFrame {
         form.add(actionPanel);
         form.add(new JLabel("Shares:"));
         form.add(sharesSpinner);
-        form.add (new JLabel("Current Price:"));
+        form.add(new JLabel("Current Price:"));
         form.add(priceLabel);
         form.add(cashLabel);
         form.add(holdingLabel);
@@ -87,6 +103,7 @@ public class TradingView extends JFrame {
         form.add(placeOrderButton);
 
         JPanel outer = new JPanel(new BorderLayout(0, 12));
+        outer.add(symbolColumn, BorderLayout.NORTH);
         outer.add(form, BorderLayout.CENTER);
 
         JPanel messagePanel = new JPanel(new BorderLayout());
@@ -100,6 +117,12 @@ public class TradingView extends JFrame {
         placeOrderButton.addActionListener(e -> placeOrder());
 
         symbolField.addActionListener(e -> loadPrice(symbolField.getText().trim()));
+        symbolField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                suggestionsScroll.setVisible(false);
+            }
+        });
         symbolField.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 restartTimer();
@@ -132,7 +155,7 @@ public class TradingView extends JFrame {
 
     private void runSearch() {
         String query = symbolField.getText().trim();
-        if (query.length()< 2) {
+        if (!symbolField.isFocusOwner() || query.length() < 2) {
             suggestionsScroll.setVisible(false);
             revalidate();
             repaint();
@@ -198,6 +221,7 @@ public class TradingView extends JFrame {
                 TradingInputData.Action.BUY : TradingInputData.Action.SELL;
 
         TradingViewModel viewModel = controller.placeOrder(username, symbol, shares, action);
+        suggestionsScroll.setVisible(false);
         updateLabels(viewModel);
     }
 
