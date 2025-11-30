@@ -1,5 +1,7 @@
 package use_case.trading;
 import entity.Holding;
+import entity.OrderRecord;
+import java.time.Instant;
 
 public class TradingInteractor implements TradingInputBoundary {
 
@@ -93,6 +95,20 @@ public class TradingInteractor implements TradingInputBoundary {
         double averageCostAfterTrade = updatedHolding == null ? 0 : updatedHolding.getAvgCost();
         double totalHoldingValueAfterTrade = totalSharesAfterTrade * stockPrice;
 
+        // record the order
+        double executedPrice = stockPrice;
+        OrderRecord orderRecord = new OrderRecord(
+                Instant.now(),
+                username,
+                symbol,
+                action == TradingInputData.Action.BUY ? "BUY" : "SELL",
+                shares,
+                executedPrice,
+                shares * executedPrice
+        );
+        dataAccess.saveOrder(orderRecord);
+
+        
         presenter.presentTradeResult(new TradingOutputData(
                 "Order executed.",
                 true,

@@ -24,8 +24,10 @@ public class AlphaVantageAPI {
   /**
    * API key for Alpha Vantage service.
    */
-  private static final String API_KEY = "9P17BCLZ42787NSY";
+  private static final String API_KEY = "14X8NQ0MYS4OL7V6";
+  // API_KEY = "9P17BCLZ42787NSY"
   // Alternative API key: JTSZQWNFASUDRTW5 (hhc)
+  // Alternative API key: 14X8NQ0MYS4OL7V6 (jim)
   // daily limit : 25
 
   /**
