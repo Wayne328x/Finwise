@@ -3,7 +3,7 @@ package data.usecase4;
 import entity.Holding;
 import usecase.trading.TradingDataAccessInterface;
 import entity.OrderRecord;
-import data.AlphaVantageAPI;
+import data.AlphaVantage;
 import java.io.IOException;
 import java.util.*;
 
@@ -55,7 +55,7 @@ public class InMemoryTradingDataAccess implements TradingDataAccessInterface{
         /// returning fixed price just for testing (need to replace with API call)
         // return 100.0;
 
-        AlphaVantageAPI api = new AlphaVantageAPI();
+        AlphaVantage api = new AlphaVantage();
         try {
             return api.getQuote(symbol).getPrice();
         } catch (IOException e) {

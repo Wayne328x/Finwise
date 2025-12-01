@@ -20,7 +20,7 @@ import okhttp3.Response;
  * API client for Alpha Vantage stock data service.
  * Provides methods to search stocks, get quotes, and retrieve time series data.
  */
-public class AlphaVantageAPI {
+public class AlphaVantage {
 
     /**
      * API key for Alpha Vantage service.
@@ -80,7 +80,7 @@ public class AlphaVantageAPI {
     /**
      * Constructs an AlphaVantageAPI instance.
      */
-    public AlphaVantageAPI() {
+    public AlphaVantage() {
         this.client = new OkHttpClient();
     }
 

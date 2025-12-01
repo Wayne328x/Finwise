@@ -1,6 +1,6 @@
 package ui.stock_search;
 
-import data.AlphaVantageAPI;
+import data.AlphaVantage;
 import interface_adapters.controllers.StockSearchController;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -257,7 +257,7 @@ public class StockSearchView extends JFrame {
   /**
    * The API client for fetching stock data.
    */
-  private final AlphaVantageAPI api;
+  private final AlphaVantage api;
   /**
    * The current logged-in username.
    */
@@ -274,7 +274,7 @@ public class StockSearchView extends JFrame {
   /**
    * List displaying stock search suggestions.
    */
-  private final JList<AlphaVantageAPI.StockSearchResult> suggestionsList =
+  private final JList<AlphaVantage.StockSearchResult> suggestionsList =
       new JList<>();
   /**
    * Scroll pane containing the suggestions list.
@@ -330,7 +330,7 @@ public class StockSearchView extends JFrame {
   /**
    * Currently selected search result.
    */
-  private AlphaVantageAPI.StockSearchResult currentSelectedResult = null;
+  private AlphaVantage.StockSearchResult currentSelectedResult = null;
   /**
    * Worker thread for search operations.
    */
@@ -354,7 +354,7 @@ public class StockSearchView extends JFrame {
       final StockSearchController controllerParam,
       final String usernameParam) {
     this.controller = controllerParam;
-    this.api = new AlphaVantageAPI();
+    this.api = new AlphaVantage();
     this.username = usernameParam;
 
     setTitle("FinWise — Live Stock Prices");
@@ -405,9 +405,9 @@ public class StockSearchView extends JFrame {
               }
 
               // Try to find an exact symbol match, otherwise use first result
-              AlphaVantageAPI.StockSearchResult selected =
+              AlphaVantage.StockSearchResult selected =
                   output.getResults().get(0);
-              for (AlphaVantageAPI.StockSearchResult r : output.getResults()) {
+              for (AlphaVantage.StockSearchResult r : output.getResults()) {
                 if (r.getSymbol().equalsIgnoreCase(initialSymbol)) {
                   selected = r;
                   break;
@@ -594,7 +594,7 @@ public class StockSearchView extends JFrame {
       public void keyPressed(final KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER
             && suggestionsList.getModel().getSize() > 0) {
-          AlphaVantageAPI.StockSearchResult sel =
+          AlphaVantage.StockSearchResult sel =
               suggestionsList.getModel().getElementAt(0);
           selectSuggestion(sel);
         } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -606,7 +606,7 @@ public class StockSearchView extends JFrame {
       @Override
       public void mouseClicked(final MouseEvent e) {
         if (e.getClickCount() >= 1) {
-          AlphaVantageAPI.StockSearchResult sel =
+          AlphaVantage.StockSearchResult sel =
               suggestionsList.getSelectedValue();
           selectSuggestion(sel);
         }
@@ -660,7 +660,7 @@ public class StockSearchView extends JFrame {
     if (text.isEmpty()) {
       suggestionsScroll.setVisible(false);
       suggestionsList.setListData(
-          new AlphaVantageAPI.StockSearchResult[0]);
+          new AlphaVantage.StockSearchResult[0]);
       statusLabel.setText("Enter keywords to search.");
       return;
     }
@@ -696,14 +696,14 @@ public class StockSearchView extends JFrame {
               statusLabel.setText(output.getMessage());
               if (!output.isSuccess()) {
                 suggestionsList.setListData(
-                    new AlphaVantageAPI.StockSearchResult[0]);
+                    new AlphaVantage.StockSearchResult[0]);
                 suggestionsScroll.setVisible(true);
                 return;
               }
-              List<AlphaVantageAPI.StockSearchResult> results =
+              List<AlphaVantage.StockSearchResult> results =
                   output.getResults();
               suggestionsList.setListData(
-                  results.toArray(new AlphaVantageAPI.StockSearchResult[0]));
+                  results.toArray(new AlphaVantage.StockSearchResult[0]));
               suggestionsScroll.setVisible(true);
             } catch (CancellationException ignored) {
               // Ignore cancellation
@@ -729,13 +729,13 @@ public class StockSearchView extends JFrame {
    * @param s the search result to select
    */
   private void selectSuggestion(
-      final AlphaVantageAPI.StockSearchResult s) {
+      final AlphaVantage.StockSearchResult s) {
     if (s == null) {
       return;
     }
     searchField.setText(s.getSymbol());
     suggestionsList.setListData(
-        new AlphaVantageAPI.StockSearchResult[0]);
+        new AlphaVantage.StockSearchResult[0]);
     suggestionsScroll.setVisible(false);
     currentSelectedResult = s;
     loadQuote(s);
@@ -760,14 +760,14 @@ public class StockSearchView extends JFrame {
    *
    * @param result the stock search result
    */
-  private void loadQuote(final AlphaVantageAPI.StockSearchResult result) {
+  private void loadQuote(final AlphaVantage.StockSearchResult result) {
     if (currentQuoteWorker != null && !currentQuoteWorker.isDone()) {
       currentQuoteWorker.cancel(true);
     }
     statusLabel.setText("Loading quote for " + result.getSymbol() + " ...");
-    currentQuoteWorker = new SwingWorker<AlphaVantageAPI.StockQuote, Void>() {
+    currentQuoteWorker = new SwingWorker<AlphaVantage.StockQuote, Void>() {
           @Override
-          protected AlphaVantageAPI.StockQuote doInBackground() {
+          protected AlphaVantage.StockQuote doInBackground() {
             try {
               return api.getQuote(result.getSymbol());
             } catch (Exception e) {
@@ -781,7 +781,7 @@ public class StockSearchView extends JFrame {
               return;
             }
             try {
-              AlphaVantageAPI.StockQuote quote = get();
+              AlphaVantage.StockQuote quote = get();
               companyNameLabel.setText(result.getName());
               symbolLabel.setText(
                   result.getSymbol() + " • " + result.getExchange());
@@ -895,9 +895,9 @@ public class StockSearchView extends JFrame {
     chartPanel.setSeries(null);
     chartPanel.repaint();
     currentSeriesWorker =
-        new SwingWorker<List<AlphaVantageAPI.StockPriceData>, Void>() {
+        new SwingWorker<List<AlphaVantage.StockPriceData>, Void>() {
           @Override
-          protected List<AlphaVantageAPI.StockPriceData> doInBackground() {
+          protected List<AlphaVantage.StockPriceData> doInBackground() {
             try {
               return api.getTimeSeries(symbol, range);
             } catch (Exception e) {
@@ -911,7 +911,7 @@ public class StockSearchView extends JFrame {
               return;
             }
             try {
-              List<AlphaVantageAPI.StockPriceData> seriesData = get();
+              List<AlphaVantage.StockPriceData> seriesData = get();
               chartPanel.setSeries(seriesData);
               chartPanel.repaint();
               statusLabel.setText(
@@ -946,9 +946,9 @@ public class StockSearchView extends JFrame {
         final boolean cellHasFocus) {
       super.getListCellRendererComponent(
           list, value, index, isSelected, cellHasFocus);
-      if (value instanceof AlphaVantageAPI.StockSearchResult) {
-        AlphaVantageAPI.StockSearchResult item =
-            (AlphaVantageAPI.StockSearchResult) value;
+      if (value instanceof AlphaVantage.StockSearchResult) {
+        AlphaVantage.StockSearchResult item =
+            (AlphaVantage.StockSearchResult) value;
         String html =
             "<html><b>" + escapeHtml(item.getName()) + "</b><br/>"
                 + "<span style='color:#667085;font-size:11px;'>"
@@ -982,7 +982,7 @@ public class StockSearchView extends JFrame {
     /**
      * The price data series to display.
      */
-    private List<AlphaVantageAPI.StockPriceData> series;
+    private List<AlphaVantage.StockPriceData> series;
 
     /**
      * Sets the price data series to display.
@@ -990,7 +990,7 @@ public class StockSearchView extends JFrame {
      * @param seriesData the price data series
      */
     public void setSeries(
-        final List<AlphaVantageAPI.StockPriceData> seriesData) {
+        final List<AlphaVantage.StockPriceData> seriesData) {
       this.series = seriesData;
     }
 
@@ -1015,7 +1015,7 @@ public class StockSearchView extends JFrame {
       final int bottomPadding = CHART_BOTTOM_PADDING;
       double min = Double.MAX_VALUE;
       double max = Double.MIN_VALUE;
-      for (AlphaVantageAPI.StockPriceData d : series) {
+      for (AlphaVantage.StockPriceData d : series) {
         double p = d.getPrice();
         min = Math.min(min, p);
         max = Math.max(max, p);

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import data.AlphaVantageAPI;
-import data.AlphaVantageAPI.StockSearchResult;
+import data.AlphaVantage;
+import data.AlphaVantage.StockSearchResult;
 
 /**
  * Interactor for stock search operations.
@@ -15,7 +15,7 @@ public final class StockSearchInteractor implements StockSearchInputBoundary {
     /**
      * The API client for fetching stock data.
      */
-    private final AlphaVantageAPI api;
+    private final AlphaVantage api;
 
     /**
      * The output boundary for presenting search results.
@@ -28,7 +28,7 @@ public final class StockSearchInteractor implements StockSearchInputBoundary {
      * @param apiClient the AlphaVantage API client
      * @param outputBoundaryParam the output boundary for presenting results
      */
-    public StockSearchInteractor(final AlphaVantageAPI apiClient,
+    public StockSearchInteractor(final AlphaVantage apiClient,
             final StockSearchOutputBoundary outputBoundaryParam) {
         this.api = apiClient;
         this.outputBoundary = outputBoundaryParam;
@@ -55,7 +55,8 @@ public final class StockSearchInteractor implements StockSearchInputBoundary {
         }
         else {
             try {
-                final List<StockSearchResult> results = api.searchStocks(keywords);
+                final List<StockSearchResult> results =
+                        api.searchStocks(keywords);
                 if (results.isEmpty()) {
                     result = new StockSearchOutputData(
                             false,
@@ -64,7 +65,8 @@ public final class StockSearchInteractor implements StockSearchInputBoundary {
                     );
                 }
                 else {
-                    result = new StockSearchOutputData(true, "Search completed", results);
+                    result = new StockSearchOutputData(
+                            true, "Search completed", results);
                 }
             }
             catch (IOException ioException) {
@@ -73,6 +75,17 @@ public final class StockSearchInteractor implements StockSearchInputBoundary {
                         "Network error: " + ioException.getMessage(),
                         new ArrayList<>()
                 );
+            }
+            catch (RuntimeException runtimeException) {
+                // CHECKSTYLE:OFF: IllegalCatch
+                // RuntimeException may be thrown by API implementations
+                // and must be caught to provide user-friendly error messages
+                result = new StockSearchOutputData(
+                        false,
+                        "Error: " + runtimeException.getMessage(),
+                        new ArrayList<>()
+                );
+                // CHECKSTYLE:ON: IllegalCatch
             }
         }
 
