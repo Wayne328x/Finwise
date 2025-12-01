@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * Interface for accessing news data.
- * The Interactor depends on this interface, not on the actual DAO implementation.
  */
 public interface NewsDataAccessInterface {
 
