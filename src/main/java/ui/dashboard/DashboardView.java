@@ -41,6 +41,7 @@ public class DashboardView extends JFrame {
     private static final int TRADING_TAB = 4;
     private static final int TRENDS_TAB = 5;
     private static final int PORTFOLIO_TAB = 6;
+    private static final int TRADER_TAB = 7;
 
     public DashboardView(DashboardController dashController,
                          StockSearchController stockController,
@@ -117,7 +118,7 @@ public class DashboardView extends JFrame {
                 case STOCK_TAB -> SwingUtilities.invokeLater(() ->
                         new StockSearchView(stockController, username).setVisible(true));
                 case TRADER_TAB -> SwingUtilities.invokeLater(() ->
-                        new TradingView(tradingController, username).setVisible(true));
+                        new TradingView(tradingController, stockController, username).setVisible(true));
                 case TRENDS_TAB -> SwingUtilities.invokeLater(() ->
                         new TrendsView(trendsController, trendsViewModel, username).setVisible(true));
                 case PORTFOLIO_TAB -> SwingUtilities.invokeLater(() ->
