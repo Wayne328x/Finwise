@@ -6,12 +6,10 @@ package usecase.stocksearch;
  */
 public interface StockSearchOutputBoundary {
 
-  /**
-   * Presents the result of a stock search operation.
-   *
-   * @param output the output data produced by the use case
-   */
-  void present(StockSearchOutputData output);
+    /**
+     * Presents the result of a stock search operation.
+     *
+     * @param output the output data produced by the use case
+     */
+    void present(StockSearchOutputData output);
 }
-
-

@@ -6,13 +6,11 @@ package usecase.stocksearch;
  */
 public interface StockSearchInputBoundary {
 
-  /**
+    /**
    * Executes a stock search operation based on the provided input.
    *
    * @param input the search input containing keywords
    * @return output data containing search results or error information
    */
-  StockSearchOutputData execute(StockSearchInputData input);
+    StockSearchOutputData execute(StockSearchInputData input);
 }
-
-
