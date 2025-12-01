@@ -1,6 +1,6 @@
 package data.usecase5;
 
-import data.AlphaVantageAPI;
+import data.AlphaVantage;
 import entity.PricePoint;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,21 +13,21 @@ import java.time.format.DateTimeFormatter;
  */
 public class AlphaVantagePriceHistoryRepository implements PriceHistoryRepository {
 
-    private final AlphaVantageAPI api;
+    private final AlphaVantage api;
 
     public AlphaVantagePriceHistoryRepository() {
-        this.api = new AlphaVantageAPI();
+        this.api = new AlphaVantage();
     }
 
     @Override
     public List<PricePoint> getPriceHistory(String symbol) {
         try {
-            List<AlphaVantageAPI.StockPriceData> series = api.getTimeSeries(symbol, "1Y");
+            List<AlphaVantage.StockPriceData> series = api.getTimeSeries(symbol, "1Y");
 
             List<PricePoint> result = new ArrayList<>();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-            for (AlphaVantageAPI.StockPriceData point : series) {
+            for (AlphaVantage.StockPriceData point : series) {
                 // Only use YYYY-MM-DD format dates
                 String dateStr = point.getDate();
                 LocalDate date;

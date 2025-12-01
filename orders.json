@@ -1,0 +1,48 @@
+{
+  "userCash": {
+    "1234567": 7318.299999999999
+  },
+  "userHoldings": {
+    "1234567": {
+      "aapl": {
+        "symbol": "aapl",
+        "shares": 2,
+        "avgCost": 278.85
+      },
+      "nvda": {
+        "symbol": "nvda",
+        "shares": 12,
+        "avgCost": 177.0
+      }
+    }
+  },
+  "orderRecords": [
+    {
+      "timestamp": "2025-11-30T22:21:55.325221Z",
+      "username": "1234567",
+      "symbol": "aapl",
+      "action": "BUY",
+      "shares": 2,
+      "price": 278.85,
+      "totalAmount": 557.7
+    },
+    {
+      "timestamp": "2025-11-30T22:22:03.524917Z",
+      "username": "1234567",
+      "symbol": "aapl",
+      "action": "SELL",
+      "shares": 1,
+      "price": 278.85,
+      "totalAmount": 278.85
+    },
+    {
+      "timestamp": "2025-11-30T22:23:29.622006Z",
+      "username": "1234567",
+      "symbol": "nvda",
+      "action": "BUY",
+      "shares": 6,
+      "price": 177.0,
+      "totalAmount": 1062.0
+    }
+  ]
+}

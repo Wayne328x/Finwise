@@ -1,6 +1,6 @@
 package usecase.stock_search;
 
-import data.AlphaVantageAPI;
+import data.AlphaVantage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.stocksearch.StockSearchInputData;
@@ -55,7 +55,7 @@ class StockSearchInteractorTest {
     }
 
     // Manual mock implementation to avoid Java 23 compatibility issues with Mockito
-    private static class MockAlphaVantageAPI extends AlphaVantageAPI {
+    private static class MockAlphaVantageAPI extends AlphaVantage {
         private List<StockSearchResult> searchResults;
         private IOException ioException;
         private RuntimeException runtimeException;
@@ -160,8 +160,8 @@ class StockSearchInteractorTest {
         String keywords = "AAPL";
         StockSearchInputData input = new StockSearchInputData(keywords);
         
-        List<AlphaVantageAPI.StockSearchResult> mockResults = new ArrayList<>();
-        mockResults.add(new AlphaVantageAPI.StockSearchResult(
+        List<AlphaVantage.StockSearchResult> mockResults = new ArrayList<>();
+        mockResults.add(new AlphaVantage.StockSearchResult(
             "AAPL", "Apple Inc.", "NASDAQ", "Equity", "United States", "USD"
         ));
         
@@ -268,11 +268,11 @@ class StockSearchInteractorTest {
         String keywords = "Apple";
         StockSearchInputData input = new StockSearchInputData(keywords);
         
-        List<AlphaVantageAPI.StockSearchResult> mockResults = new ArrayList<>();
-        mockResults.add(new AlphaVantageAPI.StockSearchResult(
+        List<AlphaVantage.StockSearchResult> mockResults = new ArrayList<>();
+        mockResults.add(new AlphaVantage.StockSearchResult(
             "AAPL", "Apple Inc.", "NASDAQ", "Equity", "United States", "USD"
         ));
-        mockResults.add(new AlphaVantageAPI.StockSearchResult(
+        mockResults.add(new AlphaVantage.StockSearchResult(
             "APLE", "Apple Hospitality REIT", "NYSE", "Equity", "United States", "USD"
         ));
         
@@ -301,8 +301,8 @@ class StockSearchInteractorTest {
         String keywords = "AAPL";
         StockSearchInputData input = new StockSearchInputData(keywords);
         
-        List<AlphaVantageAPI.StockSearchResult> mockResults = new ArrayList<>();
-        mockResults.add(new AlphaVantageAPI.StockSearchResult(
+        List<AlphaVantage.StockSearchResult> mockResults = new ArrayList<>();
+        mockResults.add(new AlphaVantage.StockSearchResult(
             "AAPL", "Apple Inc.", "NASDAQ", "Equity", "United States", "USD"
         ));
         mockApi.setSearchResults(mockResults);

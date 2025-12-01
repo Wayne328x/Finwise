@@ -2,7 +2,7 @@ package data.usecase4;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import data.AlphaVantageAPI;
+import data.AlphaVantage;
 import entity.OrderRecord;
 import entity.Holding;
 import usecase.trading.TradingDataAccessInterface;
@@ -144,7 +144,7 @@ public class JsonTradingDataAccess implements TradingDataAccessInterface{
 
      public double getStockPrice(String symbol) {
          try {
-             return new AlphaVantageAPI().getQuote(symbol).getPrice();
+             return new AlphaVantage().getQuote(symbol).getPrice();
          } catch (IOException e) {
              throw new RuntimeException("Failed to fetch stock price for " + symbol, e);
          }
