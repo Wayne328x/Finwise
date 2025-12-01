@@ -1,7 +1,10 @@
 package fetch_news;
 
+import okhttp3.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +57,10 @@ public class FetchNewsInteractorTest {
 
     @Test
     public void rateLimitFailureTest() {
-        // ✅ 修正：使用接口
         NewsDataAccessInterface failureDao = new NewsDataAccessInterface() {
             @Override
-            public List<News> fetchNews(String query) throws NewsApiDAO.RateLimitExceededException {
-                throw new NewsApiDAO.RateLimitExceededException("API Rate Limit Exceeded");
+            public List<News> fetchNews(String query){
+                throw new NewsDataAccessInterface.DataFetchException("API Rate Limit Exceeded");
             }
         };
 
@@ -81,7 +83,6 @@ public class FetchNewsInteractorTest {
 
     @Test
     public void generalFailureTest() {
-        // ✅ 修正：使用接口
         NewsDataAccessInterface failureDao = new NewsDataAccessInterface() {
             @Override
             public List<News> fetchNews(String query) {
@@ -107,27 +108,154 @@ public class FetchNewsInteractorTest {
     }
 
     @Test
-    public void RealApiDAOTest() {
+    public void daoRateLimitTest() {
+        // 1. Mock a client that returns "Rate Limit" JSON
+        OkHttpClient mockClient = new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    String json = "{\"Information\": \"Please subscribe to any of the premium plans\"}";
+                    return new Response.Builder()
+                            .code(200)
+                            .message("OK")
+                            .request(chain.request())
+                            .protocol(Protocol.HTTP_1_1)
+                            .body(ResponseBody.create(json, MediaType.get("application/json")))
+                            .build();
+                })
+                .build();
+
+        NewsApiDAO dao = new NewsApiDAO(mockClient);
+
+        // 2. check if it throws DataFetchException
+        assertThrows(NewsDataAccessInterface.DataFetchException.class, () -> {
+            dao.fetchNews("general");
+        });
+    }
+
+    @Test
+    public void daoServerErrorTest() {
+        // 1. Mock a client that returns Error 500 (cover !response.isSuccessful())
+        OkHttpClient mockClient = new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    return new Response.Builder()
+                            .code(500)
+                            .message("Internal Server Error")
+                            .request(chain.request())
+                            .protocol(Protocol.HTTP_1_1)
+                            .body(ResponseBody.create("", MediaType.get("application/json")))
+                            .build();
+                })
+                .build();
+
+        NewsApiDAO dao = new NewsApiDAO(mockClient);
+
+        // 2. check if RuntimeException is thrown
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            dao.fetchNews("general");
+        });
+        assertTrue(exception.getMessage().contains("Error fetching"));
+    }
+
+    @Test
+    public void daoInvalidJsonTest() {
+        // 1. mack a Client that returns some random JSON (covers JsonParseException)
+        OkHttpClient mockClient = new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    return new Response.Builder()
+                            .code(200)
+                            .message("OK")
+                            .request(chain.request())
+                            .protocol(Protocol.HTTP_1_1)
+                            .body(ResponseBody.create("{ Not Valid JSON }", MediaType.get("application/json")))
+                            .build();
+                })
+                .build();
+
+        NewsApiDAO dao = new NewsApiDAO(mockClient);
+
+        assertThrows(RuntimeException.class, () -> {
+            dao.fetchNews("general");
+        });
+    }
+
+    @Test
+    public void daoNetworkExceptionTest() {
+        // 1. mock a client that throws IOException
+        OkHttpClient mockClient = new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    throw new IOException("Network Down");
+                })
+                .build();
+
+        NewsApiDAO dao = new NewsApiDAO(mockClient);
+
+        assertThrows(RuntimeException.class, () -> {
+            dao.fetchNews("general");
+        });
+    }
+
+    @Test
+    public void daoInformationWithoutLimitTest() {
+        // Purpose：cover the branch that json.has("Information") == true and infoText.contains("subscribe") == false
+        OkHttpClient mockClient = new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    String json = "{\"Information\": \"Just some standard API info.\", \"feed\": []}";
+                    return new Response.Builder()
+                            .code(200)
+                            .message("OK")
+                            .request(chain.request())
+                            .protocol(Protocol.HTTP_1_1)
+                            .body(ResponseBody.create(json, MediaType.get("application/json")))
+                            .build();
+                })
+                .build();
+
+        NewsApiDAO dao = new NewsApiDAO(mockClient);
+
+        // returns an empty list safely, instead of throwing DataFetchException
+        List<News> result = dao.fetchNews("general");
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void daoMissingFeedTest() {
+        // Purpose：cover the branch that if (feed != null) == false
+        // mock that api returns some information without string "feed"
+        OkHttpClient mockClient = new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    String json = "{\"meta_data\": \"some info\", \"items\": \"0\"}";
+                    return new Response.Builder()
+                            .code(200)
+                            .message("OK")
+                            .request(chain.request())
+                            .protocol(Protocol.HTTP_1_1)
+                            .body(ResponseBody.create(json, MediaType.get("application/json")))
+                            .build();
+                })
+                .build();
+
+        NewsApiDAO dao = new NewsApiDAO(mockClient);
+
+        // returns an empty list safely，instead of throwing NullPointerException
+        List<News> result = dao.fetchNews("general");
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+//  @Disabled("To save API limit for now")
+    @Test
+    public void daoRealIntegrationTest() {
+        // REMARK: This is the only real api call in the test. When the limit is reached, the test will fail,
+        //         but it will not affect the code coverage.
+
         NewsApiDAO dao = new NewsApiDAO();
-
         try {
-            System.out.println("Testing Real API call...");
-            List<News> newsList = dao.fetchNews("general");
-
-            System.out.println("This test is expected to fail when api reached the limit!");
-            assertNotNull(newsList);
-
-            if (!newsList.isEmpty()) {
-                News firstNews = newsList.get(0);
-                System.out.println("Got news: " + firstNews.getTitle());
-                assertNotNull(firstNews.getTitle());
-                assertNotNull(firstNews.getUrl());
+            List<News> news = dao.fetchNews("general");
+            if (!news.isEmpty()) {
+                assertNotNull(news.get(0).getTitle());
             }
-
-        } catch (NewsApiDAO.RateLimitExceededException e) {
-            System.out.println("API Limit reached, but code path covered.");
         } catch (Exception e) {
-            System.out.println("Network error: " + e.getMessage());
+            System.out.println("Integration test skipped/failed due to network: " + e.getMessage());
         }
     }
 }

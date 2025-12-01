@@ -24,7 +24,7 @@ public class FetchNewsInteractor implements FetchNewsInputBoundary {
 
             presenter.presentNews(outputData.getNewsList());
 
-        } catch (NewsApiDAO.RateLimitExceededException e) {
+        } catch (NewsDataAccessInterface.DataFetchException e) {
             // DAO reached the access limit
             FetchNewsOutputData outputData = new FetchNewsOutputData(e.getMessage());
             presenter.presentError(outputData.getErrorMessage());

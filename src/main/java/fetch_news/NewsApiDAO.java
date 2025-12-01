@@ -21,13 +21,19 @@ public class NewsApiDAO implements NewsDataAccessInterface {
     private final OkHttpClient client;
     private final Gson gson;
 
+    // This is for main
     public NewsApiDAO() {
-        this.client = new OkHttpClient();
+        this(new OkHttpClient());
+    }
+
+    // This is for test purpose only, allowing us to mock when api calls fail.
+    public NewsApiDAO(OkHttpClient client) {
+        this.client = client;
         this.gson = new Gson();
     }
 
     @Override
-    public List<News> fetchNews(String query) throws RateLimitExceededException {
+    public List<News> fetchNews(String query) {
         List<News> newsList = new ArrayList<>();
 
         Request request = new Request.Builder()
@@ -46,7 +52,7 @@ public class NewsApiDAO implements NewsDataAccessInterface {
             if (json.has("Information")) {
                 String infoText = json.get("Information").getAsString();
                 if (infoText.contains("Please subscribe to any of the premium plans")) {
-                    throw new RateLimitExceededException(infoText);
+                    throw new NewsDataAccessInterface.DataFetchException(infoText);
                 }
             }
 
@@ -72,12 +78,5 @@ public class NewsApiDAO implements NewsDataAccessInterface {
         }
 
         return newsList;
-    }
-
-    // customize the exception.
-    public static class RateLimitExceededException extends Exception {
-        public RateLimitExceededException(String message) {
-            super(message);
-        }
     }
 }
