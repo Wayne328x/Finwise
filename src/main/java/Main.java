@@ -1,8 +1,8 @@
+import data.news.*;
 import data.usecase5.*;
 import data.*;
 import data.usecase4.JsonTradingDataAccess;
 
-import fetch_news.NewsApiDAO;
 import interface_adapters.controllers.*;
 import interface_adapters.presenters.*;
 
@@ -184,7 +184,7 @@ public class Main {
         NewsApiDAO newsApiDAO = new NewsApiDAO();   // Get DAO
         try {
             newsApiDAO.fetchNews("");
-        } catch (NewsDataAccessInterface.DataFetchException e) {
+        } catch (NewsApiDAO.RateLimitExceededException e) {
             System.out.println("Rate Limit Exceeded");
         }
 

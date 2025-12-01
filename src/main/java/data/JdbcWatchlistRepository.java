@@ -79,7 +79,7 @@ public final class JdbcWatchlistRepository implements WatchlistRepository {
                 "SELECT 1 FROM watched_stocks WHERE username = ? "
                         + "AND symbol = ? LIMIT 1";
         try (Connection conn = dataSource.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(PARAM_INDEX_USERNAME, username);
             ps.setString(PARAM_INDEX_SYMBOL, symbol);
@@ -117,7 +117,7 @@ public final class JdbcWatchlistRepository implements WatchlistRepository {
                         + "(username, symbol, name, exchange) "
                         + "VALUES (?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(PARAM_INDEX_USERNAME, username);
             ps.setString(PARAM_INDEX_SYMBOL, symbol);
@@ -144,7 +144,7 @@ public final class JdbcWatchlistRepository implements WatchlistRepository {
         final String sql =
                 "DELETE FROM watched_stocks WHERE username = ? AND symbol = ?";
         try (Connection conn = dataSource.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(PARAM_INDEX_USERNAME, username);
             ps.setString(PARAM_INDEX_SYMBOL, symbol);
@@ -174,7 +174,7 @@ public final class JdbcWatchlistRepository implements WatchlistRepository {
         final List<String> symbols = new ArrayList<>();
 
         try (Connection conn = dataSource.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(PARAM_INDEX_USERNAME, username);
 

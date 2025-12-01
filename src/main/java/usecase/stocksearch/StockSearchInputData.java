@@ -5,26 +5,26 @@ package usecase.stocksearch;
  * Contains the search keywords provided by the user.
  */
 public final class StockSearchInputData {
-    /**
-     * The search keywords.
-     */
-    private final String keywords;
+  /**
+   * The search keywords.
+   */
+  private final String keywords;
 
-    /**
-     * Constructs a StockSearchInputData object with the given keywords.
-     *
-     * @param keywordsText the search keywords
-     */
-    public StockSearchInputData(final String keywordsText) {
-        this.keywords = keywordsText;
-    }
+  /**
+   * Constructs a StockSearchInputData object with the given keywords.
+   *
+   * @param keywordsText the search keywords
+   */
+  public StockSearchInputData(final String keywordsText) {
+    this.keywords = keywordsText;
+  }
 
-    /**
-     * Returns the search keywords.
-     *
-     * @return the keywords
-     */
-    public String getKeywords() {
-        return keywords;
-    }
+  /**
+   * Returns the search keywords.
+   *
+   * @return the keywords
+   */
+  public String getKeywords() {
+    return keywords;
+  }
 }

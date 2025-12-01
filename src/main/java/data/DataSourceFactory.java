@@ -29,10 +29,10 @@ public final class DataSourceFactory {
    * @return a configured DataSource for SQLite
    */
   public static DataSource sqlite(final String dbPath) {
-    HikariConfig config = new HikariConfig();
-    config.setJdbcUrl("jdbc:sqlite:" + dbPath);
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:sqlite:" + dbPath);
     config.setMaximumPoolSize(DEFAULT_MAX_POOL_SIZE);
-    config.setPoolName("sqlite-pool");
-    return new HikariDataSource(config);
-  }
+        config.setPoolName("sqlite-pool");
+        return new HikariDataSource(config);
+    }
 }
