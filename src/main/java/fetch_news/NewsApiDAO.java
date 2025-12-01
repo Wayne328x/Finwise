@@ -1,4 +1,4 @@
-package data.news;
+package fetch_news;
 
 import entity.News;
 import usecase.fetch_news.NewsDataAccessInterface;

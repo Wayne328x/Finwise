@@ -1,8 +1,8 @@
-import data.news.*;
 import data.usecase5.*;
 import data.*;
 import data.usecase4.JsonTradingDataAccess;
 
+import fetch_news.NewsApiDAO;
 import interface_adapters.controllers.*;
 import interface_adapters.presenters.*;
 
