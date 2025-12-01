@@ -1,6 +1,6 @@
 package usecase.fetch_news;
 
-import data.news.NewsApiDAO;
+import fetch_news.NewsApiDAO;
 import entity.News;
 import java.util.List;
 
