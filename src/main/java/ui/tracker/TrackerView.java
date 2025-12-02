@@ -27,8 +27,8 @@ import usecase.list_expenses.ListExpensesOutputData;
 @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:SuppressWarnings"})
 public class TrackerView extends JFrame {
 
-    private static final int VIEW_PANEL_WIDTH = 800;
-    private static final int VIEW_PANEL_HEIGHT = 500;
+    private static final int VIEW_PANEL_WIDTH = 900;
+    private static final int VIEW_PANEL_HEIGHT = 600;
     private static final String CENT_DECIMAL_COUNT = "%.2f";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
