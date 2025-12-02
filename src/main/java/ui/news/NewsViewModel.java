@@ -2,17 +2,17 @@ package ui.news;
 
 import java.util.List;
 
-public class NewsViewModel {
+public final class NewsViewModel {
 
-    public List<String> titles;
+    private List<String> titles;
 
-    public List<String> publishTimes;
+    private List<String> publishTimes;
 
-    public List<String> urls;
+    private List<String> urls;
 
-    public boolean hasPrevPage;
+    private boolean hasPrevPage;
 
-    public boolean hasNextPage;
+    private boolean hasNextPage;
 
     public NewsViewModel(
             List<String> titles,
@@ -26,5 +26,25 @@ public class NewsViewModel {
         this.urls = urls;
         this.hasPrevPage = hasPrevPage;
         this.hasNextPage = hasNextPage;
+    }
+
+    public List<String> getTitles() {
+        return titles;
+    }
+
+    public List<String> getPublishTimes() {
+        return publishTimes;
+    }
+
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public boolean isHasPrevPage() {
+        return hasPrevPage;
+    }
+
+    public boolean isHasNextPage() {
+        return hasNextPage;
     }
 }
