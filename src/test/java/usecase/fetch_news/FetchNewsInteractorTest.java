@@ -219,7 +219,7 @@ public class FetchNewsInteractorTest {
         assertTrue(result.isEmpty());
     }
 
-  @Disabled("To save API limit for now")
+//  @Disabled("To save API limit for now")
     @Test
     public void daoRealIntegrationTest() {
         // REMARK: This is the only real api call in the test. When the limit is reached, the test will fail,
