@@ -1,25 +1,23 @@
 package ui.dashboard;
 
 import data.expense.ExpenseRepository;
-import data.news.NewsApiDAO;
+import data.news.NewsApiDao;
 import interfaceadapters.dashboard.DashboardController;
+import interfaceadapters.portfolio.PortfolioController;
 import interfaceadapters.stocksearch.StockSearchController;
 import interfaceadapters.trading.TradingController;
 import interfaceadapters.trends.TrendsController;
-import interfaceadapters.portfolio.PortfolioController;
-import ui.portfolio.PortfolioView;
-import ui.stock_search.StockSearchView;
-import ui.trading.TradingView;
-import ui.trends.TrendsViewModel;
-import ui.news.NewsView;
-import ui.trends.TrendsView;
-
-import javax.swing.*;
 import java.awt.*;
-import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
+import javax.swing.*;
+import ui.news.NewsView;
+import ui.portfolio.PortfolioView;
+import ui.stock_search.StockSearchView;
+import ui.trading.TradingView;
+import ui.trends.TrendsView;
+import ui.trends.TrendsViewModel;
 
 public class DashboardView extends JFrame {
 
@@ -104,7 +102,7 @@ public class DashboardView extends JFrame {
             switch (idx) {
                 case NEWS_TAB -> SwingUtilities.invokeLater(() -> {
                     // Create NewsController similar to app.Main.showNewsView()
-                    NewsApiDAO newsApiDAO = new NewsApiDAO();
+                    NewsApiDao newsApiDAO = new NewsApiDao();
                     NewsView newsView = new NewsView(null);
                     interfaceadapters.news.FetchNewsPresenter presenter =
                         new interfaceadapters.news.FetchNewsPresenter(newsView);

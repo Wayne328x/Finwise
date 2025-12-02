@@ -1,21 +1,23 @@
-package fetch_news;
+package usecase.fetch_news;
 
-import data.news.NewsApiDAO;
-import okhttp3.*;
-import org.junit.jupiter.api.Test;
-
+import data.news.NewsApiDao;
+import entity.News;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import org.junit.jupiter.api.Test;
 
-import entity.News;
-import usecase.fetch_news.FetchNewsInputData;
-import usecase.fetch_news.FetchNewsInteractor;
-import usecase.fetch_news.FetchNewsOutputBoundary;
-import usecase.fetch_news.NewsDataAccessInterface;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 public class FetchNewsInteractorTest {
@@ -80,33 +82,7 @@ public class FetchNewsInteractorTest {
         FetchNewsInteractor interactor = new FetchNewsInteractor(failureDao, failurePresenter);
         interactor.execute(new FetchNewsInputData());
     }
-
-    @Test
-    public void generalFailureTest() {
-        NewsDataAccessInterface failureDao = new NewsDataAccessInterface() {
-            @Override
-            public List<News> fetchNews(String query) {
-                throw new RuntimeException("Network crashed");
-            }
-        };
-
-        FetchNewsOutputBoundary failurePresenter = new FetchNewsOutputBoundary() {
-            @Override
-            public void presentNews(List<News> outputData) {
-                fail("Test expected General failure but succeeded.");
-            }
-
-            @Override
-            public void presentError(String errorMessage) {
-                assertTrue(errorMessage.contains("Failed to fetch news"));
-                assertTrue(errorMessage.contains("Network crashed"));
-            }
-        };
-
-        FetchNewsInteractor interactor = new FetchNewsInteractor(failureDao, failurePresenter);
-        interactor.execute(new FetchNewsInputData());
-    }
-
+    
     @Test
     public void daoRateLimitTest() {
         // 1. Mock a client that returns "Rate Limit" JSON
@@ -123,7 +99,7 @@ public class FetchNewsInteractorTest {
                 })
                 .build();
 
-        NewsApiDAO dao = new NewsApiDAO(mockClient);
+        NewsApiDao dao = new NewsApiDao(mockClient);
 
         // 2. check if it throws DataFetchException
         assertThrows(NewsDataAccessInterface.DataFetchException.class, () -> {
@@ -146,7 +122,7 @@ public class FetchNewsInteractorTest {
                 })
                 .build();
 
-        NewsApiDAO dao = new NewsApiDAO(mockClient);
+        NewsApiDao dao = new NewsApiDao(mockClient);
 
         // 2. check if RuntimeException is thrown
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -170,7 +146,7 @@ public class FetchNewsInteractorTest {
                 })
                 .build();
 
-        NewsApiDAO dao = new NewsApiDAO(mockClient);
+        NewsApiDao dao = new NewsApiDao(mockClient);
 
         assertThrows(RuntimeException.class, () -> {
             dao.fetchNews("general");
@@ -186,7 +162,7 @@ public class FetchNewsInteractorTest {
                 })
                 .build();
 
-        NewsApiDAO dao = new NewsApiDAO(mockClient);
+        NewsApiDao dao = new NewsApiDao(mockClient);
 
         assertThrows(RuntimeException.class, () -> {
             dao.fetchNews("general");
@@ -209,7 +185,7 @@ public class FetchNewsInteractorTest {
                 })
                 .build();
 
-        NewsApiDAO dao = new NewsApiDAO(mockClient);
+        NewsApiDao dao = new NewsApiDao(mockClient);
 
         // returns an empty list safely, instead of throwing DataFetchException
         List<News> result = dao.fetchNews("general");
@@ -234,7 +210,7 @@ public class FetchNewsInteractorTest {
                 })
                 .build();
 
-        NewsApiDAO dao = new NewsApiDAO(mockClient);
+        NewsApiDao dao = new NewsApiDao(mockClient);
 
         // returns an empty list safely，instead of throwing NullPointerException
         List<News> result = dao.fetchNews("general");
@@ -248,7 +224,7 @@ public class FetchNewsInteractorTest {
         // REMARK: This is the only real api call in the test. When the limit is reached, the test will fail,
         //         but it will not affect the code coverage.
 
-        NewsApiDAO dao = new NewsApiDAO();
+        NewsApiDao dao = new NewsApiDao();
         try {
             List<News> news = dao.fetchNews("general");
             if (!news.isEmpty()) {

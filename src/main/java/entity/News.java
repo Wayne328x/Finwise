@@ -31,10 +31,22 @@ public class News {
 
     @Override
     public String toString() {
-        return "News{" +
-                "title='" + title + '\'' +
-                ", url='" + url + '\'' +
-                ", timePublished=" + timePublished +
+        return "News{"
+                +
+                "title='"
+                +
+                title + '\''
+                +
+                ", url='"
+                +
+                url
+                +
+                '\''
+                +
+                ", timePublished="
+                +
+                timePublished
+                +
                 '}';
     }
 }

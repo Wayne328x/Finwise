@@ -1,7 +1,8 @@
 package usecase.fetch_news;
 
 /**
- * for future extension, e.g. search news by keywords or filter by category
+ * The interface for input data.
+ * Note: this is for future extension only, e.g. search news by keywords or filter by category
  */
 public class FetchNewsInputData {
 

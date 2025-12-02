@@ -1,11 +1,11 @@
 package usecase.fetch_news;
 
-import entity.News;
-
 import java.util.List;
 
+import entity.News;
+
 /**
- * when the news fetching is:
+ * Including two types of outcomes.
  * successful: newsList is non-empty, and errorMessage is null
  * failed: newsList is empty, and errorMessage has something
  */
@@ -15,7 +15,8 @@ public class FetchNewsOutputData {
     private final String errorMessage;
 
     /**
-     * when succeeded
+     * When succeeded.
+     * @param newsList is what it got from interactor.
      */
     public FetchNewsOutputData(List<News> newsList) {
         this.newsList = newsList;
@@ -23,7 +24,8 @@ public class FetchNewsOutputData {
     }
 
     /**
-     * when failed
+     * When failed.
+     * @param errorMessage is the message it got from interactor.
      */
     public FetchNewsOutputData(String errorMessage) {
         this.newsList = null;

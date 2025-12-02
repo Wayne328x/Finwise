@@ -1,52 +1,61 @@
 package ui.news;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import interfaceadapters.news.NewsController;
+import usecase.fetch_news.NewsDataAccessInterface;
 
-public class NewsView extends JFrame {
+public class NewsView extends javax.swing.JFrame {
 
-    private final JLabel[] titleLabels = new JLabel[3];
-    private final JLabel[] timeLabels = new JLabel[3];
-    private final JButton prevButton = new JButton("previous page");
-    private final JButton nextButton = new JButton("next page");
-
+    private final int newsShownSize = 3;
+    private final JLabel[] titleLabels = new JLabel[newsShownSize];
+    private final JLabel[] timeLabels = new JLabel[newsShownSize];
+    private final JButton prevButton;
+    private final JButton nextButton;
     private NewsController controller;
+    private final NewsComponentFactory componentFactory;
 
     public NewsView(NewsController controller) {
         this.controller = controller;
-        initializeUI();
+        this.componentFactory = new NewsComponentFactory();
+        
+        this.prevButton = componentFactory.createNavigationButton("previous page");
+        this.nextButton = componentFactory.createNavigationButton("next page");
+
+        initializeUi();
     }
 
-    private void initializeUI() {
+    private void initializeUi() {
+        final int titleFontWidth = 600;
+        final int titleFontHeight = 400;
         setTitle("News");
-        setSize(600, 400);
+        setSize(titleFontWidth, titleFontHeight);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(4, 1));
+        final JPanel mainPanel = componentFactory.createMainPanelWithGridLayout(4, 1);
 
-        for (int i = 0; i < 3; i++) {
-            JPanel newsPanel = new JPanel();
-            newsPanel.setLayout(new BorderLayout());
+        for (int i = 0; i < newsShownSize; i++) {
+            final JPanel newsPanel = componentFactory.createNewsPanel();
 
-            titleLabels[i] = new JLabel("Loading the titles...");
-            titleLabels[i].setFont(new Font("Arial", Font.BOLD, 18));
-            titleLabels[i].setForeground(Color.BLUE);
-            titleLabels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            titleLabels[i] = componentFactory.createTitleLabel("Loading the titles...");
 
-            timeLabels[i] = new JLabel("Time published: ");
-            timeLabels[i].setFont(new Font("Arial", Font.PLAIN, 12));
-            timeLabels[i].setForeground(Color.DARK_GRAY);
+            timeLabels[i] = componentFactory.createTimeLabel("Time published: ");
 
-            JPanel textPanel = new JPanel();
-            textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+            final JPanel textPanel = componentFactory.createVerticalStackingPanel();
             textPanel.add(titleLabels[i]);
             textPanel.add(timeLabels[i]);
 
@@ -54,7 +63,7 @@ public class NewsView extends JFrame {
             mainPanel.add(newsPanel);
         }
 
-        JPanel buttonPanel = new JPanel();
+        final JPanel buttonPanel = new JPanel();
         buttonPanel.add(prevButton);
         buttonPanel.add(nextButton);
 
@@ -64,17 +73,18 @@ public class NewsView extends JFrame {
         setVisible(true);
     }
 
-    public void updateView(NewsViewModel vm) {
-        for (int i = 0; i < 3; i++) {
+    /**
+     * Update the view as the user goes to previous or next page.
+     * @param viewModel is what needs to be updated. */
+    public void updateView(NewsViewModel viewModel) {
+        for (int i = 0; i < newsShownSize; i++) {
 
-            String title = vm.titles.get(i);
-            String time = vm.publishTimes.get(i);
-            String url = vm.urls.get(i);
+            final String title = viewModel.getTitles().get(i);
+            final String time = viewModel.getPublishTimes().get(i);
+            final String url = viewModel.getUrls().get(i);
 
             titleLabels[i].setText(title);
             timeLabels[i].setText(time);
-
-            final String urlToOpen = url;
 
             for (MouseListener ml : titleLabels[i].getMouseListeners()) {
                 titleLabels[i].removeMouseListener(ml);
@@ -84,28 +94,34 @@ public class NewsView extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     try {
-                        Desktop.getDesktop().browse(new URI(urlToOpen));
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                        Desktop.getDesktop().browse(new URI(url));
+                    }
+                    catch (NewsDataAccessInterface.DataFetchException | URISyntaxException | IOException exception) {
+                        exception.printStackTrace();
                     }
                 }
             });
         }
 
-        prevButton.setEnabled(vm.hasPrevPage);
-        nextButton.setEnabled(vm.hasNextPage);
+        prevButton.setEnabled(viewModel.isHasPrevPage());
+        nextButton.setEnabled(viewModel.isHasNextPage());
     }
 
+    /**
+     * Show the error message.
+     * @param message why the error happens. */
     public void showError(String message) {
-        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, message, "Failed to fetch news: ", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Set controller for turning pages.
+     * @param controller . */
     public void setController(NewsController controller) {
         this.controller = controller;
 
-        prevButton.addActionListener(e -> this.controller.goToPreviousPage());
-        nextButton.addActionListener(e -> this.controller.goToNextPage());
+        prevButton.addActionListener(event -> this.controller.goToPreviousPage());
+        nextButton.addActionListener(event -> this.controller.goToNextPage());
     }
 
 }
-
