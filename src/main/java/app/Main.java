@@ -11,8 +11,20 @@ import data.database.RegisteredUserRepository;
 import data.database.RegisteredExpenseRepository;
 import data.expense.TrendsAdapter;
 
-import interfaceadapters.controllers.*;
-import interfaceadapters.presenters.*;
+import interfaceadapters.dashboard.DashboardController;
+import interfaceadapters.login.LoginController;
+import interfaceadapters.stocksearch.StockSearchController;
+import interfaceadapters.stocksearch.StockSearchPresenter;
+import interfaceadapters.trading.TradingController;
+import interfaceadapters.trading.TradingPresenter;
+import interfaceadapters.trends.TrendsController;
+import interfaceadapters.trends.TrendsPresenter;
+import interfaceadapters.news.NewsController;
+import interfaceadapters.news.FetchNewsPresenter;
+import interfaceadapters.portfolio.PortfolioController;
+import interfaceadapters.portfolio.PortfolioPresenter;
+import interfaceadapters.signup.SignUpController;
+import interfaceadapters.tracker.TrackerController;
 
 
 import ui.dashboard.DashboardView;
@@ -198,7 +210,7 @@ public class Main {
 
         // Presenter
         NewsView view = new NewsView(null);
-        FetchNewsPresenter presenter = new FetchNewsPresenter(view);
+        interfaceadapters.news.FetchNewsPresenter presenter = new interfaceadapters.news.FetchNewsPresenter(view);
 
         // Interactor
         FetchNewsInteractor interactor = new FetchNewsInteractor(newsApiDAO, presenter);

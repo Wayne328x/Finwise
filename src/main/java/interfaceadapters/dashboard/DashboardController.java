@@ -1,4 +1,4 @@
-package interfaceadapters.controllers;
+package interfaceadapters.dashboard;
 
 public class DashboardController {
     // Add methods later as dashboard needs data/actions.

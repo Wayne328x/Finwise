@@ -1,4 +1,4 @@
-package interfaceadapters.controllers;
+package interfaceadapters.login;
 
 import usecase.login.LoginInputData;
 import usecase.login.LoginInteractor;

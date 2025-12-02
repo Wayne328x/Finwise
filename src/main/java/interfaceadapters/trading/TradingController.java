@@ -1,4 +1,4 @@
-package interfaceadapters.controllers;
+package interfaceadapters.trading;
 import usecase.trading.TradingInputBoundary;
 import usecase.trading.TradingInputData;
 import usecase.trading.TradingViewModel;

@@ -1,7 +1,7 @@
 package ui.stock_search;
 
 import data.stock.AlphaVantage;
-import interfaceadapters.controllers.StockSearchController;
+import interfaceadapters.stocksearch.StockSearchController;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;

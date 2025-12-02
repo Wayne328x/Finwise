@@ -1,6 +1,6 @@
 package ui.trading;
-import interfaceadapters.controllers.TradingController;
-import interfaceadapters.controllers.StockSearchController;
+import interfaceadapters.trading.TradingController;
+import interfaceadapters.stocksearch.StockSearchController;
 import usecase.trading.TradingInputData;
 import usecase.trading.TradingViewModel;
 import usecase.stocksearch.StockSearchOutputData;

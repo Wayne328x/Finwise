@@ -1,4 +1,4 @@
-package interfaceadapters.controllers;
+package interfaceadapters.stocksearch;
 
 import java.util.List;
 

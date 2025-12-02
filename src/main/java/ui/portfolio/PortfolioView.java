@@ -3,7 +3,7 @@ package ui.portfolio;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import interfaceadapters.controllers.PortfolioController;
+import interfaceadapters.portfolio.PortfolioController;
 
 import java.awt.*;
 import java.util.List;

@@ -1,4 +1,4 @@
-package interfaceadapters.controllers;
+package interfaceadapters.tracker;
 
 import usecase.add_expense.*;
 import usecase.list_expenses.*;

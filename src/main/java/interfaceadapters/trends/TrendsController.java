@@ -1,4 +1,4 @@
-package interfaceadapters.controllers;
+package interfaceadapters.trends;
 
 import usecase.trends.TrendsInputBoundary;
 import usecase.trends.TrendsInputData;

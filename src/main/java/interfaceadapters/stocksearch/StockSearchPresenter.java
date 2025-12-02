@@ -1,4 +1,4 @@
-package interfaceadapters.presenters;
+package interfaceadapters.stocksearch;
 
 import usecase.stocksearch.StockSearchOutputBoundary;
 import usecase.stocksearch.StockSearchOutputData;

@@ -1,4 +1,4 @@
-package interfaceadapters.presenters;
+package interfaceadapters.trends;
 
 import usecase.trends.TrendsOutputBoundary;
 import usecase.trends.TrendsOutputData;
