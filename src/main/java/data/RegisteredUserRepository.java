@@ -18,7 +18,7 @@ public final class RegisteredUserRepository implements UserRepository {
   /**
    * The data source for database connections.
    */
-  private final DataSource dataSource;
+    private final DataSource dataSource;
 
   /**
    * Constructs a RegisteredUserRepository with the given data source.
@@ -27,7 +27,7 @@ public final class RegisteredUserRepository implements UserRepository {
    */
   public RegisteredUserRepository(final DataSource dataSourceParam) {
     this.dataSource = dataSourceParam;
-  }
+    }
 
   /**
    * Finds a user by username.
@@ -35,26 +35,26 @@ public final class RegisteredUserRepository implements UserRepository {
    * @param username the username to search for
    * @return an Optional containing the user if found, empty otherwise
    */
-  @Override
+    @Override
   public Optional<User> findByUsername(final String username) {
-    String query = "SELECT * FROM users WHERE username = ?";
-    try (Connection connection = dataSource.getConnection();
+        String query = "SELECT * FROM users WHERE username = ?";
+        try (Connection connection = dataSource.getConnection();
         PreparedStatement preparedStatement =
             connection.prepareStatement(query)) {
-      preparedStatement.setString(1, username);
-      try (ResultSet resultSet = preparedStatement.executeQuery()) {
-        if (resultSet.next()) {
-          return Optional.of(new User(
-              resultSet.getLong("id"),
-              resultSet.getString("username"),
+            preparedStatement.setString(1, username);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(new User(
+                            resultSet.getLong("id"),
+                            resultSet.getString("username"),
               resultSet.getString("password")));
         }
         return Optional.empty();
-      }
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
-  }
 
   /**
    * Creates a new user with the given credentials.
@@ -65,30 +65,30 @@ public final class RegisteredUserRepository implements UserRepository {
    * @throws IllegalStateException if the username already exists
    * @throws RuntimeException if database operation fails
    */
-  @Override
+    @Override
   public User create(final String username, final String password) {
-    String query = "INSERT INTO users (username, password) VALUES (?, ?)";
-    try (Connection connection = dataSource.getConnection();
+        String query = "INSERT INTO users (username, password) VALUES (?, ?)";
+        try (Connection connection = dataSource.getConnection();
         PreparedStatement preparedStatement =
             connection.prepareStatement(
                 query,
                 Statement.RETURN_GENERATED_KEYS)) {
-      preparedStatement.setString(1, username);
-      preparedStatement.setString(2, password);
-      preparedStatement.executeUpdate();
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            preparedStatement.executeUpdate();
 
-      try (ResultSet keys = preparedStatement.getGeneratedKeys()) {
-        if (keys.next()) {
-          return new User(keys.getLong(1), username, password);
+            try (ResultSet keys = preparedStatement.getGeneratedKeys()) {
+                if (keys.next()) {
+                    return new User(keys.getLong(1), username, password);
         }
         throw new RuntimeException("No generated key found!");
-      }
-    } catch (SQLException e) {
+            }
+        } catch (SQLException e) {
       if (e.getMessage() != null
           && e.getMessage().toLowerCase().contains("unique")) {
-        throw new IllegalStateException("Username already exists!");
-      }
-      throw new RuntimeException(e);
+                throw new IllegalStateException("Username already exists!");
+            }
+            throw new RuntimeException(e);
+        }
     }
-  }
 }
