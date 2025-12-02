@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/controllers/TrackerController.java
-package interfaceadapters.controllers;
-========
 package interfaceadapters.tracker;
->>>>>>>> origin:src/main/java/interfaceadapters/tracker/TrackerController.java
 
 import usecase.add_expense.*;
 import usecase.list_expenses.*;
@@ -19,7 +15,7 @@ public class TrackerController {
     }
 
     public ListExpensesOutputData loadExpenses(String username) {
-        ListExpensesInputData input = new ListExpensesInputData(username);
+        final ListExpensesInputData input = new ListExpensesInputData(username);
         return listInteractor.execute(input);
     }
 
@@ -27,7 +23,7 @@ public class TrackerController {
                                            String datetime,
                                            String type,
                                            String amountText) {
-        AddExpenseInputData input =
+        final AddExpenseInputData input =
                 new AddExpenseInputData(username, datetime, type, amountText);
         return addInteractor.execute(input);
     }

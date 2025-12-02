@@ -1,9 +1,10 @@
 package data.expense;
 
 import java.util.List;
+
+import data.database.RegisteredExpenseRepository;
 import entity.Expense;
 import usecase.trends.TrendsDataAccess;
-import data.database.RegisteredExpenseRepository;
 
 /**
  * Data adapter for the Trends use case.
@@ -13,8 +14,8 @@ public class TrendsAdapter implements TrendsDataAccess {
     private final RegisteredExpenseRepository repo;
 
     /**
-     * @param repo the entire repository of expenses.
-     */
+    * @param repo the entire repository of expenses.
+    */
     public TrendsAdapter(RegisteredExpenseRepository repo) {
         this.repo = repo;
     }

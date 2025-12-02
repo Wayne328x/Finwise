@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/presenters/StockSearchPresenter.java
-package interfaceadapters.presenters;
-========
 package interfaceadapters.stocksearch;
->>>>>>>> origin:src/main/java/interfaceadapters/stocksearch/StockSearchPresenter.java
 
 import usecase.stocksearch.StockSearchOutputBoundary;
 import usecase.stocksearch.StockSearchOutputData;

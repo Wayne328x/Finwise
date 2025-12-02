@@ -1,14 +1,10 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/controllers/NewsController.java
-package interfaceadapters.controllers;
-
-import usecase.fetch_news.FetchNewsInputBoundary;
-import interfaceadapters.presenters.FetchNewsPresenter;
-========
 package interfaceadapters.news;
 
 import usecase.fetch_news.FetchNewsInputBoundary;
 import interfaceadapters.news.FetchNewsPresenter;
->>>>>>>> origin:src/main/java/interfaceadapters/news/NewsController.java
+
+import usecase.fetch_news.FetchNewsInputBoundary;
+import interfaceadapters.news.FetchNewsPresenter;
 import usecase.fetch_news.FetchNewsInputData;
 
 public class NewsController {

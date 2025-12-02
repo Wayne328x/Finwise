@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/controllers/StockSearchController.java
-package interfaceadapters.controllers;
-========
 package interfaceadapters.stocksearch;
->>>>>>>> origin:src/main/java/interfaceadapters/stocksearch/StockSearchController.java
 
 import java.util.List;
 

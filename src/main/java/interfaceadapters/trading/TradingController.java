@@ -1,8 +1,5 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/controllers/TradingController.java
-package interfaceadapters.controllers;
-========
 package interfaceadapters.trading;
->>>>>>>> origin:src/main/java/interfaceadapters/trading/TradingController.java
+
 import usecase.trading.TradingInputBoundary;
 import usecase.trading.TradingInputData;
 import usecase.trading.TradingViewModel;

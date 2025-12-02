@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/controllers/PortfolioController.java
-package interfaceadapters.controllers;
-========
 package interfaceadapters.portfolio;
->>>>>>>> origin:src/main/java/interfaceadapters/portfolio/PortfolioController.java
 
 import ui.portfolio.PortfolioViewModel;
 import usecase.portfolio.PortfolioInputBoundary;

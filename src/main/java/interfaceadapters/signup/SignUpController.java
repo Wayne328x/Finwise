@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/controllers/SignUpController.java
-package interfaceadapters.controllers;
-========
 package interfaceadapters.signup;
->>>>>>>> origin:src/main/java/interfaceadapters/signup/SignUpController.java
 
 import usecase.signup.SignUpInputData;
 import usecase.signup.SignUpInteractor;

@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/controllers/LoginController.java
-package interfaceadapters.controllers;
-========
 package interfaceadapters.login;
->>>>>>>> origin:src/main/java/interfaceadapters/login/LoginController.java
 
 import usecase.login.LoginInputData;
 import usecase.login.LoginInteractor;

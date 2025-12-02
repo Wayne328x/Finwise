@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/presenters/PortfolioPresenter.java
-package interfaceadapters.presenters;
-========
 package interfaceadapters.portfolio;
->>>>>>>> origin:src/main/java/interfaceadapters/portfolio/PortfolioPresenter.java
 
 import entity.Holding;
 import entity.PortfolioSnapshot;

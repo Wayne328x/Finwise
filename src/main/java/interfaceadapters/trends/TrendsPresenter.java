@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/presenters/TrendsPresenter.java
-package interfaceadapters.presenters;
-========
 package interfaceadapters.trends;
->>>>>>>> origin:src/main/java/interfaceadapters/trends/TrendsPresenter.java
 
 import usecase.trends.TrendsOutputBoundary;
 import usecase.trends.TrendsOutputData;

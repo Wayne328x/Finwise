@@ -1,8 +1,5 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/presenters/TradingPresenter.java
-package interfaceadapters.presenters;
-========
 package interfaceadapters.trading;
->>>>>>>> origin:src/main/java/interfaceadapters/trading/TradingPresenter.java
+
 import usecase.trading.TradingOutputBoundary;
 import usecase.trading.TradingOutputData;
 import usecase.trading.TradingViewModel;

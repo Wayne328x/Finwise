@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/interfaceadapters/presenters/FetchNewsPresenter.java
-package interfaceadapters.presenters;
-========
 package interfaceadapters.news;
->>>>>>>> origin:src/main/java/interfaceadapters/news/FetchNewsPresenter.java
 
 import entity.News;
 import ui.news.NewsView;
