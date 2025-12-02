@@ -1,6 +1,7 @@
 package data.portfolio;
 
 import entity.PricePoint;
+import usecase.portfolio.PriceHistoryRepository;
 
 import java.time.LocalDate;
 import java.util.*;

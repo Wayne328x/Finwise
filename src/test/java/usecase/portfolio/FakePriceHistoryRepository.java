@@ -1,6 +1,5 @@
 package usecase.portfolio;
 
-import data.portfolio.PriceHistoryRepository;
 import entity.PricePoint;
 
 import java.util.Collections;
