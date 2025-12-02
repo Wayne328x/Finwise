@@ -1,6 +1,6 @@
 package usecase.signup;
 
-import data.UserRepository;
+import data.user.UserRepository;
 import entity.User;
 
 /**

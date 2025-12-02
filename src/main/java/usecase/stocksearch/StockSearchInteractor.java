@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import data.AlphaVantage;
-import data.AlphaVantage.StockSearchResult;
+import data.stock.AlphaVantage;
+import data.stock.AlphaVantage.StockSearchResult;
 
 /**
  * Interactor for stock search operations.

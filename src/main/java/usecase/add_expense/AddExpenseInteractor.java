@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import data.ExpenseRepository;
+import data.expense.ExpenseRepository;
 
 /**
  * Interactor for adding a new expense.

@@ -34,7 +34,7 @@ The readme should include information such as:
 
 **Use case 1:** Track expenses
 
-* **Main flow:**
+* **app.Main flow:**
     * User enters the amount for the type of expense
     * The system stores transactions under the user’s profile
 * **Alternative flow:**
@@ -43,7 +43,7 @@ The readme should include information such as:
 
 **Use case 2**: Financial trends
 
-* **Main flow:**
+* **app.Main flow:**
     * Choose the type of time range (view by day, by week, or by month).
     * System displays user’s financial history using line chart
 * **Alternative flow:**
@@ -51,7 +51,7 @@ The readme should include information such as:
 
 **Use case 3:** Fetch Selected Live Stock prices
 
-* **Main flow:**
+* **app.Main flow:**
     * User enters the name of the stock in the search bar.
     * Fetch and display the list of related stock symbols.
     * User selects the stock symbol that they are interested in.
@@ -64,7 +64,7 @@ The readme should include information such as:
 
 **Use Case 4:** Investing in Simulated Market
 
-* **Main flow:**
+* **app.Main flow:**
     * User enters or selects a symbol (e.g., Apple’s symbol)
     * User chooses either buy or sell, and then enters the amount and clicks submit.
     * Show the latest price
@@ -76,7 +76,7 @@ The readme should include information such as:
 
 **Use Case 5:** Portfolio performance diagnostics
 
-* **Main flow:**
+* **app.Main flow:**
     * User clicks “stock holdings”
     * System fetches portfolio gain/loss over time
     * System updates portfolio gain/loss over time with up-to-date prices of invested stocks
@@ -88,7 +88,7 @@ The readme should include information such as:
 
 **Use Case 6:** Real-time News
 
-* **Main flow:**
+* **app.Main flow:**
     * User can directly see the latest news headlines at the top of the home page for their holdings and watchlist
     * The news automatically rotates the page
     * User can pause the news by hovering the mouse if they are interested in

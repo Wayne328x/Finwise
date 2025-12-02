@@ -2,7 +2,7 @@ package usecase.list_expenses;
 
 import java.util.List;
 
-import data.ExpenseRepository;
+import data.expense.ExpenseRepository;
 import entity.Expense;
 
 /**

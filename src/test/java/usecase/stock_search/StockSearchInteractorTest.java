@@ -1,6 +1,6 @@
 package usecase.stock_search;
 
-import data.AlphaVantage;
+import data.stock.AlphaVantage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.stocksearch.StockSearchInputData;
@@ -96,19 +96,15 @@ class StockSearchInteractorTest {
 
     @Test
     void testExecute_WithNullKeywords_ReturnsFailure() {
-        // Arrange
         StockSearchInputData input = new StockSearchInputData(null);
         mockOutputBoundary.reset();
 
-        // Act
         StockSearchOutputData output = interactor.execute(input);
 
-        // Assert
         assertFalse(output.isSuccess());
         assertEquals("Search keywords cannot be empty", output.getMessage());
         assertTrue(output.getResults().isEmpty());
         
-        // Verify output boundary was called
         assertEquals(1, mockOutputBoundary.getPresentCallCount());
         assertNotNull(mockOutputBoundary.getLastPresentedOutput());
         assertFalse(mockOutputBoundary.getLastPresentedOutput().isSuccess());
@@ -118,45 +114,36 @@ class StockSearchInteractorTest {
 
     @Test
     void testExecute_WithBlankKeywords_ReturnsFailure() {
-        // Arrange
         StockSearchInputData input = new StockSearchInputData("   ");
         mockOutputBoundary.reset();
 
-        // Act
         StockSearchOutputData output = interactor.execute(input);
 
-        // Assert
         assertFalse(output.isSuccess());
         assertEquals("Search keywords cannot be empty", output.getMessage());
         assertTrue(output.getResults().isEmpty());
         
-        // Verify output boundary was called
         assertEquals(1, mockOutputBoundary.getPresentCallCount());
         assertFalse(mockOutputBoundary.getLastPresentedOutput().isSuccess());
     }
 
     @Test
     void testExecute_WithEmptyKeywords_ReturnsFailure() {
-        // Arrange
         StockSearchInputData input = new StockSearchInputData("");
         mockOutputBoundary.reset();
 
-        // Act
         StockSearchOutputData output = interactor.execute(input);
 
-        // Assert
         assertFalse(output.isSuccess());
         assertEquals("Search keywords cannot be empty", output.getMessage());
         assertTrue(output.getResults().isEmpty());
         
-        // Verify output boundary was called
         assertEquals(1, mockOutputBoundary.getPresentCallCount());
         assertFalse(mockOutputBoundary.getLastPresentedOutput().isSuccess());
     }
 
     @Test
     void testExecute_WithValidKeywords_ReturnsSuccess() {
-        // Arrange
         String keywords = "AAPL";
         StockSearchInputData input = new StockSearchInputData(keywords);
         
@@ -168,16 +155,13 @@ class StockSearchInteractorTest {
         mockApi.setSearchResults(mockResults);
         mockOutputBoundary.reset();
 
-        // Act
         StockSearchOutputData output = interactor.execute(input);
 
-        // Assert
         assertTrue(output.isSuccess());
         assertEquals("Search completed", output.getMessage());
         assertEquals(1, output.getResults().size());
         assertEquals("AAPL", output.getResults().get(0).getSymbol());
         
-        // Verify output boundary was called with correct data
         assertEquals(1, mockOutputBoundary.getPresentCallCount());
         assertNotNull(mockOutputBoundary.getLastPresentedOutput());
         assertTrue(mockOutputBoundary.getLastPresentedOutput().isSuccess());
@@ -190,22 +174,18 @@ class StockSearchInteractorTest {
 
     @Test
     void testExecute_WithEmptyResults_ReturnsFailure() {
-        // Arrange
         String keywords = "INVALID";
         StockSearchInputData input = new StockSearchInputData(keywords);
         
         mockApi.setSearchResults(new ArrayList<>());
         mockOutputBoundary.reset();
 
-        // Act
         StockSearchOutputData output = interactor.execute(input);
 
-        // Assert
         assertFalse(output.isSuccess());
         assertEquals("No results for \"" + keywords + "\"", output.getMessage());
         assertTrue(output.getResults().isEmpty());
         
-        // Verify output boundary was called
         assertEquals(1, mockOutputBoundary.getPresentCallCount());
         assertFalse(mockOutputBoundary.getLastPresentedOutput().isSuccess());
         assertEquals("No results for \"" + keywords + "\"", 
@@ -214,7 +194,6 @@ class StockSearchInteractorTest {
 
     @Test
     void testExecute_WithIOException_ReturnsFailure() {
-        // Arrange
         String keywords = "AAPL";
         StockSearchInputData input = new StockSearchInputData(keywords);
         IOException ioException = new IOException("Network connection failed");
@@ -222,15 +201,12 @@ class StockSearchInteractorTest {
         mockApi.setIOException(ioException);
         mockOutputBoundary.reset();
 
-        // Act
         StockSearchOutputData output = interactor.execute(input);
 
-        // Assert
         assertFalse(output.isSuccess());
         assertEquals("Network error: " + ioException.getMessage(), output.getMessage());
         assertTrue(output.getResults().isEmpty());
         
-        // Verify output boundary was called with error data
         assertEquals(1, mockOutputBoundary.getPresentCallCount());
         assertFalse(mockOutputBoundary.getLastPresentedOutput().isSuccess());
         assertEquals("Network error: " + ioException.getMessage(), 
@@ -239,7 +215,6 @@ class StockSearchInteractorTest {
 
     @Test
     void testExecute_WithGenericException_ReturnsFailure() {
-        // Arrange
         String keywords = "AAPL";
         StockSearchInputData input = new StockSearchInputData(keywords);
         RuntimeException runtimeException = new RuntimeException("Unexpected error");
@@ -247,15 +222,12 @@ class StockSearchInteractorTest {
         mockApi.setRuntimeException(runtimeException);
         mockOutputBoundary.reset();
 
-        // Act
         StockSearchOutputData output = interactor.execute(input);
 
-        // Assert
         assertFalse(output.isSuccess());
         assertEquals("Error: " + runtimeException.getMessage(), output.getMessage());
         assertTrue(output.getResults().isEmpty());
         
-        // Verify output boundary was called with error data
         assertEquals(1, mockOutputBoundary.getPresentCallCount());
         assertFalse(mockOutputBoundary.getLastPresentedOutput().isSuccess());
         assertEquals("Error: " + runtimeException.getMessage(), 
@@ -264,7 +236,6 @@ class StockSearchInteractorTest {
 
     @Test
     void testExecute_WithMultipleResults_ReturnsSuccess() {
-        // Arrange
         String keywords = "Apple";
         StockSearchInputData input = new StockSearchInputData(keywords);
         
@@ -279,15 +250,12 @@ class StockSearchInteractorTest {
         mockApi.setSearchResults(mockResults);
         mockOutputBoundary.reset();
 
-        // Act
         StockSearchOutputData output = interactor.execute(input);
 
-        // Assert
         assertTrue(output.isSuccess());
         assertEquals("Search completed", output.getMessage());
         assertEquals(2, output.getResults().size());
         
-        // Verify output boundary was called with correct data
         assertEquals(1, mockOutputBoundary.getPresentCallCount());
         assertTrue(mockOutputBoundary.getLastPresentedOutput().isSuccess());
         assertEquals(2, mockOutputBoundary.getLastPresentedOutput().getResults().size());
@@ -295,7 +263,6 @@ class StockSearchInteractorTest {
 
     @Test
     void testExecute_WithNullOutputBoundary_DoesNotThrowException() {
-        // Arrange - Create interactor with null output boundary to test the null check branch
         StockSearchInteractor interactorWithNullBoundary = 
             new StockSearchInteractor(mockApi, null);
         String keywords = "AAPL";
@@ -307,10 +274,8 @@ class StockSearchInteractorTest {
         ));
         mockApi.setSearchResults(mockResults);
 
-        // Act - Should not throw NullPointerException
         StockSearchOutputData output = interactorWithNullBoundary.execute(input);
 
-        // Assert - Should still return valid output even with null boundary
         assertTrue(output.isSuccess());
         assertEquals("Search completed", output.getMessage());
         assertEquals(1, output.getResults().size());

@@ -3,7 +3,7 @@ package ui.portfolio;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import interface_adapters.controllers.PortfolioController;
+import interfaceadapters.controllers.PortfolioController;
 
 import java.awt.*;
 import java.util.List;
@@ -33,7 +33,7 @@ public class PortfolioView extends JFrame {
         // Call the use case via controller
         PortfolioViewModel vm = controller.analyze(username);
 
-        // Main layout
+        // app.Main layout
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
 
         // Header

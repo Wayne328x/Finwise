@@ -2,7 +2,7 @@ package usecase.stocksearch;
 
 import java.util.List;
 
-import data.AlphaVantage.StockSearchResult;
+import data.stock.AlphaVantage.StockSearchResult;
 
 /**
  * Output data for stock search operations.

@@ -1,7 +1,7 @@
 package fetch_news;
 
+import data.fetch_news.NewsApiDAO;
 import okhttp3.*;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

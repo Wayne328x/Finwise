@@ -4,7 +4,7 @@ import usecase.login.LoginOutputData;
 
 import javax.swing.*;
 
-import interface_adapters.controllers.LoginController;
+import interfaceadapters.controllers.LoginController;
 
 import java.awt.*;
 
@@ -37,7 +37,7 @@ public class LoginView extends JFrame {
             LoginOutputData result = loginController.login(username, password);
             JOptionPane.showMessageDialog(this, result.getMessage());
             if (result.isSuccess()) {
-                showDashboard.accept(username); // pass username up to Main
+                showDashboard.accept(username); // pass username up to app.Main
                 dispose();
             }
         });

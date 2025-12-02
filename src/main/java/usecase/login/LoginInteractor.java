@@ -1,6 +1,6 @@
 package usecase.login;
 
-import data.UserRepository;
+import data.user.UserRepository;
 import entity.User;
 import java.util.Optional;
 
