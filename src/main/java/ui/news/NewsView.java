@@ -1,19 +1,31 @@
 package ui.news;
 
-import interfaceadapters.news.NewsController;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URI;
-import javax.swing.*;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import interfaceadapters.news.NewsController;
 
 public class NewsView extends javax.swing.JFrame {
 
-    private final javax.swing.JLabel[] titleLabels = new javax.swing.JLabel[3];
-    private final javax.swing.JLabel[] timeLabels = new JLabel[3];
+    private final int newsShownSize = 3;
+    private final javax.swing.JLabel[] titleLabels = new javax.swing.JLabel[newsShownSize];
+    private final javax.swing.JLabel[] timeLabels = new JLabel[newsShownSize];
     private final javax.swing.JButton prevButton = new JButton("previous page");
     private final JButton nextButton = new JButton("next page");
+
 
     private NewsController controller;
 
@@ -31,7 +43,7 @@ public class NewsView extends javax.swing.JFrame {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new java.awt.GridLayout(4, 1));
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < newsShownSize; i++) {
             javax.swing.JPanel newsPanel = new javax.swing.JPanel();
             newsPanel.setLayout(new BorderLayout());
 
@@ -61,7 +73,7 @@ public class NewsView extends javax.swing.JFrame {
     }
 
     public void updateView(NewsViewModel vm) {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < newsShownSize; i++) {
 
             String title = vm.titles.get(i);
             String time = vm.publishTimes.get(i);
