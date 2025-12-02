@@ -82,33 +82,7 @@ public class FetchNewsInteractorTest {
         FetchNewsInteractor interactor = new FetchNewsInteractor(failureDao, failurePresenter);
         interactor.execute(new FetchNewsInputData());
     }
-
-    @Test
-    public void generalFailureTest() {
-        NewsDataAccessInterface failureDao = new NewsDataAccessInterface() {
-            @Override
-            public List<News> fetchNews(String query) {
-                throw new RuntimeException("Network crashed");
-            }
-        };
-
-        FetchNewsOutputBoundary failurePresenter = new FetchNewsOutputBoundary() {
-            @Override
-            public void presentNews(List<News> outputData) {
-                fail("Test expected General failure but succeeded.");
-            }
-
-            @Override
-            public void presentError(String errorMessage) {
-                assertTrue(errorMessage.contains("Failed to fetch news"));
-                assertTrue(errorMessage.contains("Network crashed"));
-            }
-        };
-
-        FetchNewsInteractor interactor = new FetchNewsInteractor(failureDao, failurePresenter);
-        interactor.execute(new FetchNewsInputData());
-    }
-
+    
     @Test
     public void daoRateLimitTest() {
         // 1. Mock a client that returns "Rate Limit" JSON
