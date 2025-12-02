@@ -1,4 +1,4 @@
-package use_case.portfolio;
+package usecase.portfolio;
 
 import entity.PricePoint;
 import java.util.List;

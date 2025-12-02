@@ -1,8 +1,5 @@
 package usecase.portfolio;
 
-import data.portfolio.PortfolioRepository;
-import data.portfolio.PriceHistoryRepository;
-
 import entity.Holding;
 import entity.PortfolioSnapshot;
 import entity.PricePoint;

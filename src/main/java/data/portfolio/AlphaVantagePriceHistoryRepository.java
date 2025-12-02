@@ -2,6 +2,8 @@ package data.portfolio;
 
 import data.stock.AlphaVantage;
 import entity.PricePoint;
+import usecase.portfolio.PriceHistoryRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
