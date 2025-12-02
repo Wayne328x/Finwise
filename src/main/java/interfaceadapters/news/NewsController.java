@@ -2,6 +2,9 @@ package interfaceadapters.news;
 
 import usecase.fetch_news.FetchNewsInputBoundary;
 import interfaceadapters.news.FetchNewsPresenter;
+
+import usecase.fetch_news.FetchNewsInputBoundary;
+import interfaceadapters.news.FetchNewsPresenter;
 import usecase.fetch_news.FetchNewsInputData;
 
 public class NewsController {

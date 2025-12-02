@@ -5,10 +5,10 @@ public class AddExpenseOutputData {
     private final String message;
     private final String datetime;
     private final String type;
-    private final Double amount;
+    private final double amount;
 
     public AddExpenseOutputData(boolean success, String message,
-                                String datetime, String type, Double amount) {
+                                String datetime, String type, double amount) {
         this.success = success;
         this.message = message;
         this.datetime = datetime;
@@ -32,7 +32,7 @@ public class AddExpenseOutputData {
         return type;
     }
 
-    public Double getAmount() {
+    public double getAmount() {
         return amount;
     }
 }

@@ -15,7 +15,7 @@ public class TrackerController {
     }
 
     public ListExpensesOutputData loadExpenses(String username) {
-        ListExpensesInputData input = new ListExpensesInputData(username);
+        final ListExpensesInputData input = new ListExpensesInputData(username);
         return listInteractor.execute(input);
     }
 
@@ -23,7 +23,7 @@ public class TrackerController {
                                            String datetime,
                                            String type,
                                            String amountText) {
-        AddExpenseInputData input =
+        final AddExpenseInputData input =
                 new AddExpenseInputData(username, datetime, type, amountText);
         return addInteractor.execute(input);
     }
