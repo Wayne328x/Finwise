@@ -1,7 +1,9 @@
 package usecase.trading;
+
+import java.time.Instant;
+
 import entity.Holding;
 import entity.OrderRecord;
-import java.time.Instant;
 
 public class TradingInteractor implements TradingInputBoundary {
 
@@ -16,10 +18,10 @@ public class TradingInteractor implements TradingInputBoundary {
 
     @Override
     public void placeOrder(TradingInputData input) {
-        String username = input.getUsername();
-        String symbol = input.getSymbol();
-        TradingInputData.Action action = input.getAction();
-        int shares = input.getShares();
+        final String username = input.getUsername();
+        final String symbol = input.getSymbol();
+        final TradingInputData.Action action = input.getAction();
+        final int shares = input.getShares();
 
         // validating input
         if (symbol == null || symbol.isBlank() || shares <= 0 || action == null) {
@@ -34,13 +36,12 @@ public class TradingInteractor implements TradingInputBoundary {
             return;
         }
 
-
-        double stockPrice = dataAccess.getStockPrice(symbol);
-        double cash = dataAccess.getCash(username);
-        Holding holding = dataAccess.getHolding(username, symbol);
+        final double stockPrice = dataAccess.getStockPrice(symbol);
+        final double cash = dataAccess.getCash(username);
+        final Holding holding = dataAccess.getHolding(username, symbol);
 
         if (action == TradingInputData.Action.BUY) {
-            double totalCost = stockPrice * shares;
+            final double totalCost = stockPrice * shares;
             if (cash < totalCost) {
                 presenter.presentTradeResult(new TradingOutputData(
                         "Not enough cash.",
@@ -54,16 +55,17 @@ public class TradingInteractor implements TradingInputBoundary {
             }
 
             // new shares and average total cost
-            int oldShares = holding == null ? 0 : holding.getShares();
-            double oldAverageCost = holding == null ? 0 : holding.getAvgCost();
-            int newShares = oldShares + shares;
-            double newAverageCost = ((oldAverageCost * oldShares) + totalCost) / newShares;
+            final int oldShares = holding == null ? 0 : holding.getShares();
+            final double oldAverageCost = holding == null ? 0 : holding.getAvgCost();
+            final int newShares = oldShares + shares;
+            final double newAverageCost = ((oldAverageCost * oldShares) + totalCost) / newShares;
 
-            Holding newHolding = new Holding(symbol, newShares, newAverageCost);
+            final Holding newHolding = new Holding(symbol, newShares, newAverageCost);
             dataAccess.updateCash(username, cash - totalCost);
             dataAccess.updateHolding(username, newHolding);
 
-        } else {
+        }
+        else {
             // selling
             if (holding == null || shares > holding.getShares()) {
                 presenter.presentTradeResult(new TradingOutputData(
@@ -77,27 +79,28 @@ public class TradingInteractor implements TradingInputBoundary {
                 return;
             }
 
-            double proceeds = stockPrice * shares;
-            int remaining = holding.getShares() - shares;
+            final double proceeds = stockPrice * shares;
+            final int remaining = holding.getShares() - shares;
             dataAccess.updateCash(username, cash + proceeds);
 
             if (remaining == 0) {
                 dataAccess.removeHolding(username, symbol);
-            } else {
-                Holding updated = new Holding(symbol, remaining, holding.getAvgCost());
+            }
+            else {
+                final Holding updated = new Holding(symbol, remaining, holding.getAvgCost());
                 dataAccess.updateHolding(username, updated);
             }
         }
 
-        double updatedCash = dataAccess.getCash(username);
-        Holding updatedHolding = dataAccess.getHolding(username, symbol);
-        int totalSharesAfterTrade = updatedHolding == null ? 0 : updatedHolding.getShares();
-        double averageCostAfterTrade = updatedHolding == null ? 0 : updatedHolding.getAvgCost();
-        double totalHoldingValueAfterTrade = totalSharesAfterTrade * stockPrice;
+        final double updatedCash = dataAccess.getCash(username);
+        final Holding updatedHolding = dataAccess.getHolding(username, symbol);
+        final int totalSharesAfterTrade = updatedHolding == null ? 0 : updatedHolding.getShares();
+        final double averageCostAfterTrade = updatedHolding == null ? 0 : updatedHolding.getAvgCost();
+        final double totalHoldingValueAfterTrade = totalSharesAfterTrade * stockPrice;
 
         // record the order
-        double executedPrice = stockPrice;
-        OrderRecord orderRecord = new OrderRecord(
+        final double executedPrice = stockPrice;
+        final OrderRecord orderRecord = new OrderRecord(
                 Instant.now(),
                 username,
                 symbol,
@@ -108,7 +111,6 @@ public class TradingInteractor implements TradingInputBoundary {
         );
         dataAccess.saveOrder(orderRecord);
 
-        
         presenter.presentTradeResult(new TradingOutputData(
                 "Order executed.",
                 true,

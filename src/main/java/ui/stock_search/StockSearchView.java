@@ -400,7 +400,6 @@ public class StockSearchView extends JFrame {
             // Run the search in the background, then select the matching result
             final SwingWorker<StockSearchOutputData, Void> worker =
                     createInitialSymbolWorker(initialSymbol);
-
             worker.execute();
         }
     }
@@ -421,7 +420,7 @@ public class StockSearchView extends JFrame {
 
             @Override
             protected void done() {
-                handleInitialSymbolLoaded(initialSymbol);
+                handleInitialSymbolLoaded(initialSymbol, this);
             }
         };
     }
@@ -430,12 +429,12 @@ public class StockSearchView extends JFrame {
      * Handles the loaded initial symbol data.
      *
      * @param initialSymbol the symbol that was loaded
+     * @param worker the worker that completed the search
      */
-    private void handleInitialSymbolLoaded(final String initialSymbol) {
+    private void handleInitialSymbolLoaded(
+            final String initialSymbol,
+            final SwingWorker<StockSearchOutputData, Void> worker) {
         try {
-            @SuppressWarnings("unchecked")
-            final SwingWorker<StockSearchOutputData, Void> worker =
-                    (SwingWorker<StockSearchOutputData, Void>) currentSearchWorker;
             final StockSearchOutputData output = worker.get();
 
             if (output.isSuccess()

@@ -16,9 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import interfaceadapters.news.NewsController;
-import usecase.fetch_news.NewsDataAccessInterface;
 
-public class NewsView extends javax.swing.JFrame {
+public class NewsView extends javax.swing.JFrame implements NewsViewInterface {
 
     private final int newsShownSize = 3;
     private final JLabel[] titleLabels = new JLabel[newsShownSize];
@@ -96,8 +95,8 @@ public class NewsView extends javax.swing.JFrame {
                     try {
                         Desktop.getDesktop().browse(new URI(url));
                     }
-                    catch (NewsDataAccessInterface.DataFetchException | URISyntaxException | IOException exception) {
-                        exception.printStackTrace();
+                    catch (IOException | URISyntaxException ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
             });
