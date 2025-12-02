@@ -1,20 +1,23 @@
 package ui.dashboard;
 
-import data.ExpenseRepository;
-import fetch_news.NewsApiDAO;
-import interface_adapters.controllers.*;
+import data.expense.ExpenseRepository;
+import data.news.NewsApiDao;
+import interfaceadapters.dashboard.DashboardController;
+import interfaceadapters.portfolio.PortfolioController;
+import interfaceadapters.stocksearch.StockSearchController;
+import interfaceadapters.trading.TradingController;
+import interfaceadapters.trends.TrendsController;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
+import javax.swing.*;
+import ui.news.NewsView;
 import ui.portfolio.PortfolioView;
 import ui.stock_search.StockSearchView;
 import ui.trading.TradingView;
-import ui.trends.TrendsViewModel;
-import ui.news.NewsView;
 import ui.trends.TrendsView;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import ui.trends.TrendsViewModel;
 
 public class DashboardView extends JFrame {
 
@@ -28,6 +31,7 @@ public class DashboardView extends JFrame {
     private final Runnable onLogout;
     private final String username;
     private final ExpenseRepository expenseRepository;
+    private final Consumer<String> showTrackerView;
 
     private final JTabbedPane tabs = new JTabbedPane();
 
@@ -48,7 +52,8 @@ public class DashboardView extends JFrame {
                          PortfolioController portfolioController,
                          Runnable onLogout,
                          String username,
-                         ExpenseRepository expenseRepository) {
+                         ExpenseRepository expenseRepository,
+                         Consumer<String> showTrackerView) {
         this.dashController = dashController;
         this.stockController = stockController;
         this.tradingController = tradingController;
@@ -58,6 +63,7 @@ public class DashboardView extends JFrame {
         this.onLogout = onLogout;
         this.username = username;
         this.expenseRepository = expenseRepository;
+        this.showTrackerView = showTrackerView;
 
         setTitle("FinWise");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,29 +101,29 @@ public class DashboardView extends JFrame {
 
             switch (idx) {
                 case NEWS_TAB -> SwingUtilities.invokeLater(() -> {
-                    // Create NewsController similar to Main.showNewsView()
-                    NewsApiDAO newsApiDAO = new NewsApiDAO();
+                    // Create NewsController similar to app.Main.showNewsView()
+                    NewsApiDao newsApiDAO = new NewsApiDao();
                     NewsView newsView = new NewsView(null);
-                    interface_adapters.presenters.FetchNewsPresenter presenter =
-                        new interface_adapters.presenters.FetchNewsPresenter(newsView);
-                    use_case.fetch_news.FetchNewsInteractor interactor =
-                        new use_case.fetch_news.FetchNewsInteractor(newsApiDAO, presenter);
-                    interface_adapters.controllers.NewsController newsController =
-                        new interface_adapters.controllers.NewsController(interactor, presenter);
+                    interfaceadapters.news.FetchNewsPresenter presenter =
+                        new interfaceadapters.news.FetchNewsPresenter(newsView);
+                    usecase.fetch_news.FetchNewsInteractor interactor =
+                        new usecase.fetch_news.FetchNewsInteractor(newsApiDAO, presenter);
+                    interfaceadapters.news.NewsController newsController =
+                        new interfaceadapters.news.NewsController(interactor, presenter);
                     newsView.setController(newsController);
                     newsController.fetchNews();
                     newsView.setVisible(true);
                 });
                 case TRACKER_TAB -> SwingUtilities.invokeLater(() ->
-                        new TrackerView(username, expenseRepository).setVisible(true));
+                        showTrackerView.accept(username));
                 case STOCK_TAB -> SwingUtilities.invokeLater(() ->
                         new StockSearchView(stockController, username).setVisible(true));
+                case TRADING_TAB -> SwingUtilities.invokeLater(() ->
+                        new TradingView(tradingController, stockController, username).setVisible(true));
                 case TRENDS_TAB -> SwingUtilities.invokeLater(() ->
                         new TrendsView(trendsController, trendsViewModel, username).setVisible(true));
                 case PORTFOLIO_TAB -> SwingUtilities.invokeLater(() ->
                         new PortfolioView(portfolioController, username).setVisible(true));
-                case TRADING_TAB -> SwingUtilities.invokeLater(() ->
-                        new TradingView(tradingController, stockController, username).setVisible(true));
                 default -> {}
             }
             // Reset to Home to avoid repeated auto-opens on focus changes

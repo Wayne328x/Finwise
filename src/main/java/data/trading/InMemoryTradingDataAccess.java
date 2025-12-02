@@ -64,7 +64,6 @@ public class InMemoryTradingDataAccess implements TradingDataAccessInterface{
         }
     }
 
-    // Returns the list of holdings of according the username
     @Override
     public List<Holding> getUserHoldings(String username) {
         Map<String, Holding> h = userHoldings.get(username);

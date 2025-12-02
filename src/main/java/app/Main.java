@@ -1,55 +1,60 @@
 package app;
 
-import data.stock.AlphaVantage;
+import data.database.DataSourceFactory;
 import data.database.JdbcWatchlistRepository;
-import data.stock.WatchlistRepository;
-import data.portfolio.*;
-import data.database.*;
-import data.trading.JsonTradingDataAccess;
-import data.news.NewsApiDAO;
-import data.database.RegisteredUserRepository;
 import data.database.RegisteredExpenseRepository;
+import data.database.RegisteredUserRepository;
+import data.database.TableInitializer;
 import data.expense.TrendsAdapter;
-
+import data.news.NewsApiDao;
+import data.portfolio.AlphaVantagePriceHistoryRepository;
+import data.portfolio.PortfolioRepository;
+import data.portfolio.PriceHistoryRepository;
+import data.portfolio.TradingDataPortfolioRepository;
+import data.stock.AlphaVantage;
+import data.stock.WatchlistRepository;
+import data.trading.JsonTradingDataAccess;
 import interfaceadapters.dashboard.DashboardController;
 import interfaceadapters.login.LoginController;
+import interfaceadapters.news.NewsController;
+import interfaceadapters.portfolio.PortfolioController;
+import interfaceadapters.portfolio.PortfolioPresenter;
+import interfaceadapters.signup.SignUpController;
 import interfaceadapters.stocksearch.StockSearchController;
 import interfaceadapters.stocksearch.StockSearchPresenter;
+import interfaceadapters.tracker.TrackerController;
 import interfaceadapters.trading.TradingController;
 import interfaceadapters.trading.TradingPresenter;
 import interfaceadapters.trends.TrendsController;
 import interfaceadapters.trends.TrendsPresenter;
-import interfaceadapters.news.NewsController;
-import interfaceadapters.news.FetchNewsPresenter;
-import interfaceadapters.portfolio.PortfolioController;
-import interfaceadapters.portfolio.PortfolioPresenter;
-import interfaceadapters.signup.SignUpController;
-import interfaceadapters.tracker.TrackerController;
-
-
+import java.nio.file.Paths;
+import javax.sql.DataSource;
+import javax.swing.*;
 import ui.dashboard.DashboardView;
 import ui.login.LoginView;
-import ui.signup.SignUpView;
 import ui.news.NewsView;
 import ui.portfolio.PortfolioView;
 import ui.portfolio.PortfolioViewModel;
+import ui.signup.SignUpView;
 import ui.stock_search.StockSearchView;
+import ui.tracker.TrackerView;
 import ui.trends.TrendsView;
 import ui.trends.TrendsViewModel;
-import use_case.login.*;
-import use_case.portfolio.*;
-import use_case.signup.*;
-import use_case.stocksearch.*;
-import use_case.fetch_news.*;
-import use_case.trading.*;
-
-
-import use_case.trends.TrendsDataAccess;
-import use_case.trends.TrendsInteractor;
-
-import javax.sql.DataSource;
-import javax.swing.*;
-import java.nio.file.Paths;
+import usecase.add_expense.AddExpenseInteractor;
+import usecase.fetch_news.FetchNewsInteractor;
+import usecase.fetch_news.NewsDataAccessInterface;
+import usecase.list_expenses.ListExpensesInteractor;
+import usecase.login.LoginInteractor;
+import usecase.portfolio.PortfolioInputBoundary;
+import usecase.portfolio.PortfolioInteractor;
+import usecase.signup.SignUpInteractor;
+import usecase.stocksearch.StockSearchInputBoundary;
+import usecase.stocksearch.StockSearchInteractor;
+import usecase.trading.TradingDataAccessInterface;
+import usecase.trading.TradingInteractor;
+import usecase.trading.TradingViewModel;
+import usecase.trends.TrendsDataAccess;
+import usecase.trends.TrendsInteractor;
 
 public class Main {
 
@@ -63,6 +68,7 @@ public class Main {
     private static SignUpController signUpController;
     private static LoginController loginController;
     private static DashboardController dashboardController;
+    private static TrackerController trackerController;
     private static StockSearchController stockSearchController;
     private static TradingController tradingController;
     private static TradingViewModel tradingViewModel;
@@ -93,6 +99,8 @@ public class Main {
             // Create interactors
             SignUpInteractor signUpInteractor = new SignUpInteractor(userRepository);
             LoginInteractor loginInteractor = new LoginInteractor(userRepository);
+            ListExpensesInteractor listExpensesInteractor = new ListExpensesInteractor(expenseRepository);
+            AddExpenseInteractor addExpenseInteractor     = new AddExpenseInteractor(expenseRepository);
 
             // Stocks API call
             AlphaVantage api = new AlphaVantage();
@@ -126,6 +134,7 @@ public class Main {
             signUpController = new SignUpController(signUpInteractor);
             loginController = new LoginController(loginInteractor);
             dashboardController = new DashboardController();
+            trackerController = new TrackerController(listExpensesInteractor, addExpenseInteractor);
             portfolioController = new PortfolioController(portfolioInteractor, portfolioPresenter.getViewModel());
 
 
@@ -184,7 +193,8 @@ public class Main {
                 portfolioController,
                 Main::showLoginView,     // callback to login screen
                 username,                // show welcome message
-                expenseRepository
+                expenseRepository,
+                Main::showTrackerView
         );
 
         currentFrame = dashboardView;
@@ -192,7 +202,7 @@ public class Main {
     }
 
     private static void showNewsView(){
-        NewsApiDAO newsApiDAO = new NewsApiDAO();   // Get DAO
+        NewsApiDao newsApiDAO = new NewsApiDao();   // Get DAO
         try {
             newsApiDAO.fetchNews("");
         } catch (NewsDataAccessInterface.DataFetchException e) {
@@ -214,6 +224,11 @@ public class Main {
 
         // Initialize the news
         controller.fetchNews();
+    }
+
+    private static void showTrackerView(String username) {
+        TrackerView trackerView = new TrackerView(username, trackerController);
+        trackerView.setVisible(true);
     }
 
     private static void showPortfolioView() {
@@ -287,4 +302,3 @@ public class Main {
         // ToDo
     }
 }
-
