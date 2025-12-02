@@ -1,6 +1,6 @@
 package usecase.add_expense;
 
-import data.ExpenseRepository;
+import data.expense.ExpenseRepository;
 import entity.Expense;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
