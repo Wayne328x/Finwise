@@ -1,6 +1,6 @@
 package fetch_news;
 
-import data.fetch_news.NewsApiDAO;
+import data.news.NewsApiDAO;
 import okhttp3.*;
 import org.junit.jupiter.api.Test;
 

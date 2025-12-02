@@ -58,7 +58,6 @@ class StockSearchInteractorTest {
     private static class MockAlphaVantageAPI extends AlphaVantage {
         private List<StockSearchResult> searchResults;
         private IOException ioException;
-        private RuntimeException runtimeException;
 
         public MockAlphaVantageAPI() {
             super();
@@ -67,28 +66,17 @@ class StockSearchInteractorTest {
         public void setSearchResults(List<StockSearchResult> results) {
             this.searchResults = results;
             this.ioException = null;
-            this.runtimeException = null;
         }
 
         public void setIOException(IOException e) {
             this.ioException = e;
             this.searchResults = null;
-            this.runtimeException = null;
-        }
-
-        public void setRuntimeException(RuntimeException e) {
-            this.runtimeException = e;
-            this.searchResults = null;
-            this.ioException = null;
         }
 
         @Override
         public List<StockSearchResult> searchStocks(String keywords) throws IOException {
             if (ioException != null) {
                 throw ioException;
-            }
-            if (runtimeException != null) {
-                throw runtimeException;
             }
             return searchResults != null ? searchResults : new ArrayList<>();
         }
@@ -213,26 +201,6 @@ class StockSearchInteractorTest {
             mockOutputBoundary.getLastPresentedOutput().getMessage());
     }
 
-    @Test
-    void testExecute_WithGenericException_ReturnsFailure() {
-        String keywords = "AAPL";
-        StockSearchInputData input = new StockSearchInputData(keywords);
-        RuntimeException runtimeException = new RuntimeException("Unexpected error");
-        
-        mockApi.setRuntimeException(runtimeException);
-        mockOutputBoundary.reset();
-
-        StockSearchOutputData output = interactor.execute(input);
-
-        assertFalse(output.isSuccess());
-        assertEquals("Error: " + runtimeException.getMessage(), output.getMessage());
-        assertTrue(output.getResults().isEmpty());
-        
-        assertEquals(1, mockOutputBoundary.getPresentCallCount());
-        assertFalse(mockOutputBoundary.getLastPresentedOutput().isSuccess());
-        assertEquals("Error: " + runtimeException.getMessage(), 
-            mockOutputBoundary.getLastPresentedOutput().getMessage());
-    }
 
     @Test
     void testExecute_WithMultipleResults_ReturnsSuccess() {

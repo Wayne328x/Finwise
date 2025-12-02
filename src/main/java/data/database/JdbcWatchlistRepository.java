@@ -1,6 +1,5 @@
 package data.database;
 
-import data.stock.WatchlistRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
+
+import data.stock.WatchlistRepository;
 
 /**
  * JDBC implementation of the watchlist repository using the
@@ -163,7 +164,8 @@ public final class JdbcWatchlistRepository implements WatchlistRepository {
      * Finds all watched stock symbols for a user.
      *
      * @param username the username
-     * @return list of watched stock symbols, ordered by creation date descending
+     * @return list of watched stock symbols,
+     *     ordered by creation date descending
      */
     @Override
     public List<String> findSymbolsByUsername(final String username) {

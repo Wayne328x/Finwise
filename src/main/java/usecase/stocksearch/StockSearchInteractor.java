@@ -76,14 +76,6 @@ public final class StockSearchInteractor implements StockSearchInputBoundary {
                         new ArrayList<>()
                 );
             }
-            catch (RuntimeException runtimeException) {
-
-                result = new StockSearchOutputData(
-                        false,
-                        "Error: " + runtimeException.getMessage(),
-                        new ArrayList<>()
-                );
-            }
         }
 
         if (outputBoundary != null) {
