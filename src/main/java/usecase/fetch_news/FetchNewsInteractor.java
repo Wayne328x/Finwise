@@ -1,7 +1,8 @@
 package usecase.fetch_news;
 
-import entity.News;
 import java.util.List;
+
+import entity.News;
 
 public class FetchNewsInteractor implements FetchNewsInputBoundary {
 
@@ -16,20 +17,17 @@ public class FetchNewsInteractor implements FetchNewsInputBoundary {
     @Override
     public void execute(FetchNewsInputData inputData) {
         try {
-            List<News> newsList = newsDao.fetchNews(null);
+            final List<News> newsList = newsDao.fetchNews(null);
 
             // package the output data
-            FetchNewsOutputData outputData = new FetchNewsOutputData(newsList);
+            final FetchNewsOutputData outputData = new FetchNewsOutputData(newsList);
 
             presenter.presentNews(outputData.getNewsList());
 
-        } catch (NewsDataAccessInterface.DataFetchException e) {
+        }
+        catch (NewsDataAccessInterface.DataFetchException exception) {
             // DAO reached the access limit
-            FetchNewsOutputData outputData = new FetchNewsOutputData(e.getMessage());
-            presenter.presentError(outputData.getErrorMessage());
-        } catch (Exception e) {
-            // other exceptions
-            FetchNewsOutputData outputData = new FetchNewsOutputData("Failed to fetch news: " + e.getMessage());
+            final FetchNewsOutputData outputData = new FetchNewsOutputData(exception.getMessage());
             presenter.presentError(outputData.getErrorMessage());
         }
     }
