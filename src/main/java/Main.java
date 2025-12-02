@@ -3,8 +3,8 @@ import data.*;
 import data.usecase4.JsonTradingDataAccess;
 
 import fetch_news.NewsApiDAO;
-import interface_adapters.controllers.*;
-import interface_adapters.presenters.*;
+import interfaceadapters.controllers.*;
+import interfaceadapters.presenters.*;
 
 
 import ui.dashboard.DashboardView;

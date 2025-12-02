@@ -2,7 +2,7 @@ package entity;
 
 public class Expense {
 
-    private final long  id;
+    private final long id;
     private final String username;
     private final String datetime;
     private final String type;

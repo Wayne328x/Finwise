@@ -1,4 +1,4 @@
-package interface_adapters.controllers;
+package interfaceadapters.controllers;
 
 import ui.portfolio.PortfolioViewModel;
 import usecase.portfolio.PortfolioInputBoundary;

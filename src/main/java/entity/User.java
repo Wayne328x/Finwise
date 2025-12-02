@@ -3,7 +3,7 @@ package entity;
 public class User {
 
     private final Long id;
-    private final  String username;
+    private final String username;
     private final String password;
 
     public User(Long id, String username, String password) {

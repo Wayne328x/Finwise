@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import entity.Expense;
-import interface_adapters.controllers.TrackerController;
+import interfaceadapters.controllers.TrackerController;
 import usecase.add_expense.AddExpenseOutputData;
 import usecase.list_expenses.ListExpensesOutputData;
 
@@ -45,9 +45,9 @@ public class TrackerView extends JFrame {
     });
     private final JTextField amountField = new JTextField(8);
 
-    public TrackerView(String username, TrackerController trackerController) {
+    public TrackerView(String username, TrackerController controller) {
         this.username = username;
-        this.trackerController = trackerController;
+        this.trackerController = controller;
 
         setTitle("Expense Tracker");
         setSize(VIEW_PANEL_WIDTH, VIEW_PANEL_HEIGHT);

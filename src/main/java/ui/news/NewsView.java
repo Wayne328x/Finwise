@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URI;
 
-import interface_adapters.controllers.NewsController;
+import interfaceadapters.controllers.NewsController;
 
 public class NewsView extends JFrame {
 

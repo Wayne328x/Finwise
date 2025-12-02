@@ -1,4 +1,4 @@
-package interface_adapters.presenters;
+package interfaceadapters.presenters;
 
 import entity.Holding;
 import entity.PortfolioSnapshot;

@@ -1,13 +1,15 @@
 package data;
 
-import entity.Expense;
 import java.sql.Connection;
+
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.sql.DataSource;
+
+import entity.Expense;
 
 /**
  * Implementation of ExpenseRepository using JDBC and SQLite.

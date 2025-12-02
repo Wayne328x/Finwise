@@ -1,4 +1,4 @@
-package interface_adapters.controllers;
+package interfaceadapters.controllers;
 
 import usecase.add_expense.*;
 import usecase.list_expenses.*;
