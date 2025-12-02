@@ -11,28 +11,28 @@ import entity.Expense;
 public interface ExpenseRepository {
 
     /**
-    * Finds all expenses for a given username.
-    *
-    * @param username the username to search for
-    * @return a list of expenses for the user
-    */
+     * Finds all expenses for a given username.
+     *
+     * @param username the username to search for
+     * @return a list of expenses for the user
+     */
     List<Expense> findByUsername(String username);
 
     /**
-    * Adds a new expense to the database.
-    *
-    * @param username the username
-    * @param datetime the expense datetime
-    * @param type the expense type
-    * @param amount the expense amount
-    */
+     * Adds a new expense to the database.
+     *
+     * @param username the username
+     * @param datetime the expense datetime
+     * @param type     the expense type
+     * @param amount   the expense amount
+     */
     void add(String username, String datetime, String type, double amount);
 
     /**
-    * Gets the total expense amount for a user.
-    *
-    * @param username the username
-    * @return the total expense amount
-    */
+     * Gets the total expense amount for a user.
+     *
+     * @param username the username
+     * @return the total expense amount
+     */
     double getTotalForUser(String username);
 }

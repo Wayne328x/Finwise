@@ -1,6 +1,6 @@
 {
   "userCash": {
-    "1234567": 7318.299999999999
+    "1234567": 4770.4
   },
   "userHoldings": {
     "1234567": {
@@ -13,6 +13,11 @@
         "symbol": "nvda",
         "shares": 12,
         "avgCost": 177.0
+      },
+      "AAPL": {
+        "symbol": "AAPL",
+        "shares": 9,
+        "avgCost": 283.1
       }
     }
   },
@@ -43,6 +48,24 @@
       "shares": 6,
       "price": 177.0,
       "totalAmount": 1062.0
+    },
+    {
+      "timestamp": "2025-12-02T07:26:07.184625Z",
+      "username": "1234567",
+      "symbol": "AAPL",
+      "action": "BUY",
+      "shares": 10,
+      "price": 283.1,
+      "totalAmount": 2831.0
+    },
+    {
+      "timestamp": "2025-12-02T07:26:12.839823Z",
+      "username": "1234567",
+      "symbol": "AAPL",
+      "action": "SELL",
+      "shares": 1,
+      "price": 283.1,
+      "totalAmount": 283.1
     }
   ]
 }

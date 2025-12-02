@@ -14,17 +14,22 @@ public class TrendsAdapter implements TrendsDataAccess {
     private final RegisteredExpenseRepository repo;
 
     /**
-    * @param repo the entire repository of expenses.
-    */
-    public TrendsAdapter(RegisteredExpenseRepository repo) {
+     * Constructs a TrendsAdapter with the given expense repository.
+     *
+     * @param repo the entire repository of expenses
+     */
+    public TrendsAdapter(final RegisteredExpenseRepository repo) {
         this.repo = repo;
     }
 
     /**
-     * @param username the username of the logged-in user.
+     * Retrieves all expenses for the given username.
+     *
+     * @param username the username of the logged-in user
+     * @return list of expenses for the user
      */
     @Override
-    public List<Expense> getExpenses(String username) {
+    public List<Expense> getExpenses(final String username) {
         // Delegate to the existing repository
         return repo.findByUsername(username);
     }
