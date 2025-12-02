@@ -12,6 +12,8 @@ public class TrendsOutputData {
     private final Map<LocalDate, Map<String, Double>> totalExpenses;
 
     /**
+     * Constructs a TrendsOutputData.
+     *
      * @param totalExpenses the expenses, indexed by date and type.
      */
     public TrendsOutputData(Map<LocalDate, Map<String, Double>> totalExpenses) {
@@ -19,6 +21,8 @@ public class TrendsOutputData {
     }
 
     /**
+     * Returns the expense total.
+     *
      * @return the expense totals, indexed by date and type.
      */
     public Map<LocalDate, Map<String, Double>> getTotalExpenses() {
