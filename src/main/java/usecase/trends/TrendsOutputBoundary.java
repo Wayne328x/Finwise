@@ -7,7 +7,8 @@ public interface TrendsOutputBoundary {
 
     /**
      * Present the result of the Trends use case.
-     * @param outputData
+     *
+     * @param outputData the output data
      */
     void present(TrendsOutputData outputData);
 }

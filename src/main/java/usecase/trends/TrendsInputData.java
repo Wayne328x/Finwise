@@ -13,6 +13,8 @@ public class TrendsInputData {
     private final LocalDate endDate;
 
     /**
+     * Constructs a TrendsInputData.
+     *
      * @param username the username of the logged-in user.
      * @param startDate the start date of the trend request.
      * @param endDate the end date of the trend request.
@@ -24,6 +26,8 @@ public class TrendsInputData {
     }
 
     /**
+     * Returns the username.
+     *
      * @return the username associated with this trend request.
      */
     public String getUsername() {
@@ -31,6 +35,8 @@ public class TrendsInputData {
     }
 
     /**
+     * Returns the start date.
+     *
      * @return the start date associated with this trend request.
      */
     public LocalDate getStartDate() {
@@ -38,6 +44,8 @@ public class TrendsInputData {
     }
 
     /**
+     * Returns the end date.
+     *
      * @return the end date associated with this trend request.
      */
     public LocalDate getEndDate() {

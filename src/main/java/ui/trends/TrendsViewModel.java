@@ -11,14 +11,18 @@ public class TrendsViewModel {
     private Map<LocalDate, Map<String, Double>> totalExpenses;
 
     /**
-     * @return a map of the expenses.
+     * Returns the total expenses.
+     *
+     * @return a map of the expenses
      */
     public Map<LocalDate, Map<String, Double>> getTotalExpenses() {
         return totalExpenses;
     }
 
     /**
-     * @param totalExpenses the expenses for this trend.
+     * Sets the total expenses to the parameter.
+     *
+     * @param totalExpenses the expenses for this trend
      */
     public void setTotalExpenses(Map<LocalDate, Map<String, Double>> totalExpenses) {
         this.totalExpenses = totalExpenses;
