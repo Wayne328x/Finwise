@@ -1,9 +1,10 @@
 package interfaceadapters.news;
 
-import entity.News;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import entity.News;
 import ui.news.NewsView;
 import ui.news.NewsViewModel;
 import usecase.fetch_news.FetchNewsOutputBoundary;
