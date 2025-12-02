@@ -1,6 +1,6 @@
-package fetch_news;
+package usecase.fetch_news;
 
-import data.fetch_news.NewsApiDAO;
+import data.news.NewsApiDAO;
 import okhttp3.*;
 import org.junit.jupiter.api.Test;
 
@@ -10,10 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.News;
-import usecase.fetch_news.FetchNewsInputData;
-import usecase.fetch_news.FetchNewsInteractor;
-import usecase.fetch_news.FetchNewsOutputBoundary;
-import usecase.fetch_news.NewsDataAccessInterface;
 
 import static org.junit.jupiter.api.Assertions.*;
 
