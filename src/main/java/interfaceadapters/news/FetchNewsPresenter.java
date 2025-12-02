@@ -1,25 +1,26 @@
 package interfaceadapters.news;
 
 import entity.News;
-import ui.news.NewsView;
-import ui.news.NewsViewModel;
-import usecase.fetch_news.FetchNewsOutputBoundary;
-
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import ui.news.NewsView;
+import ui.news.NewsViewModel;
+import usecase.fetch_news.FetchNewsOutputBoundary;
 
 public class FetchNewsPresenter implements FetchNewsOutputBoundary {
 
     private final NewsView view;
 
-    /** save all the news for turning pages */
+    /** Save all the news for turning pages. */
     private List<News> allNews = new ArrayList<>();
 
-    /** index for current page */
-    private int currentPage = 0;
+    private final int newsShownSize = 3;
 
-    /** formatting the time */
+    /** Index for current page. */
+    private int currentPage;
+
+    /** Formatting the time. */
     private final DateTimeFormatter formatter =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -34,7 +35,8 @@ public class FetchNewsPresenter implements FetchNewsOutputBoundary {
     @Override
     public void presentNews(List<News> newsList) {
         this.allNews = newsList;
-        this.currentPage = 0; // new data start from index 1
+        this.currentPage = 0;
+        // new data start from index 1
         updateViewModelAndRender();
     }
 
@@ -43,17 +45,15 @@ public class FetchNewsPresenter implements FetchNewsOutputBoundary {
         view.showError(errorMessage);
     }
 
-    // --------------------------
-    //     Presenter additional methods
-    // --------------------------
-
+    /** Turn to the next page of news. */
     public void nextPage() {
-        if ((currentPage + 1) * 3 < allNews.size()) {
+        if ((currentPage + 1) * newsShownSize < allNews.size()) {
             currentPage++;
             updateViewModelAndRender();
         }
     }
 
+    /** Turn to the previous page of news. */
     public void prevPage() {
         if (currentPage > 0) {
             currentPage--;
@@ -66,32 +66,32 @@ public class FetchNewsPresenter implements FetchNewsOutputBoundary {
     // --------------------------
 
     private void updateViewModelAndRender() {
-        int start = currentPage * 3;
-        int end = Math.min(start + 3, allNews.size());
+        final int start = currentPage * newsShownSize;
+        final int end = Math.min(start + newsShownSize, allNews.size());
 
-        List<String> titles = new ArrayList<>();
-        List<String> publishTimes = new ArrayList<>();
-        List<String> urls = new ArrayList<>();
+        final List<String> titles = new ArrayList<>();
+        final List<String> publishTimes = new ArrayList<>();
+        final List<String> urls = new ArrayList<>();
 
         // set up 3 news for each page
         for (int i = start; i < end; i++) {
-            News n = allNews.get(i);
+            final News n = allNews.get(i);
             titles.add(n.getTitle());
             publishTimes.add(n.getTimePublished().format(formatter));
             urls.add(n.getUrl());
         }
 
         // when the news left is less than 3, fill it up with blank
-        while (titles.size() < 3) {
+        while (titles.size() < newsShownSize) {
             titles.add("");
             publishTimes.add("");
             urls.add("");
         }
 
-        boolean hasPrev = currentPage > 0;
-        boolean hasNext = end < allNews.size();
+        final boolean hasPrev = currentPage > 0;
+        final boolean hasNext = end < allNews.size();
 
-        NewsViewModel vm = new NewsViewModel(
+        final NewsViewModel vm = new NewsViewModel(
                 titles, publishTimes, urls, hasPrev, hasNext
         );
 

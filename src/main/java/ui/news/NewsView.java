@@ -1,19 +1,18 @@
 package ui.news;
 
-import javax.swing.*;
+import interfaceadapters.news.NewsController;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URI;
+import javax.swing.*;
 
-import interfaceadapters.news.NewsController;
+public class NewsView extends javax.swing.JFrame {
 
-public class NewsView extends JFrame {
-
-    private final JLabel[] titleLabels = new JLabel[3];
-    private final JLabel[] timeLabels = new JLabel[3];
-    private final JButton prevButton = new JButton("previous page");
+    private final javax.swing.JLabel[] titleLabels = new javax.swing.JLabel[3];
+    private final javax.swing.JLabel[] timeLabels = new JLabel[3];
+    private final javax.swing.JButton prevButton = new JButton("previous page");
     private final JButton nextButton = new JButton("next page");
 
     private NewsController controller;
@@ -30,10 +29,10 @@ public class NewsView extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(4, 1));
+        mainPanel.setLayout(new java.awt.GridLayout(4, 1));
 
         for (int i = 0; i < 3; i++) {
-            JPanel newsPanel = new JPanel();
+            javax.swing.JPanel newsPanel = new javax.swing.JPanel();
             newsPanel.setLayout(new BorderLayout());
 
             titleLabels[i] = new JLabel("Loading the titles...");
@@ -46,9 +45,6 @@ public class NewsView extends JFrame {
             timeLabels[i].setForeground(Color.DARK_GRAY);
 
             JPanel textPanel = new JPanel();
-            textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-            textPanel.add(titleLabels[i]);
-            textPanel.add(timeLabels[i]);
 
             newsPanel.add(textPanel, BorderLayout.CENTER);
             mainPanel.add(newsPanel);
