@@ -152,7 +152,6 @@ public class JsonTradingDataAccess implements TradingDataAccessInterface{
     
     public synchronized void saveOrder(OrderRecord orderRecord) {
         orderRecords.add(orderRecord);
-        applyOrderRecord(orderRecord);
         saveStateToFile();
     }
 

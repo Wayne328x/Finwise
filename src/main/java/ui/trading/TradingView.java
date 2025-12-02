@@ -32,6 +32,7 @@ public class TradingView extends JFrame {
     private final JLabel valueLabel = new JLabel("Total Value: $0.00");
     private final JLabel messageLabel = new JLabel("");
     private final JLabel priceLabel = new JLabel("Price: $");
+    private boolean suppressSearchRestart = false;
 
     public TradingView(TradingController controller, StockSearchController stockSearchController, String username) {
         this.controller = controller;
@@ -133,7 +134,28 @@ public class TradingView extends JFrame {
             public void changedUpdate(DocumentEvent e) {
                 restartTimer();
             }
-            private void restartTimer() { searchTimer.restart(); }
+            private void restartTimer() {
+                if (!suppressSearchRestart) {
+                    searchTimer.restart();
+                }
+            }
+        });
+
+        // select from suggestions
+        suggestions.addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) return;
+            AlphaVantageAPI.StockSearchResult sel = suggestions.getSelectedValue();
+            if (sel != null) {
+                suppressSearchRestart = true;
+                symbolField.setText(sel.getSymbol());
+                suppressSearchRestart = false;
+                suggestionsScroll.setVisible(false);
+                loadPrice(sel.getSymbol());
+            }
+        });
+        symbolField.addActionListener(e -> {
+            suggestionsScroll.setVisible(false);
+            loadPrice(symbolField.getText().trim());
         });
 
         suggestions.addMouseListener(new MouseAdapter() {
@@ -142,7 +164,9 @@ public class TradingView extends JFrame {
                 if (e.getClickCount() == 2) {
                     AlphaVantage.StockSearchResult selected = suggestions.getSelectedValue();
                     if (selected != null) {
+                        suppressSearchRestart = true;
                         symbolField.setText(selected.getSymbol());
+                        suppressSearchRestart = false;
                         loadPrice(selected.getSymbol());
                         suggestionsScroll.setVisible(false);
                     }
