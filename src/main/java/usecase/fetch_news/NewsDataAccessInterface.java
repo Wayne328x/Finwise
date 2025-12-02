@@ -18,8 +18,5 @@ public interface NewsDataAccessInterface {
             super(message);
         }
 
-        public DataFetchException(String message, Throwable cause) {
-            super(message, cause);
-        }
     }
 }
