@@ -110,19 +110,41 @@ The readme should include information such as:
 | Use Case \#6 | User story 6 | Aaron  |
 
 ---
-## 🎥 Use Case 1 – Dashboard & Login
+## 🎥 Application Demo Videos
 
+### ✅ Use Case 1
 ![Use Case 1 Demo](videodemo/usecase1demo.gif)
+[Download Full Video](videodemo/usecase1demo.mp4)
 
-🔗 [Download Full HD Video](videodemo/usecase1demo.mp4)
+---
 
-## 🎥 Demo Videos
-- ✅ [Use Case 1 Demo](videodemo/usecase1 demo.mp4)
-- ✅ [Use Case 2 Demo](videodemo/usecase2demo.mp4)
-- ✅ [Use Case 3 Demo](videodemo/usecase3 demo.mp4)
-- ✅ [Use Case 4 Demo](videodemo/usecase4 demo.mp4)
-- ✅ [Use Case 5 Demo](videodemo/USECASE5.mp4)
-- ✅ [Use Case 6 Demo](videodemo/usecase6demo.mp4)
+### ✅ Use Case 2
+![Use Case 2 Demo](videodemo/usecase2demo.gif)
+[Download Full Video](videodemo/usecase2demo.mp4)
+
+---
+
+### ✅ Use Case 3
+![Use Case 3 Demo](videodemo/usecase3demo.gif)
+[Download Full Video](videodemo/usecase3demo.mp4)
+
+---
+
+### ✅ Use Case 4
+![Use Case 4 Demo](videodemo/usecase4demo.gif)
+[Download Full Video](videodemo/usecase4demo.mp4)
+
+---
+
+### ✅ Use Case 5
+![Use Case 5 Demo](videodemo/usecase5demo.gif)
+[Download Full Video](videodemo/USECASE5.mp4)
+
+---
+
+### ✅ Use Case 6
+![Use Case 6 Demo](videodemo/usecase6demo_small.gif)
+[Download Full Video](videodemo/usecase6demo.mp4)
 #### **Proposed Entities**
 
 **User**
