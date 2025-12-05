@@ -40,9 +40,7 @@ The readme should include information such as:
 * **Alternative flow:**
     * Duplicate entry → undo transaction
     * Invalid or empty input → prompt user to enter amount in correct format
-## 🎥 Use Case 1 Demo
 
-[Click to watch the demo](videodemo/usecase1 demo.mp4)
 **Use case 2**: Financial trends
 
 * **app.Main flow:**
@@ -50,9 +48,7 @@ The readme should include information such as:
     * System displays user’s financial history using line chart
 * **Alternative flow:**
     * Not enough entries → prompt “not enough information” to show
-## 🎥 Use Case 2 Demo
 
-[Click to watch the demo](videodemo/usecase2demo.mp4)
 **Use case 3:** Fetch Selected Live Stock prices
 
 * **app.Main flow:**
@@ -65,9 +61,7 @@ The readme should include information such as:
 * **Alternative flow:**
     * Network stability issues/API call failure → System shows warning and displays last-loaded prices; label the chart “as of \<timestamp\>.”
     * Invalid symbol in the search bar → display “No results for “what user just entered”
-## 🎥 Use Case 3 Demo
 
-[Click to watch the demo](videodemo/usecase3 demo.mp4)
 **Use Case 4:** Investing in Simulated Market
 
 * **app.Main flow:**
@@ -79,9 +73,7 @@ The readme should include information such as:
 * **Alternative flow:**
     * No recent price available (e.g., off the market or internet stability issues) after clicking the submit button → ask user to refresh the market
     * Not enough simulated money → notify the user “Not enough money” and show user a button to add more simulated money if they want
-## 🎥 Use Case 4 Demo
 
-[Click to watch the demo](videodemo/usecase4 demo.mp4)
 **Use Case 5:** Portfolio performance diagnostics
 
 * **app.Main flow:**
@@ -93,9 +85,7 @@ The readme should include information such as:
 * **Alternative flow:**
     * Network stability issue with fetching historical data → prompt to refresh
     * New users have not invested at all and opened it → display “No data available”
-## 🎥 Use Case 5 Demo
 
-[Click to watch the demo](videodemo/USECASE5.mp4)
 **Use Case 6:** Real-time News
 
 * **app.Main flow:**
@@ -105,9 +95,7 @@ The readme should include information such as:
     * User can click the news panel and navigate to the corresponding external website on their browser
 * **Alternative flow:**
     * Failure to load \- Display “No Results”.
-## 🎥 Use Case 6 Demo
 
-[Click to watch the demo](videodemo/usecase6demo.mp4)
 #### ---
 
 #### **MVP Table**
@@ -122,7 +110,13 @@ The readme should include information such as:
 | Use Case \#6 | User story 6 | Aaron  |
 
 ---
-
+## 🎥 Demo Videos
+- ✅ [Use Case 1 Demo](videodemo/usecase1 demo.mp4)
+- ✅ [Use Case 2 Demo](videodemo/usecase2demo.mp4)
+- ✅ [Use Case 3 Demo](videodemo/usecase3 demo.mp4)
+- ✅ [Use Case 4 Demo](videodemo/usecase4 demo.mp4)
+- ✅ [Use Case 5 Demo](videodemo/USECASE5.mp4)
+- ✅ [Use Case 6 Demo](videodemo/usecase6demo.mp4)
 #### **Proposed Entities**
 
 **User**
@@ -174,6 +168,3 @@ Alpha Vantage
 
 
 
-By keeping this README up-to-date,
-your team will find it easier to prepare for the final presentation
-at the end of the term.
