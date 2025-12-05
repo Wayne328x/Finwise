@@ -40,10 +40,6 @@ The readme should include information such as:
 * **Alternative flow:**
     * Duplicate entry → undo transaction
     * Invalid or empty input → prompt user to enter amount in correct format
-* **🎥 Use Case 1 – Dashboard & Login:**
-  ![Use Case 1 Demo](videodemo/usecase1demo.gif)
-
-🔗 [Download Full HD Video](videodemo/usecase1demo.mp4)
 
 **Use case 2**: Financial trends
 
@@ -114,6 +110,12 @@ The readme should include information such as:
 | Use Case \#6 | User story 6 | Aaron  |
 
 ---
+## 🎥 Use Case 1 – Dashboard & Login
+
+![Use Case 1 Demo](videodemo/usecase1demo.gif)
+
+🔗 [Download Full HD Video](videodemo/usecase1demo.mp4)
+
 ## 🎥 Demo Videos
 - ✅ [Use Case 1 Demo](videodemo/usecase1 demo.mp4)
 - ✅ [Use Case 2 Demo](videodemo/usecase2demo.mp4)
