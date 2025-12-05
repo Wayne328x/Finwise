@@ -40,6 +40,7 @@ The readme should include information such as:
 * **Alternative flow:**
     * Duplicate entry → undo transaction
     * Invalid or empty input → prompt user to enter amount in correct format
+  [![Watch the video](https://raw.githubusercontent.com/Wayne328x/Finwise/tree/main/videodemo/usecase1%20demo.mp4)](https://raw.githubusercontent.com/Wayne328x/Finwise/tree/main/videodemo/usecase1%20demo.mp4)
 
 **Use case 2**: Financial trends
 
